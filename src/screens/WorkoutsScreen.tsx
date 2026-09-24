@@ -9,6 +9,7 @@ import routinesLibrary from '../data/defaultRoutines.json';
 import { PlateCalculatorModal } from '../components/PlateCalculatorModal';
 import { ExercisePickerModal, ExerciseItem } from '../components/ExercisePickerModal';
 import { VoiceCues, setVoiceCoachEnabled, getVoiceCoachEnabled } from '../lib/voiceCoach';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
 type SetType = 'N' | 'W' | 'D' | 'F';
 
@@ -61,6 +62,18 @@ export function WorkoutsScreen() {
   useEffect(() => {
     setSelectedDayIndex(0);
   }, [selectedRoutineIndex]);
+
+  // Mentinem ecranul aprins la sala pe toata durata antrenamentului activ
+  useEffect(() => {
+    if (activeSessionDay !== null) {
+      activateKeepAwakeAsync();
+    } else {
+      deactivateKeepAwake();
+    }
+    return () => {
+      deactivateKeepAwake();
+    };
+  }, [activeSessionDay]);
 
   // Timer interval cu Voice Cues & Haptics
   useEffect(() => {

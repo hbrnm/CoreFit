@@ -23,6 +23,24 @@ export interface PRRecord {
   date: string;
 }
 
+export interface FoodLogItem {
+  id: number;
+  date: string;
+  meal_type: string;
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
+export interface MacroTotals {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
 interface AppState {
   profile: ProfileData;
   todayWater: number;
@@ -30,6 +48,8 @@ interface AppState {
   todayBurnedKcal: number;
   bodyWeightLogs: BodyWeightLog[];
   prRecords: PRRecord[];
+  todayFoodLogs: FoodLogItem[];
+  todayMacros: MacroTotals;
   isBiometricLocked: boolean;
   isBiometricsEnabled: boolean;
 
@@ -40,6 +60,8 @@ interface AppState {
   logWorkoutSession: (routineName: string, durationSeconds: number, calories: number) => void;
   logBodyWeight: (weightKg: number) => void;
   recordSetPR: (exerciseName: string, weightKg: number, reps: number) => boolean;
+  addFoodLog: (item: Omit<FoodLogItem, 'id' | 'date'>) => void;
+  deleteFoodLog: (id: number) => void;
   setBiometricLock: (locked: boolean) => void;
   setBiometricsEnabled: (enabled: boolean) => void;
 }
@@ -56,6 +78,8 @@ export const useStore = create<AppState>((set, get) => ({
   todayBurnedKcal: 0,
   bodyWeightLogs: [],
   prRecords: [],
+  todayFoodLogs: [],
+  todayMacros: { calories: 0, protein: 0, carbs: 0, fat: 0 },
   isBiometricLocked: false,
   isBiometricsEnabled: false,
 
@@ -97,12 +121,28 @@ export const useStore = create<AppState>((set, get) => ({
         'SELECT * FROM pr_records ORDER BY est_1rm DESC'
       );
 
+      // Jurnal alimente de azi
+      const foodRows = db.getAllSync<FoodLogItem>(
+        'SELECT * FROM food_logs WHERE date = ? ORDER BY id DESC',
+        [today]
+      );
+
+      const totals: MacroTotals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+      (foodRows || []).forEach((item) => {
+        totals.calories += item.calories;
+        totals.protein += item.protein;
+        totals.carbs += item.carbs;
+        totals.fat += item.fat;
+      });
+
       set({
         todayWater: waterTotal,
         todayWorkoutMinutes: minutesTotal,
         todayBurnedKcal: caloriesTotal,
         bodyWeightLogs: weights || [],
         prRecords: prs || [],
+        todayFoodLogs: foodRows || [],
+        todayMacros: totals,
       });
     } catch (e) {
       console.warn('Eroare la incarcarea datelor SQLite:', e);
@@ -160,6 +200,51 @@ export const useStore = create<AppState>((set, get) => ({
       set({ prRecords: prs || [] });
     }
     return isNewPR;
+  },
+
+  addFoodLog: (item) => {
+    const db = getDb();
+    const today = getTodayDateString();
+    db.runSync(
+      'INSERT INTO food_logs (date, meal_type, name, calories, protein, carbs, fat) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [today, item.meal_type, item.name, item.calories, item.protein, item.carbs, item.fat]
+    );
+
+    const foodRows = db.getAllSync<FoodLogItem>(
+      'SELECT * FROM food_logs WHERE date = ? ORDER BY id DESC',
+      [today]
+    );
+
+    const totals: MacroTotals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    (foodRows || []).forEach((f) => {
+      totals.calories += f.calories;
+      totals.protein += f.protein;
+      totals.carbs += f.carbs;
+      totals.fat += f.fat;
+    });
+
+    set({ todayFoodLogs: foodRows || [], todayMacros: totals });
+  },
+
+  deleteFoodLog: (id: number) => {
+    const db = getDb();
+    const today = getTodayDateString();
+    db.runSync('DELETE FROM food_logs WHERE id = ?', [id]);
+
+    const foodRows = db.getAllSync<FoodLogItem>(
+      'SELECT * FROM food_logs WHERE date = ? ORDER BY id DESC',
+      [today]
+    );
+
+    const totals: MacroTotals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    (foodRows || []).forEach((f) => {
+      totals.calories += f.calories;
+      totals.protein += f.protein;
+      totals.carbs += f.carbs;
+      totals.fat += f.fat;
+    });
+
+    set({ todayFoodLogs: foodRows || [], todayMacros: totals });
   },
 
   setBiometricLock: (locked: boolean) => set({ isBiometricLocked: locked }),

@@ -48,6 +48,17 @@ function initTables(db: SQLite.SQLiteDatabase) {
       est_1rm REAL NOT NULL,
       date TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS food_logs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      meal_type TEXT NOT NULL,
+      name TEXT NOT NULL,
+      calories INTEGER NOT NULL,
+      protein REAL NOT NULL,
+      carbs REAL NOT NULL,
+      fat REAL NOT NULL
+    );
   `);
 
   // Asiguram un profil implicit daca nu exista deja
