@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
-import { CircularProgress } from '../components/CircularProgress';
 import { useStore } from '../store/useStore';
-import routineData from '../data/defaultRoutines.json';
+import routinesLibrary from '../data/defaultRoutines.json';
 
 interface SetLog {
   setNumber: number;
@@ -15,21 +14,29 @@ interface SetLog {
 }
 
 export function WorkoutsScreen() {
+  const [selectedRoutineIndex, setSelectedRoutineIndex] = useState(0);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+
+  // Sesiune activa
   const [activeSessionDay, setActiveSessionDay] = useState<number | null>(null);
-  
-  // Stare pentru seriile antrenamentului activ: { [exerciseIndex]: SetLog[] }
   const [exerciseSets, setExerciseSets] = useState<{ [key: number]: SetLog[] }>({});
-  
+
   // Timer odihna
   const [secondsLeft, setSecondsLeft] = useState(90);
-  const [maxRest, setMaxRest] = useState(90);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const logWorkoutSession = useStore((state) => state.logWorkoutSession);
-  const currentDay = routineData.days[selectedDayIndex];
+  
+  const currentRoutine = routinesLibrary[selectedRoutineIndex] || routinesLibrary[0];
+  const currentDay = currentRoutine.days[selectedDayIndex] || currentRoutine.days[0];
 
-  // Pornire timer cu haptics
+  // Reset day index daca rutina selectata are mai putine zile
+  useEffect(() => {
+    setSelectedDayIndex(0);
+  }, [selectedRoutineIndex]);
+
+  // Timer interval
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isTimerRunning && secondsLeft > 0) {
@@ -50,10 +57,10 @@ export function WorkoutsScreen() {
     return () => clearInterval(interval);
   }, [isTimerRunning, secondsLeft]);
 
-  // Initializare sesiune activa
+  // Initializare sesiune
   const handleStartSession = (dayIdx: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    const day = routineData.days[dayIdx];
+    const day = currentRoutine.days[dayIdx];
     const initialSets: { [key: number]: SetLog[] } = {};
 
     day.exercises.forEach((ex, exIdx) => {
@@ -69,7 +76,7 @@ export function WorkoutsScreen() {
     setActiveSessionDay(dayIdx);
   };
 
-  // Bifare serie
+  // Bifare set
   const toggleSetComplete = (exIdx: number, setIdx: number, restSeconds: number) => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setExerciseSets((prev) => {
@@ -77,9 +84,7 @@ export function WorkoutsScreen() {
       const isNowCompleted = !sets[setIdx].completed;
       sets[setIdx] = { ...sets[setIdx], completed: isNowCompleted };
 
-      // Daca a bifat seria ca finalizata, porneste automat timerul de odihna specificat pentru acel exercitiu!
       if (isNowCompleted) {
-        setMaxRest(restSeconds);
         setSecondsLeft(restSeconds);
         setIsTimerRunning(true);
       }
@@ -91,9 +96,8 @@ export function WorkoutsScreen() {
   // Finalizare antrenament
   const handleFinishWorkout = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    const day = routineData.days[activeSessionDay!];
+    const day = currentRoutine.days[activeSessionDay!];
     
-    // Calculeaza volumul total si serii finalizate
     let completedSetsCount = 0;
     Object.values(exerciseSets).forEach((sets) => {
       sets.forEach((s) => {
@@ -101,14 +105,14 @@ export function WorkoutsScreen() {
       });
     });
 
-    const estimatedKcal = Math.round(completedSetsCount * 22); // ~22 kcal per set intens
-    const durationMinutes = Math.max(30, completedSetsCount * 3);
+    const estimatedKcal = Math.round(completedSetsCount * 22);
+    const durationMinutes = Math.max(25, completedSetsCount * 3);
 
-    logWorkoutSession(day.day_title, durationMinutes * 60, estimatedKcal);
+    logWorkoutSession(`${currentRoutine.routine_name} - ${day.day_title}`, durationMinutes * 60, estimatedKcal);
 
     Alert.alert(
-      'Felicitări, Campionule! 🏆',
-      `Ai finalizat ${completedSetsCount} serii din ${day.day_title}.\nEstimare: ~${estimatedKcal} kcal arse salvate în baza de date SQLite!`
+      'Antrenament Finalizat! 🏆',
+      `Ai completat ${completedSetsCount} serii din ${day.day_title}.\nEstimare: ~${estimatedKcal} kcal arse salvate în SQLite!`
     );
 
     setActiveSessionDay(null);
@@ -124,12 +128,27 @@ export function WorkoutsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Header Rutina */}
-        <View style={styles.header}>
-          <Text style={styles.badge}>EVIDENCE-BASED 4-DAY</Text>
-          <Text style={styles.mainTitle}>{routineData.routine_name}</Text>
-          <Text style={styles.subDesc}>{routineData.description}</Text>
+        {/* Header cu Buton Schimba Programul */}
+        <View style={styles.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.badge}>{currentRoutine.level.toUpperCase()}</Text>
+            <Text style={styles.mainTitle}>{currentRoutine.routine_name}</Text>
+          </View>
+          
+          <TouchableOpacity
+            style={styles.changeRoutineBtn}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setIsGalleryOpen(true);
+            }}
+            activeOpacity={0.8}
+          >
+            <Feather name="layers" size={16} color="#10B981" />
+            <Text style={styles.changeRoutineText}>Galerie</Text>
+          </TouchableOpacity>
         </View>
+
+        <Text style={styles.subDesc}>{currentRoutine.description}</Text>
 
         {/* Floating Timer daca e activ */}
         {isTimerRunning && (
@@ -151,7 +170,7 @@ export function WorkoutsScreen() {
         {activeSessionDay === null ? (
           <>
             <View style={styles.tabsRow}>
-              {routineData.days.map((day, idx) => (
+              {currentRoutine.days.map((day, idx) => (
                 <TouchableOpacity
                   key={day.day_number}
                   style={[styles.dayTab, selectedDayIndex === idx && styles.dayTabActive]}
@@ -168,7 +187,7 @@ export function WorkoutsScreen() {
               ))}
             </View>
 
-            {/* Vizualizare Zi Selectata */}
+            {/* Detalii Zi Curenta */}
             <View style={styles.dayCard}>
               <View style={styles.dayCardHeader}>
                 <Text style={styles.dayTitle}>{currentDay.day_title}</Text>
@@ -183,7 +202,7 @@ export function WorkoutsScreen() {
                     <View style={{ flex: 1 }}>
                       <Text style={styles.exName}>{ex.exercise_name}</Text>
                       <Text style={styles.exMuscles}>
-                        🎯 {ex.target_muscle} {ex.secondary_muscles.length > 0 ? `• Secundar: ${ex.secondary_muscles.join(', ')}` : ''}
+                        🎯 {ex.target_muscle} {ex.secondary_muscles && ex.secondary_muscles.length > 0 ? `• ${ex.secondary_muscles.join(', ')}` : ''}
                       </Text>
                     </View>
                   </View>
@@ -198,7 +217,6 @@ export function WorkoutsScreen() {
                 </View>
               ))}
 
-              {/* Buton Start Antrenament */}
               <TouchableOpacity
                 style={styles.startBtn}
                 onPress={() => handleStartSession(selectedDayIndex)}
@@ -210,12 +228,12 @@ export function WorkoutsScreen() {
             </View>
           </>
         ) : (
-          /* MOD SESIUNE ACTIVĂ CU BIFAT SETURI */
+          /* MOD SESIUNE ACTIVĂ */
           <View style={styles.activeSessionContainer}>
             <View style={styles.activeHeader}>
-              <View>
-                <Text style={styles.activeBadge}>SESIUNE ÎN DESFĂȘURARE</Text>
-                <Text style={styles.activeTitle}>{routineData.days[activeSessionDay].day_title}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.activeBadge}>SESIUNE ACTIVĂ</Text>
+                <Text style={styles.activeTitle}>{currentRoutine.days[activeSessionDay].day_title}</Text>
               </View>
               <TouchableOpacity 
                 style={styles.finishBtn} 
@@ -226,12 +244,11 @@ export function WorkoutsScreen() {
               </TouchableOpacity>
             </View>
 
-            {routineData.days[activeSessionDay].exercises.map((ex, exIdx) => (
+            {currentRoutine.days[activeSessionDay].exercises.map((ex, exIdx) => (
               <View key={exIdx} style={styles.activeExCard}>
                 <Text style={styles.activeExName}>#{exIdx + 1} {ex.exercise_name}</Text>
                 <Text style={styles.activeExNotes}>🎯 {ex.target_muscle} • Odihnă: {ex.rest_seconds}s</Text>
 
-                {/* Tabel Seturi */}
                 <View style={styles.setTable}>
                   <View style={styles.setRowHeader}>
                     <Text style={[styles.setHeaderText, { width: 45 }]}>SET</Text>
@@ -289,6 +306,65 @@ export function WorkoutsScreen() {
           </View>
         )}
       </ScrollView>
+
+      {/* Modal Galerie de Programe */}
+      <Modal
+        visible={isGalleryOpen}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsGalleryOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Galerie Programe</Text>
+              <TouchableOpacity onPress={() => setIsGalleryOpen(false)}>
+                <Feather name="x" size={24} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {routinesLibrary.map((prog, pIdx) => {
+                const isSelected = selectedRoutineIndex === pIdx;
+                return (
+                  <TouchableOpacity
+                    key={prog.id}
+                    style={[styles.galleryCard, isSelected && styles.galleryCardActive]}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                      setSelectedRoutineIndex(pIdx);
+                      setIsGalleryOpen(false);
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <View style={styles.galleryCardTop}>
+                      <Text style={styles.galleryGoal}>{prog.goal.toUpperCase()}</Text>
+                      <View style={styles.daysBadge}>
+                        <Text style={styles.daysBadgeText}>{prog.frequency_days_per_week} Zile / săpt</Text>
+                      </View>
+                    </View>
+
+                    <Text style={styles.galleryName}>{prog.routine_name}</Text>
+                    <Text style={styles.galleryDesc}>{prog.description}</Text>
+
+                    <View style={styles.galleryFooter}>
+                      <Text style={styles.galleryLevel}>Nivel: {prog.level}</Text>
+                      {isSelected ? (
+                        <View style={styles.activeTag}>
+                          <Feather name="check" size={14} color="#10B981" />
+                          <Text style={styles.activeTagText}>Selectat</Text>
+                        </View>
+                      ) : (
+                        <Text style={styles.selectText}>Alege Programul →</Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -302,8 +378,11 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 40,
   },
-  header: {
-    marginBottom: 20,
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 6,
   },
   badge: {
     color: '#10B981',
@@ -314,14 +393,30 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     color: '#FFF',
-    fontSize: 22,
+    fontSize: 21,
     fontWeight: 'bold',
-    marginBottom: 6,
+  },
+  changeRoutineBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 6,
+  },
+  changeRoutineText: {
+    color: '#10B981',
+    fontWeight: '700',
+    fontSize: 13,
   },
   subDesc: {
     color: 'rgba(255,255,255,0.6)',
     fontSize: 13,
     lineHeight: 18,
+    marginBottom: 18,
   },
   timerBanner: {
     flexDirection: 'row',
@@ -585,5 +680,105 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     fontSize: 15,
     letterSpacing: 0.5,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: '#0F172A',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: '85%',
+    padding: 20,
+    paddingBottom: 40,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.1)',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    color: '#FFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  galleryCard: {
+    backgroundColor: '#1E293B',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  galleryCardActive: {
+    borderColor: '#10B981',
+    backgroundColor: 'rgba(16, 185, 129, 0.05)',
+  },
+  galleryCardTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  galleryGoal: {
+    color: '#10B981',
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  daysBadge: {
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  daysBadgeText: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  galleryName: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginBottom: 6,
+  },
+  galleryDesc: {
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: 13,
+    lineHeight: 18,
+    marginBottom: 12,
+  },
+  galleryFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.06)',
+    paddingTop: 10,
+  },
+  galleryLevel: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 12,
+  },
+  activeTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  activeTagText: {
+    color: '#10B981',
+    fontWeight: '700',
+    fontSize: 13,
+  },
+  selectText: {
+    color: '#06B6D4',
+    fontWeight: '700',
+    fontSize: 13,
   },
 });

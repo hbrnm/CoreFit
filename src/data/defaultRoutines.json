@@ -1,251 +1,602 @@
-{
-  "routine_name": "Hypertrophy & Strength 4-Day Evidence-Based Split",
-  "frequency_days_per_week": 4,
-  "description": "Program conceput conform celor mai recente dovezi din știința sportului (Dr. Brad Schoenfeld & Dr. Mike Israetel). Utilizează diviziunea Upper/Lower pe 4 zile pentru o frecvență de 2x/săptămână per grupă musculară, maximizând hipertrofia mediată de alungire (stretch-mediated hypertrophy), tensiunea mecanică și gestionarea oboselii sistemice.",
-  "days": [
-    {
-      "day_number": 1,
-      "day_title": "Upper A (Forță & Tensiune Mecanică)",
-      "exercises": [
-        {
-          "exercise_name": "Împins cu Haltera din Înclinat (Incline Barbell Bench Press)",
-          "target_muscle": "Piept (Clavicular / Superior)",
-          "secondary_muscles": ["Umeri Anteriori", "Triceps"],
-          "sets": 3,
-          "reps_range": "6-8",
-          "rir": "1-2",
-          "rest_seconds": 150,
-          "notes": "Înclinație la 30 grade. Coborâre controlată de 3 secunde, pauză de 1 secundă la piept pentru alungire maximă a fibrelor superioare."
-        },
-        {
-          "exercise_name": "Tracțiuni cu Priză Neutră sau Lat Pulldown",
-          "target_muscle": "Dorsali (Lats)",
-          "secondary_muscles": ["Biceps", "Romboid"],
-          "sets": 3,
-          "reps_range": "8-10",
-          "rir": "1-2",
-          "rest_seconds": 120,
-          "notes": "Trage coatele spre bazin, nu spre spate. Accent pe stretch în poziția de vârf."
-        },
-        {
-          "exercise_name": "Ramat la Aparat cu Suport pe Piept (Chest-Supported Row)",
-          "target_muscle": "Spate Superior (Trapéz Mijlociu, Romboid)",
-          "secondary_muscles": ["Delt Oid Posterior", "Biceps"],
-          "sets": 3,
-          "reps_range": "8-10",
-          "rir": "1-2",
-          "rest_seconds": 120,
-          "notes": "Suportul pe piept elimină oboseala lombară. Retracție scapulară completă la contracție."
-        },
-        {
-          "exercise_name": "Ridicări Laterale la Cablu (Cable Lateral Raises)",
-          "target_muscle": "Deltoid Lateral",
-          "secondary_muscles": ["Trapez Superior"],
-          "sets": 4,
-          "reps_range": "10-12",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Scripetele setat la nivelul genunchiului pentru tensiune maximă în poziția alungită."
-        },
-        {
-          "exercise_name": "Extensii Triceps deasupra Capului la Cablu (Overhead Cable Extension)",
-          "target_muscle": "Triceps (Capul Lung)",
-          "secondary_muscles": ["Anconeu"],
-          "sets": 3,
-          "reps_range": "10-12",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Capul lung al tricepsului este stimulat optim doar când brațul este în flexie deasupra capului."
-        },
-        {
-          "exercise_name": "Flexii Biceps din Înclinat cu Gantere (Incline Dumbbell Curl)",
-          "target_muscle": "Biceps Brahial",
-          "secondary_muscles": ["Brahial"],
-          "sets": 3,
-          "reps_range": "10-12",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Banca la 45-60 grade. Menține umerii retrași pentru a pune bicepsul în alungire profundă."
-        }
-      ]
-    },
-    {
-      "day_number": 2,
-      "day_title": "Lower A (Lanț Anterior & Posterior)",
-      "exercises": [
-        {
-          "exercise_name": "Genuflexiuni la Hack Squat sau Barbell Squat",
-          "target_muscle": "Cvadriceps",
-          "secondary_muscles": ["Glutei", "Adductori"],
-          "sets": 3,
-          "reps_range": "6-8",
-          "rir": "1-2",
-          "rest_seconds": 180,
-          "notes": "Adâncime completă sub paralel. Folosește pantofi cu talpă plată sau înălțătoare de călcâi pentru flexie maximă de genunchi."
-        },
-        {
-          "exercise_name": "Îndreptări Românești cu Haltera / Gantere (Romanian Deadlift - RDL)",
-          "target_muscle": "Ischiogambieri (Hamstrings)",
-          "secondary_muscles": ["Glutei", "Erectori Spinali"],
-          "sets": 3,
-          "reps_range": "8-10",
-          "rir": "2",
-          "rest_seconds": 150,
-          "notes": "Inițiază mișcarea prin împingerea bazinului spre spate (hip hinge). Oprește coborârea când bazinul nu se mai deplasează înapoi."
-        },
-        {
-          "exercise_name": "Extensii Picioare la Aparat (Leg Extension)",
-          "target_muscle": "Cvadriceps (Rectus Femoris)",
-          "secondary_muscles": [],
-          "sets": 3,
-          "reps_range": "10-12",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Pauză de 1 secundă la vârf de contracție și coborâre controlată de 2 secunde."
-        },
-        {
-          "exercise_name": "Flexii Picioare din Șezut (Seated Leg Curl)",
-          "target_muscle": "Ischiogambieri (Hamstrings)",
-          "secondary_muscles": ["Gastrocnemian"],
-          "sets": 3,
-          "reps_range": "10-12",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Studiile arată hipertrofie superioară la varianta din șezut comparativ cu cea culcat datorită poziției alungite a șoldului."
-        },
-        {
-          "exercise_name": "Ridicări pe Vârfuri din Picioare (Standing Calf Raise)",
-          "target_muscle": "Gastrocnemian (Gambe)",
-          "secondary_muscles": ["Solear"],
-          "sets": 4,
-          "reps_range": "10-15",
-          "rir": "1",
-          "rest_seconds": 60,
-          "notes": "Pauză de 2 secunde în partea de jos (stretch complet) pentru a elimina reflexul elastic al tendonului ahilian."
-        }
-      ]
-    },
-    {
-      "day_number": 3,
-      "day_title": "Upper B (Hipertrofie & Volum Țintit)",
-      "exercises": [
-        {
-          "exercise_name": "Împins Orizontal cu Gantere sau la Aparat (Dumbbell Flat Press)",
-          "target_muscle": "Piept (Sternal)",
-          "secondary_muscles": ["Triceps", "Deltoid Anterior"],
-          "sets": 3,
-          "reps_range": "8-10",
-          "rir": "1-2",
-          "rest_seconds": 120,
-          "notes": "Coboară ganterele adânc pentru a simți o întindere musculară pronunțată pe pectorali."
-        },
-        {
-          "exercise_name": "Ramat la Scripete cu Mâner Larg (Neutral Wide Grip Cable Row)",
-          "target_muscle": "Spate Superior & Lats",
-          "secondary_muscles": ["Biceps", "Deltoid Posterior"],
-          "sets": 3,
-          "reps_range": "10-12",
-          "rir": "1-2",
-          "rest_seconds": 120,
-          "notes": "Menține trunchiul drept la 90 grade, fără balans din zona lombară."
-        },
-        {
-          "exercise_name": "Fluturări la Cabluri (Cable Flyes / Pec Deck)",
-          "target_muscle": "Piept",
-          "secondary_muscles": ["Deltoid Anterior"],
-          "sets": 3,
-          "reps_range": "12-15",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Tensiune constantă pe toată raza de mișcare. Menține o flexie ușoară a coatelor."
-        },
-        {
-          "exercise_name": "Fluturări Inverse la Pec Deck (Reverse Pec Deck / Face Pulls)",
-          "target_muscle": "Deltoid Posterior",
-          "secondary_muscles": ["Romboid", "Trapez"],
-          "sets": 3,
-          "reps_range": "12-15",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Concentrează-te pe tragerea coatelor în lateral, nu pe strângerea omoplaților."
-        },
-        {
-          "exercise_name": "Flexii Biceps Preacher / La Banca Scott (Preacher Curl)",
-          "target_muscle": "Biceps Brahial (Capul Scurt)",
-          "secondary_muscles": ["Brahioradial"],
-          "sets": 3,
-          "reps_range": "10-12",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Tensiune mecanică masivă în punctul de alungire inițial. Nu bloca coatele la capăt."
-        },
-        {
-          "exercise_name": "Extensii Triceps la Scripete cu Funia (Cable Rope Pushdown)",
-          "target_muscle": "Triceps (Capul Lateral & Medial)",
-          "secondary_muscles": ["Anconeu"],
-          "sets": 3,
-          "reps_range": "12-15",
-          "rir": "1",
-          "rest_seconds": 75,
-          "notes": "Desfă funia în partea de jos pentru o contracție completă a capului lateral."
-        }
-      ]
-    },
-    {
-      "day_number": 4,
-      "day_title": "Lower B (Accent Glutei, Cvadriceps & Coaste/Core)",
-      "exercises": [
-        {
-          "exercise_name": "Presă de Picioare (Leg Press cu picioarele mediu/jos)",
-          "target_muscle": "Cvadriceps & Glutei",
-          "secondary_muscles": ["Adductori"],
-          "sets": 3,
-          "reps_range": "8-10",
-          "rir": "1-2",
-          "rest_seconds": 150,
-          "notes": "Coborâre cât mai adâncă fără a dezlipi bazinul de spătar."
-        },
-        {
-          "exercise_name": "Fandări Bulgărești cu Gantere (Bulgarian Split Squat)",
-          "target_muscle": "Glutei & Cvadriceps",
-          "secondary_muscles": ["Ischiogambieri"],
-          "sets": 3,
-          "reps_range": "8-10",
-          "rir": "1-2",
-          "rest_seconds": 120,
-          "notes": "Trunchiul ușor aplecat în față (la 45 grade) pentru a maximiza implicarea gluteilor în faza de stretch."
-        },
-        {
-          "exercise_name": "Flexii Picioare Culcat (Lying Leg Curl)",
-          "target_muscle": "Ischiogambieri",
-          "secondary_muscles": ["Gastrocnemian"],
-          "sets": 3,
-          "reps_range": "10-12",
-          "rir": "1",
-          "rest_seconds": 90,
-          "notes": "Menține bazinul lipit ferm de bancă pe parcursul întregii mișcări."
-        },
-        {
-          "exercise_name": "Ridicări pe Vârfuri din Șezut (Seated Calf Raise)",
-          "target_muscle": "Solear (Gambe)",
-          "secondary_muscles": [],
-          "sets": 3,
-          "reps_range": "12-15",
-          "rir": "1",
-          "rest_seconds": 60,
-          "notes": "Genunchii îndoiți la 90 grade dezactivează gastrocnemianul, izolând mușchiul solear."
-        },
-        {
-          "exercise_name": "Abdomene la Cablu din Genunchi (Kneeling Cable Crunch)",
-          "target_muscle": "Drept Abdominal (Abs)",
-          "secondary_muscles": ["Oblici"],
-          "sets": 3,
-          "reps_range": "12-15",
-          "rir": "1",
-          "rest_seconds": 60,
-          "notes": "Flectează activ coloana vertebrală rotunjind spatele, nu trage doar din brațe sau șolduri."
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "hypertrophy-4day",
+    "routine_name": "Hypertrophy & Strength (Upper / Lower)",
+    "frequency_days_per_week": 4,
+    "level": "Intermediar / Avansat",
+    "goal": "Masă Musculară & Forță",
+    "description": "Program științific de 4 zile bazat pe tensiune mecanică și frecvență 2x/săptămână per grupă musculară.",
+    "days": [
+      {
+        "day_number": 1,
+        "day_title": "Upper A (Forță & Tensiune Mecanică)",
+        "exercises": [
+          {
+            "exercise_name": "Împins cu Haltera din Înclinat",
+            "target_muscle": "Piept Superior",
+            "secondary_muscles": ["Umeri Anteriori", "Triceps"],
+            "sets": 3,
+            "reps_range": "6-8",
+            "rir": "1-2",
+            "rest_seconds": 150,
+            "notes": "Înclinație la 30 grade. Coborâre controlată de 3 secunde."
+          },
+          {
+            "exercise_name": "Tracțiuni cu Priză Neutră sau Lat Pulldown",
+            "target_muscle": "Dorsali (Lats)",
+            "secondary_muscles": ["Biceps"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Trage coatele spre bazin pentru activare maximă a dorsalilor."
+          },
+          {
+            "exercise_name": "Ramat la Aparat cu Suport pe Piept",
+            "target_muscle": "Spate Superior",
+            "secondary_muscles": ["Biceps", "Deltoid Posterior"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Retracție scapulară completă la vârf de contracție."
+          },
+          {
+            "exercise_name": "Ridicări Laterale la Cablu",
+            "target_muscle": "Deltoid Lateral",
+            "secondary_muscles": ["Trapez"],
+            "sets": 4,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Tensiune constantă în poziția de jos."
+          },
+          {
+            "exercise_name": "Extensii Triceps deasupra Capului",
+            "target_muscle": "Triceps (Capul Lung)",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Alungire profundă a tricepsului."
+          },
+          {
+            "exercise_name": "Flexii Biceps din Înclinat cu Gantere",
+            "target_muscle": "Biceps Brahial",
+            "secondary_muscles": ["Brahial"],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Banca la 45-60 grade cu umerii retrași."
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "day_title": "Lower A (Cvadriceps & Ischio)",
+        "exercises": [
+          {
+            "exercise_name": "Hack Squat sau Genuflexiuni cu Haltera",
+            "target_muscle": "Cvadriceps",
+            "secondary_muscles": ["Glutei"],
+            "sets": 3,
+            "reps_range": "6-8",
+            "rir": "1-2",
+            "rest_seconds": 180,
+            "notes": "Adâncime completă sub paralel."
+          },
+          {
+            "exercise_name": "Îndreptări Românești (RDL)",
+            "target_muscle": "Ischiogambieri",
+            "secondary_muscles": ["Glutei", "Lombari"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "2",
+            "rest_seconds": 150,
+            "notes": "Împinge bazinul spre spate fără flexie din coloană."
+          },
+          {
+            "exercise_name": "Extensii Picioare la Aparat",
+            "target_muscle": "Cvadriceps",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Pauză de 1 secundă la vârf de contracție."
+          },
+          {
+            "exercise_name": "Flexii Picioare din Șezut",
+            "target_muscle": "Ischiogambieri",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Poziție alungită superioară pentru hipertrofie."
+          },
+          {
+            "exercise_name": "Ridicări pe Vârfuri din Picioare",
+            "target_muscle": "Gambe (Gastrocnemian)",
+            "secondary_muscles": [],
+            "sets": 4,
+            "reps_range": "10-15",
+            "rir": "1",
+            "rest_seconds": 60,
+            "notes": "Pauză de 2 secunde în partea de jos (stretch)."
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "day_title": "Upper B (Pompare & Detalii)",
+        "exercises": [
+          {
+            "exercise_name": "Împins Orizontal cu Gantere",
+            "target_muscle": "Piept",
+            "secondary_muscles": ["Triceps"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Coborâre amplă pentru întindere pe piept."
+          },
+          {
+            "exercise_name": "Ramat la Scripete cu Priză Medie",
+            "target_muscle": "Dorsali & Spate",
+            "secondary_muscles": ["Biceps"],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Menține trunchiul nemișcat la 90 grade."
+          },
+          {
+            "exercise_name": "Fluturări la Cabluri",
+            "target_muscle": "Piept",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Tensiune continuă."
+          },
+          {
+            "exercise_name": "Reverse Pec Deck",
+            "target_muscle": "Deltoid Posterior",
+            "secondary_muscles": ["Trapez"],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Focalizează tragerea din coate."
+          },
+          {
+            "exercise_name": "Flexii Preacher la Banca Scott",
+            "target_muscle": "Biceps",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Tensiune mare la baza mișcării."
+          },
+          {
+            "exercise_name": "Extensii Triceps la Funie",
+            "target_muscle": "Triceps",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 75,
+            "notes": "Desfă funia la finalul cursei."
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "day_title": "Lower B (Glutei & Lanț Muscular)",
+        "exercises": [
+          {
+            "exercise_name": "Presă de Picioare",
+            "target_muscle": "Cvadriceps & Glutei",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 150,
+            "notes": "Fără desprinderea bazinului de scaun."
+          },
+          {
+            "exercise_name": "Fandări Bulgărești cu Gantere",
+            "target_muscle": "Glutei",
+            "secondary_muscles": ["Cvadriceps"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Trunchiul la 45 grade pentru stretch pe fesieri."
+          },
+          {
+            "exercise_name": "Flexii Picioare Culcat",
+            "target_muscle": "Ischiogambieri",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Menține pelvisul lipit de bancă."
+          },
+          {
+            "exercise_name": "Ridicări pe Vârfuri din Șezut",
+            "target_muscle": "Gambe (Solear)",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 60,
+            "notes": "Izolează solearul prin genunchi flexați."
+          },
+          {
+            "exercise_name": "Abdomene la Cablu (Cable Crunch)",
+            "target_muscle": "Abdomen",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 60,
+            "notes": "Rotunjirea activă a coloanei vertebrale."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ppl-3day",
+    "routine_name": "Push / Pull / Legs (PPL Clasic)",
+    "frequency_days_per_week": 3,
+    "level": "Toate Nivelurile",
+    "goal": "Hipertrofie Clasică",
+    "description": "Cea mai populară împărțire din fitness: Mișcări de Împins, Mișcări de Tras, Antrenament de Picioare.",
+    "days": [
+      {
+        "day_number": 1,
+        "day_title": "Push (Piept, Umeri, Triceps)",
+        "exercises": [
+          {
+            "exercise_name": "Împins Orizontal cu Haltera / Gantere",
+            "target_muscle": "Piept",
+            "secondary_muscles": ["Umeri Anteriori", "Triceps"],
+            "sets": 4,
+            "reps_range": "6-8",
+            "rir": "1-2",
+            "rest_seconds": 150,
+            "notes": "Stabilitate completă a omoplaților pe bancă."
+          },
+          {
+            "exercise_name": "Împins Deasupra Capului (Overhead Press)",
+            "target_muscle": "Umeri",
+            "secondary_muscles": ["Triceps"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Strânge abdomenul și gluteii pentru bază solidă."
+          },
+          {
+            "exercise_name": "Fluturări la Cabluri din Înclinat",
+            "target_muscle": "Piept Superior",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Stretch adânc la finalul fiecărei repetiții."
+          },
+          {
+            "exercise_name": "Ridicări Laterale cu Gantere",
+            "target_muscle": "Deltoid Lateral",
+            "secondary_muscles": [],
+            "sets": 4,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 75,
+            "notes": "Condu mișcarea din coate, fără elan din corp."
+          },
+          {
+            "exercise_name": "Flotări la Paralele (Dips) sau Extensii Cablu",
+            "target_muscle": "Triceps",
+            "secondary_muscles": ["Piept Inferior"],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Trunchi drept pentru accent maxim pe triceps."
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "day_title": "Pull (Spate, Deltoid Posterior, Biceps)",
+        "exercises": [
+          {
+            "exercise_name": "Tracțiuni sau Lat Pulldown",
+            "target_muscle": "Dorsali",
+            "secondary_muscles": ["Biceps"],
+            "sets": 4,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Coborâre amplă până sub bărbie."
+          },
+          {
+            "exercise_name": "Ramat cu Haltera din Aplecat (Barbell Row)",
+            "target_muscle": "Spate Grosime",
+            "secondary_muscles": ["Biceps", "Lombari"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "2",
+            "rest_seconds": 120,
+            "notes": "Spatele neutru la 45 grade."
+          },
+          {
+            "exercise_name": "Face Pulls la Scripete",
+            "target_muscle": "Deltoid Posterior",
+            "secondary_muscles": ["Trapez Mijlociu"],
+            "sets": 4,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 75,
+            "notes": "Rotire externă a umerilor la final."
+          },
+          {
+            "exercise_name": "Flexii Biceps cu Bara Dreaptă / Z",
+            "target_muscle": "Biceps",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Fără balans din bazin."
+          },
+          {
+            "exercise_name": "Flexii Ciocan cu Gantere (Hammer Curls)",
+            "target_muscle": "Brahial & Antebraț",
+            "secondary_muscles": ["Biceps"],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1",
+            "rest_seconds": 75,
+            "notes": "Construiește grosimea brațului."
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "day_title": "Legs (Cvadriceps, Ischio, Gambe)",
+        "exercises": [
+          {
+            "exercise_name": "Genuflexiuni cu Haltera",
+            "target_muscle": "Cvadriceps",
+            "secondary_muscles": ["Glutei"],
+            "sets": 4,
+            "reps_range": "6-8",
+            "rir": "2",
+            "rest_seconds": 180,
+            "notes": "Regele exercițiilor de picioare."
+          },
+          {
+            "exercise_name": "Îndreptări Românești (RDL)",
+            "target_muscle": "Ischiogambieri",
+            "secondary_muscles": ["Glutei"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "2",
+            "rest_seconds": 150,
+            "notes": "Accent pe alungire."
+          },
+          {
+            "exercise_name": "Extensii Picioare",
+            "target_muscle": "Cvadriceps",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Pompare intensă."
+          },
+          {
+            "exercise_name": "Flexii Picioare din Șezut",
+            "target_muscle": "Ischiogambieri",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 90,
+            "notes": "Control strict pe coborâre."
+          },
+          {
+            "exercise_name": "Ridicări pe Vârfuri la Aparat",
+            "target_muscle": "Gambe",
+            "secondary_muscles": [],
+            "sets": 4,
+            "reps_range": "15-20",
+            "rir": "0-1",
+            "rest_seconds": 60,
+            "notes": "Pauză pe stretch."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fullbody-3day",
+    "routine_name": "Full Body Eficient (Timp Limitat)",
+    "frequency_days_per_week": 3,
+    "level": "Începător / Ocupat",
+    "goal": "Fitness General & Longevitate",
+    "description": "Antrenament complet al corpului de 3 ori pe săptămână. Ideal pentru cei cu program încărcat.",
+    "days": [
+      {
+        "day_number": 1,
+        "day_title": "Full Body A (Accent Împins & Cvadriceps)",
+        "exercises": [
+          {
+            "exercise_name": "Genuflexiuni la Aparat sau Goblet Squat",
+            "target_muscle": "Cvadriceps",
+            "secondary_muscles": ["Glutei"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "2",
+            "rest_seconds": 120,
+            "notes": "Postură stabilă, respiră adânc pe coborâre."
+          },
+          {
+            "exercise_name": "Împins cu Gantere din Orizontal",
+            "target_muscle": "Piept",
+            "secondary_muscles": ["Triceps"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 120,
+            "notes": "Coborâre de 2 secunde."
+          },
+          {
+            "exercise_name": "Tracțiuni la Scripete (Lat Pulldown)",
+            "target_muscle": "Dorsali",
+            "secondary_muscles": ["Biceps"],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1-2",
+            "rest_seconds": 90,
+            "notes": "Priză confortabilă mediu-largă."
+          },
+          {
+            "exercise_name": "Ridicări Laterale cu Gantere",
+            "target_muscle": "Umeri",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 60,
+            "notes": "Tonus muscular pe deltoid."
+          },
+          {
+            "exercise_name": "Plank (Scândură)",
+            "target_muscle": "Core & Abdomen",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "45-60s",
+            "rir": "1",
+            "rest_seconds": 60,
+            "notes": "Menține corpul într-o linie dreaptă perfectă."
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "day_title": "Full Body B (Accent Lanț Posterior & Trageri)",
+        "exercises": [
+          {
+            "exercise_name": "Îndreptări Românești (RDL)",
+            "target_muscle": "Ischiogambieri & Glutei",
+            "secondary_muscles": ["Lombari"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "2",
+            "rest_seconds": 120,
+            "notes": "Păstrează ganterele aproape de tibii."
+          },
+          {
+            "exercise_name": "Ramat la Aparat sau cu Gantera pe Bancă",
+            "target_muscle": "Spate",
+            "secondary_muscles": ["Biceps"],
+            "sets": 3,
+            "reps_range": "8-10",
+            "rir": "1-2",
+            "rest_seconds": 90,
+            "notes": "Trage cotul spre șold."
+          },
+          {
+            "exercise_name": "Împins din Înclinat cu Gantere",
+            "target_muscle": "Piept Superior",
+            "secondary_muscles": ["Umeri"],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "1-2",
+            "rest_seconds": 90,
+            "notes": "Banca la 30 grade."
+          },
+          {
+            "exercise_name": "Superset Brațe: Biceps Curl + Triceps Pushdown",
+            "target_muscle": "Brațe",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12-15",
+            "rir": "1",
+            "rest_seconds": 60,
+            "notes": "Executate spate în spate pentru eficiență de timp."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mobility-recovery",
+    "routine_name": "Mobilitate, Core & Postură",
+    "frequency_days_per_week": 2,
+    "level": "Recuperare Activă",
+    "goal": "Sănătate Articulară & Postură",
+    "description": "Sesiuni lejere pentru deblocarea spatelui, șoldurilor și întărirea trunchiului fără oboseală musculară severă.",
+    "days": [
+      {
+        "day_number": 1,
+        "day_title": "Sesiune Mobilitate Șolduri & Coloană",
+        "exercises": [
+          {
+            "exercise_name": "90/90 Hip Transitions",
+            "target_muscle": "Șolduri & Rotatori",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "3",
+            "rest_seconds": 45,
+            "notes": "Mișcările lente îmbunătățesc rotația internă și externă a șoldului."
+          },
+          {
+            "exercise_name": "Cat-Cow & Thoracic Rotations",
+            "target_muscle": "Coloană Toracală",
+            "secondary_muscles": ["Lombari"],
+            "sets": 3,
+            "reps_range": "10-12",
+            "rir": "3",
+            "rest_seconds": 45,
+            "notes": "Sincronizează respirația cu arcuirea spatelui."
+          },
+          {
+            "exercise_name": "Deadbug",
+            "target_muscle": "Core Profund (Transvers)",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "12",
+            "rir": "2",
+            "rest_seconds": 60,
+            "notes": "Spatele lipit complet de sol în timpul întinderii membrelor."
+          },
+          {
+            "exercise_name": "Bird-Dog",
+            "target_muscle": "Stabilitate Lombară & Glutei",
+            "secondary_muscles": [],
+            "sets": 3,
+            "reps_range": "10",
+            "rir": "2",
+            "rest_seconds": 45,
+            "notes": "Pauză de 2 secunde la extensie maximă."
+          }
+        ]
+      }
+    ]
+  }
+]
