@@ -9,35 +9,19 @@ export interface ExerciseItem {
   secondary: string[];
   notes: string;
   images: string[];
+  gif_url?: string;
 }
 
 const exercisesList = exercisesData as ExerciseItem[];
 
-const CATEGORY_FALLBACK_IMAGES: Record<string, string[]> = {
-  Piept: [
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg',
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/1.jpg',
-  ],
-  Spate: [
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg',
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/1.jpg',
-  ],
-  Umeri: [
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg',
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/1.jpg',
-  ],
-  Picioare: [
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Full_Squat/0.jpg',
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Full_Squat/1.jpg',
-  ],
-  Brațe: [
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg',
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/1.jpg',
-  ],
-  Abdomen: [
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg',
-    'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/1.jpg',
-  ],
+// Animații GIF 3D anatomice cu mușchi evidențiați în roșu (GymVisual / ExerciseDB)
+const CATEGORY_FALLBACK_GIFS: Record<string, string> = {
+  Piept: 'https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0025.gif',
+  Spate: 'https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2330.gif',
+  Umeri: 'https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0091.gif',
+  Picioare: 'https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0043.gif',
+  Brațe: 'https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0031.gif',
+  Abdomen: 'https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0472.gif',
 };
 
 const SPECIFIC_KEYWORDS_MAP: { keywords: string[]; exerciseId: string }[] = [
@@ -74,15 +58,16 @@ const SPECIFIC_KEYWORDS_MAP: { keywords: string[]; exerciseId: string }[] = [
 ];
 
 /**
- * Găsește exercițiul și imaginile sale pe baza numelui sau a categoriei
+ * Găsește exercițiul și animația sa GIF 3D pe baza numelui sau a categoriei
  */
-export function getExerciseIllustration(exerciseName: string, category?: string): { images: string[]; exercise?: ExerciseItem } {
+export function getExerciseIllustration(exerciseName: string, category?: string): { images: string[]; gifUrl: string; exercise?: ExerciseItem } {
   const norm = exerciseName.toLowerCase();
 
   // 1. Caută ID direct
   const exactById = exercisesList.find((ex) => ex.id === norm);
   if (exactById && exactById.images && exactById.images.length > 0) {
-    return { images: exactById.images, exercise: exactById };
+    const gif = exactById.gif_url || exactById.images[0];
+    return { images: [gif], gifUrl: gif, exercise: exactById };
   }
 
   // 2. Caută nume exact sau parțial în lista noastră
@@ -91,7 +76,8 @@ export function getExerciseIllustration(exerciseName: string, category?: string)
     return exNorm.includes(norm) || norm.includes(exNorm);
   });
   if (exactByName && exactByName.images && exactByName.images.length > 0) {
-    return { images: exactByName.images, exercise: exactByName };
+    const gif = exactByName.gif_url || exactByName.images[0];
+    return { images: [gif], gifUrl: gif, exercise: exactByName };
   }
 
   // 3. Caută după cuvinte cheie specifice
@@ -100,16 +86,13 @@ export function getExerciseIllustration(exerciseName: string, category?: string)
     if (matchAll) {
       const ex = exercisesList.find((e) => e.id === item.exerciseId);
       if (ex && ex.images && ex.images.length > 0) {
-        return { images: ex.images, exercise: ex };
+        const gif = ex.gif_url || ex.images[0];
+        return { images: [gif], gifUrl: gif, exercise: ex };
       }
     }
   }
 
   // 4. Fallback după categorie (Piept, Spate, etc.)
-  if (category && CATEGORY_FALLBACK_IMAGES[category]) {
-    return { images: CATEGORY_FALLBACK_IMAGES[category] };
-  }
-
-  // 5. Fallback general: Bench Press
-  return { images: CATEGORY_FALLBACK_IMAGES.Piept };
+  const fallback = (category && CATEGORY_FALLBACK_GIFS[category]) || CATEGORY_FALLBACK_GIFS.Piept;
+  return { images: [fallback], gifUrl: fallback };
 }

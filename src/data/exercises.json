@@ -11,9 +11,9 @@
     ],
     "notes": "Păstrează călcâiele ferm pe sol și omoplații retractați.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0025.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0025.gif"
   },
   {
     "id": "incline_bench_press",
@@ -27,9 +27,9 @@
     ],
     "notes": "Bancă la 30 grade pentru a nu transfera efortul complet pe deltoid.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Bench_Press_-_Medium_Grip/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Bench_Press_-_Medium_Grip/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0047.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0047.gif"
   },
   {
     "id": "db_incline_press",
@@ -43,9 +43,9 @@
     ],
     "notes": "Coborâre controlată pentru alungire profundă.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0314.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0314.gif"
   },
   {
     "id": "cable_flyes",
@@ -58,9 +58,9 @@
     ],
     "notes": "Tensiune constantă inclusiv la finalul contracției.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crossover/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crossover/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1269.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1269.gif"
   },
   {
     "id": "dips_chest",
@@ -74,9 +74,9 @@
     ],
     "notes": "Trunchiul aplecat ușor înainte.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0251.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0251.gif"
   },
   {
     "id": "deadlift",
@@ -91,9 +91,9 @@
     ],
     "notes": "Păstrează coloana neutră și haltera lipită de tibii.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0032.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0032.gif"
   },
   {
     "id": "barbell_row",
@@ -107,9 +107,9 @@
     ],
     "notes": "Trage haltera spre ombilic cu coatele aproape de corp.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0027.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0027.gif"
   },
   {
     "id": "lat_pulldown",
@@ -123,9 +123,9 @@
     ],
     "notes": "Trage coatele în jos și spre spate fără balans excesiv.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2330.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2330.gif"
   },
   {
     "id": "pull_ups",
@@ -139,9 +139,9 @@
     ],
     "notes": "Extensie completă a brațelor la baza mișcării.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0140.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0140.gif"
   },
   {
     "id": "chest_supported_row",
@@ -154,9 +154,9 @@
     ],
     "notes": "Elimină complet stresul pe zona lombară.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0180.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0180.gif"
   },
   {
     "id": "overhead_press",
@@ -170,9 +170,9 @@
     ],
     "notes": "Activează gluteii și abdomenul pentru stabilitate.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0091.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0091.gif"
   },
   {
     "id": "cable_lateral_raise",
@@ -185,9 +185,9 @@
     ],
     "notes": "Cablul setat la înălțimea genunchilor pentru rezistență pe alungire.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0178.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0178.gif"
   },
   {
     "id": "db_lateral_raise",
@@ -198,9 +198,9 @@
     "secondary": [],
     "notes": "Coatele ușor flexate, fără mișcări din trunchi.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0334.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0334.gif"
   },
   {
     "id": "face_pull",
@@ -213,9 +213,9 @@
     ],
     "notes": "Trage funia spre nivelul ochilor cu rotație externă.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Face_Pull/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Face_Pull/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/3697.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/3697.gif"
   },
   {
     "id": "squat",
@@ -230,9 +230,9 @@
     ],
     "notes": "Coborâre controlată, genunchii urmăresc direcția degetelor de la picioare.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Full_Squat/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Full_Squat/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0043.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0043.gif"
   },
   {
     "id": "hack_squat",
@@ -245,9 +245,9 @@
     ],
     "notes": "Stabilitate mare ce permite focus maxim pe cvadriceps.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hack_Squat/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hack_Squat/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0046.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0046.gif"
   },
   {
     "id": "leg_press",
@@ -260,9 +260,9 @@
     ],
     "notes": "Nu lăsa bazinul să se curbeze de pe spătar.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2287.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2287.gif"
   },
   {
     "id": "rdl",
@@ -276,9 +276,9 @@
     ],
     "notes": "Bazinul se deplasează spre spate, menținând o flexie minimă a genunchilor.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Romanian_Deadlift/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Romanian_Deadlift/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0085.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0085.gif"
   },
   {
     "id": "leg_extension",
@@ -289,9 +289,9 @@
     "secondary": [],
     "notes": "Pauză de 1 secundă pe contracție de vârf.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0585.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0585.gif"
   },
   {
     "id": "seated_leg_curl",
@@ -302,9 +302,9 @@
     "secondary": [],
     "notes": "Poziție superioară de stretch comparativ cu varianta culcat.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Leg_Curls/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Leg_Curls/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0599.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0599.gif"
   },
   {
     "id": "standing_calf_raise",
@@ -317,9 +317,9 @@
     ],
     "notes": "Pauză de 2 secunde în partea de jos a cursei.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Calf_Raises/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Calf_Raises/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1372.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1372.gif"
   },
   {
     "id": "incline_db_curl",
@@ -332,9 +332,9 @@
     ],
     "notes": "Banca la 45-60 grade pentru alungire extremă a bicepsului.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Incline_Dumbbell_Curl/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Incline_Dumbbell_Curl/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0318.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0318.gif"
   },
   {
     "id": "barbell_curl",
@@ -347,9 +347,9 @@
     ],
     "notes": "Menține coatele fixe pe linia torsului.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0031.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0031.gif"
   },
   {
     "id": "hammer_curl",
@@ -362,9 +362,9 @@
     ],
     "notes": "Dezvoltă grosimea brațului și puterea antebrațului.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0165.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0165.gif"
   },
   {
     "id": "triceps_pushdown",
@@ -375,9 +375,9 @@
     "secondary": [],
     "notes": "Coatele lipite de corp, cursa completă în jos.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Triceps_Pushdown/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Triceps_Pushdown/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0201.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0201.gif"
   },
   {
     "id": "overhead_triceps_ext",
@@ -388,9 +388,9 @@
     "secondary": [],
     "notes": "Capul lung este activat cel mai puternic cu umărul în flexie.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Overhead_Barbell_Triceps_Extension/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Overhead_Barbell_Triceps_Extension/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
   },
   {
     "id": "skull_crushers",
@@ -401,9 +401,9 @@
     "secondary": [],
     "notes": "Coboară haltera spre creștetul capului.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_EZ_Bar_Triceps_Extension/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_EZ_Bar_Triceps_Extension/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
   },
   {
     "id": "hanging_leg_raise",
@@ -416,9 +416,9 @@
     ],
     "notes": "Ridică bazinul către piept, nu doar picioarele.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hanging_Leg_Raise/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hanging_Leg_Raise/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0472.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0472.gif"
   },
   {
     "id": "cable_crunch",
@@ -429,9 +429,9 @@
     "secondary": [],
     "notes": "Rotunjește coloana pentru a contracta fibrele abdominale.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0175.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0175.gif"
   },
   {
     "id": "plank",
@@ -445,8 +445,8 @@
     ],
     "notes": "Menține corpul perfect aliniat fără coborârea șoldurilor.",
     "images": [
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg",
-      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/1.jpg"
-    ]
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2135.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2135.gif"
   }
 ]

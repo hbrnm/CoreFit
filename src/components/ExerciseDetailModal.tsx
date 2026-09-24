@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
-import * as Haptics from 'expo-haptics';
 import { ExerciseItem } from '../lib/exerciseHelper';
 
 interface ExerciseDetailModalProps {
@@ -19,33 +18,9 @@ export function ExerciseDetailModal({
   exerciseName,
   onClose,
 }: ExerciseDetailModalProps) {
-  const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
-  const [isPlayingAnimation, setIsPlayingAnimation] = useState(true);
   const [isImageLoading, setIsImageLoading] = useState(true);
 
-  // Auto-play între cele două cadre ale mișcării (Start -> Contracție)
-  useEffect(() => {
-    if (!visible || !isPlayingAnimation || images.length < 2) return;
-
-    const interval = setInterval(() => {
-      setCurrentFrameIndex((prev) => (prev === 0 ? 1 : 0));
-    }, 1400);
-
-    return () => clearInterval(interval);
-  }, [visible, isPlayingAnimation, images]);
-
-  const handleToggleFrame = (idx: number) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setIsPlayingAnimation(false);
-    setCurrentFrameIndex(idx);
-  };
-
-  const handleTogglePlay = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setIsPlayingAnimation((prev) => !prev);
-  };
-
-  const currentImageUri = images[currentFrameIndex] || images[0];
+  const gifUri = (exercise && exercise.gif_url) || images[0] || '';
 
   return (
     <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
@@ -54,7 +29,12 @@ export function ExerciseDetailModal({
           {/* Header */}
           <View style={styles.header}>
             <View style={{ flex: 1, paddingRight: 12 }}>
-              <Text style={styles.headerBadge}>{exercise?.category?.toUpperCase() || 'EXERCIȚIU'}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                <Text style={styles.headerBadge}>{exercise?.category?.toUpperCase() || 'EXERCIȚIU'}</Text>
+                <View style={styles.gifBadge}>
+                  <Text style={styles.gifBadgeText}>GIF 3D</Text>
+                </View>
+              </View>
               <Text style={styles.headerTitle} numberOfLines={2}>
                 {exercise?.name || exerciseName}
               </Text>
@@ -65,12 +45,13 @@ export function ExerciseDetailModal({
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-            {/* Vizualizare Mișcare & Ilustrație */}
+            {/* Vizualizare Animație GIF 3D */}
             <View style={styles.mediaContainer}>
-              {currentImageUri ? (
+              {gifUri ? (
                 <View style={styles.imageWrapper}>
                   <Image
-                    source={{ uri: currentImageUri }}
+                    key={gifUri}
+                    source={{ uri: gifUri }}
                     style={styles.exerciseImage}
                     resizeMode="contain"
                     onLoadStart={() => setIsImageLoading(true)}
@@ -85,46 +66,17 @@ export function ExerciseDetailModal({
               ) : (
                 <View style={styles.noImage}>
                   <Feather name="activity" size={40} color="rgba(255,255,255,0.3)" />
-                  <Text style={styles.noImageText}>Fără ilustrație disponibilă</Text>
+                  <Text style={styles.noImageText}>Fără animație disponibilă</Text>
                 </View>
               )}
 
-              {/* Controale Animație / Cadre (Poziție 1 vs Poziție 2) */}
-              {images.length >= 2 && (
-                <View style={styles.frameControlsRow}>
-                  <TouchableOpacity
-                    style={[styles.frameBtn, currentFrameIndex === 0 && styles.frameBtnActive]}
-                    onPress={() => handleToggleFrame(0)}
-                  >
-                    <Text style={[styles.frameBtnText, currentFrameIndex === 0 && styles.frameBtnTextActive]}>
-                      1. Start
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.playPauseBtn}
-                    onPress={handleTogglePlay}
-                  >
-                    <Feather
-                      name={isPlayingAnimation ? "pause" : "play"}
-                      size={16}
-                      color="#10B981"
-                    />
-                    <Text style={styles.playPauseText}>
-                      {isPlayingAnimation ? 'Loop Activ' : 'Pauză'}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[styles.frameBtn, currentFrameIndex === 1 && styles.frameBtnActive]}
-                    onPress={() => handleToggleFrame(1)}
-                  >
-                    <Text style={[styles.frameBtnText, currentFrameIndex === 1 && styles.frameBtnTextActive]}>
-                      2. Contracție
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+              {/* Subtitlu & Legendă Anatomică */}
+              <View style={styles.legendRow}>
+                <View style={styles.legendDot} />
+                <Text style={styles.legendText}>
+                  Zona marcată cu <Text style={{ color: '#EF4444', fontWeight: 'bold' }}>roșu</Text> reprezintă mușchii vizați
+                </Text>
+              </View>
             </View>
 
             {/* Informații Mușchi & Echipament */}
@@ -223,7 +175,17 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1,
-    marginBottom: 2,
+  },
+  gifBadge: {
+    backgroundColor: 'rgba(249,115,22,0.2)',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  gifBadgeText: {
+    color: '#F97316',
+    fontSize: 9,
+    fontWeight: '900',
   },
   headerTitle: {
     color: '#FFF',
@@ -249,7 +211,7 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     width: '100%',
-    height: 220,
+    height: 240,
     backgroundColor: '#FFFFFF',
     borderRadius: 14,
     overflow: 'hidden',
@@ -276,45 +238,25 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.4)',
     fontSize: 13,
   },
-  frameControlsRow: {
+  legendRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    marginTop: 12,
-    width: '100%',
+    gap: 8,
+    marginTop: 10,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
-  frameBtn: {
-    flex: 1,
-    paddingVertical: 8,
-    borderRadius: 10,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    alignItems: 'center',
+  legendDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#EF4444',
   },
-  frameBtnActive: {
-    backgroundColor: '#10B981',
-  },
-  frameBtnText: {
-    color: 'rgba(255,255,255,0.6)',
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  frameBtnTextActive: {
-    color: '#0F172A',
-  },
-  playPauseBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderRadius: 10,
-    backgroundColor: 'rgba(16,185,129,0.12)',
-  },
-  playPauseText: {
-    color: '#10B981',
+  legendText: {
+    color: 'rgba(255,255,255,0.7)',
     fontSize: 11,
-    fontWeight: 'bold',
   },
   infoSection: {
     gap: 12,
