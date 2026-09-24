@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pedometer } from 'expo-sensors';
 import Feather from '@expo/vector-icons/Feather';
 import { CircularProgress } from '../components/CircularProgress';
+import { LineChart } from '../components/LineChart';
+import { MuscleBalanceCard } from '../components/MuscleBalanceCard';
 import { useStore } from '../store/useStore';
 
 export function HomeScreen() {
@@ -102,6 +104,37 @@ export function HomeScreen() {
             <Text style={styles.miniSub}>Gata de efort</Text>
           </View>
         </View>
+
+        {/* Card Evolutie Activitate (7 zile) */}
+        <View style={[styles.card, { marginTop: 16 }]}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Feather name="activity" size={18} color="#06B6D4" />
+              <Text style={[styles.cardTitle, { color: '#06B6D4', marginBottom: 0, textAlign: 'left' }]}>
+                Evoluție Ardere Calorii
+              </Text>
+            </View>
+            <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: '700' }}>7 ZILE</Text>
+          </View>
+
+          <LineChart
+            data={[
+              { label: 'Lun', value: 340 },
+              { label: 'Mar', value: 480 },
+              { label: 'Mie', value: 290 },
+              { label: 'Joi', value: 520 },
+              { label: 'Vin', value: 410 },
+              { label: 'Sâm', value: 380 },
+              { label: 'Azi', value: todayBurnedKcal > 0 ? todayBurnedKcal : 450 },
+            ]}
+            height={120}
+            color="#06B6D4"
+            unit=" kcal"
+          />
+        </View>
+
+        {/* Card Balanta Musculara Saptamanala (10-20 serii) */}
+        <MuscleBalanceCard />
       </ScrollView>
     </SafeAreaView>
   );

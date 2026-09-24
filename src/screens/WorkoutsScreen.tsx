@@ -8,6 +8,7 @@ import { calculate1RM } from '../lib/db';
 import routinesLibrary from '../data/defaultRoutines.json';
 import { PlateCalculatorModal } from '../components/PlateCalculatorModal';
 import { ExercisePickerModal, ExerciseItem } from '../components/ExercisePickerModal';
+import { VoiceCues, setVoiceCoachEnabled, getVoiceCoachEnabled } from '../lib/voiceCoach';
 
 type SetType = 'N' | 'W' | 'D' | 'F';
 
@@ -49,6 +50,7 @@ export function WorkoutsScreen() {
   // Timer odihna
   const [secondsLeft, setSecondsLeft] = useState(90);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [isVoiceMuted, setIsVoiceMuted] = useState(!getVoiceCoachEnabled());
 
   const logWorkoutSession = useStore((state) => state.logWorkoutSession);
   const recordSetPR = useStore((state) => state.recordSetPR);
@@ -60,15 +62,19 @@ export function WorkoutsScreen() {
     setSelectedDayIndex(0);
   }, [selectedRoutineIndex]);
 
-  // Timer interval
+  // Timer interval cu Voice Cues & Haptics
   useEffect(() => {
     let interval: any;
     if (isTimerRunning && secondsLeft > 0) {
       interval = setInterval(() => {
         setSecondsLeft((prev) => {
+          if (prev === 6) {
+            VoiceCues.fiveSecondsWarning();
+          }
           if (prev <= 1) {
             setIsTimerRunning(false);
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+            VoiceCues.restOver();
             return 0;
           }
           if (prev % 10 === 0) {
@@ -178,8 +184,13 @@ export function WorkoutsScreen() {
         if (w > 0 && r > 0 && current.type !== 'W') {
           const isPR = recordSetPR(exName, w, r);
           if (isPR) {
+            VoiceCues.newPR(exName, w);
             Alert.alert('🏆 NOU RECORD PERSONAL (PR)!', `${exName}: ${w} kg x ${r} reps (1RM Estimat: ${calculate1RM(w, r)} kg)`);
+          } else {
+            VoiceCues.setDone(setIdx + 1);
           }
+        } else {
+          VoiceCues.setDone(setIdx + 1);
         }
 
         setSecondsLeft(restSeconds);
@@ -193,6 +204,7 @@ export function WorkoutsScreen() {
   // Finalizare antrenament
   const handleFinishWorkout = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    VoiceCues.workoutFinished();
     const day = currentRoutine.days[activeSessionDay!];
 
     let completedSetsCount = 0;
@@ -246,6 +258,18 @@ export function WorkoutsScreen() {
           </View>
 
           <View style={{ flexDirection: 'row', gap: 8 }}>
+            <TouchableOpacity
+              style={[styles.utilBtn, isVoiceMuted && { opacity: 0.5 }]}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                const nextMuted = !isVoiceMuted;
+                setIsVoiceMuted(nextMuted);
+                setVoiceCoachEnabled(!nextMuted);
+              }}
+            >
+              <Feather name={isVoiceMuted ? "volume-x" : "volume-2"} size={16} color="#06B6D4" />
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={styles.utilBtn}
               onPress={() => {
