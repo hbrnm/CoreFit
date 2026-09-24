@@ -38,7 +38,7 @@ export function WorkoutsScreen() {
 
   // Timer interval
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: any;
     if (isTimerRunning && secondsLeft > 0) {
       interval = setInterval(() => {
         setSecondsLeft((prev) => {
