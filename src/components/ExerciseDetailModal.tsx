@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { Image } from 'expo-image';
 import Feather from '@expo/vector-icons/Feather';
-import { ExerciseItem } from '../lib/exerciseHelper';
+import { ExerciseItem, LOCAL_EXERCISE_GIFS } from '../lib/exerciseHelper';
 
 interface ExerciseDetailModalProps {
   visible: boolean;
   exercise: ExerciseItem | null;
   images: string[];
   exerciseName: string;
+  source?: any;
   onClose: () => void;
 }
 
@@ -16,11 +18,17 @@ export function ExerciseDetailModal({
   exercise,
   images,
   exerciseName,
+  source,
   onClose,
 }: ExerciseDetailModalProps) {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
-  const gifUri = (exercise && exercise.gif_url) || images[0] || '';
+  // Folosește sursa locală fluidă din app bundle dacă există
+  const resolvedSource =
+    source ||
+    (exercise && LOCAL_EXERCISE_GIFS[exercise.id]) ||
+    (exercise && exercise.gif_url ? { uri: exercise.gif_url } : null) ||
+    (images[0] ? { uri: images[0] } : null);
 
   return (
     <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
@@ -32,7 +40,7 @@ export function ExerciseDetailModal({
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 }}>
                 <Text style={styles.headerBadge}>{exercise?.category?.toUpperCase() || 'EXERCIȚIU'}</Text>
                 <View style={styles.gifBadge}>
-                  <Text style={styles.gifBadgeText}>GIF 3D</Text>
+                  <Text style={styles.gifBadgeText}>GIF 3D FLUID</Text>
                 </View>
               </View>
               <Text style={styles.headerTitle} numberOfLines={2}>
@@ -45,15 +53,16 @@ export function ExerciseDetailModal({
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-            {/* Vizualizare Animație GIF 3D */}
+            {/* Vizualizare Animație GIF 3D Hardware Accelerated */}
             <View style={styles.mediaContainer}>
-              {gifUri ? (
+              {resolvedSource ? (
                 <View style={styles.imageWrapper}>
                   <Image
-                    key={gifUri}
-                    source={{ uri: gifUri }}
+                    source={resolvedSource}
                     style={styles.exerciseImage}
-                    resizeMode="contain"
+                    contentFit="contain"
+                    autoplay={true}
+                    cachePolicy="memory-disk"
                     onLoadStart={() => setIsImageLoading(true)}
                     onLoadEnd={() => setIsImageLoading(false)}
                   />

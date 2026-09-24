@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import { Image } from 'expo-image';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import exercisesList from '../data/exercises.json';
-import { ExerciseItem } from '../lib/exerciseHelper';
+import { ExerciseItem, LOCAL_EXERCISE_GIFS } from '../lib/exerciseHelper';
 export { ExerciseItem };
 import { ExerciseDetailModal } from './ExerciseDetailModal';
 
@@ -104,7 +105,7 @@ export function ExercisePickerModal({ visible, onClose, onSelectExercise }: Exer
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
             renderItem={({ item }) => {
-              const thumbUri = item.images && item.images.length > 0 ? item.images[0] : null;
+              const localSource = LOCAL_EXERCISE_GIFS[item.id] || (item.images && item.images.length > 0 ? { uri: item.images[0] } : null);
 
               return (
                 <TouchableOpacity
@@ -113,14 +114,20 @@ export function ExercisePickerModal({ visible, onClose, onSelectExercise }: Exer
                   activeOpacity={0.7}
                 >
                   <View style={styles.cardContentRow}>
-                    {/* Thumbnail Ilustrație Exercițiu */}
-                    {thumbUri ? (
+                    {/* Thumbnail Ilustrație Exercițiu Fluidă */}
+                    {localSource ? (
                       <TouchableOpacity
                         style={styles.thumbWrapper}
                         onPress={() => handleOpenDetail(item)}
                         activeOpacity={0.8}
                       >
-                        <Image source={{ uri: thumbUri }} style={styles.thumbImage} resizeMode="contain" />
+                        <Image
+                          source={localSource}
+                          style={styles.thumbImage}
+                          contentFit="contain"
+                          autoplay={true}
+                          cachePolicy="memory-disk"
+                        />
                         <View style={styles.thumbZoomBadge}>
                           <Feather name="maximize-2" size={10} color="#0F172A" />
                         </View>
@@ -166,12 +173,13 @@ export function ExercisePickerModal({ visible, onClose, onSelectExercise }: Exer
         </View>
       </View>
 
-      {/* Modal Detaliu Exercițiu cu Ilustrații & Animație Formă */}
+      {/* Modal Detaliu Exercițiu cu Ilustrații & Animație Formă Fluidă */}
       <ExerciseDetailModal
         visible={!!detailExercise}
         exercise={detailExercise}
         images={detailExercise?.images || []}
         exerciseName={detailExercise?.name || ''}
+        source={detailExercise ? LOCAL_EXERCISE_GIFS[detailExercise.id] : undefined}
         onClose={() => setDetailExercise(null)}
       />
     </Modal>

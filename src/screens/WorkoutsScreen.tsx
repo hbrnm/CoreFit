@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Modal, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Modal } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
@@ -51,11 +52,13 @@ export function WorkoutsScreen() {
     exercise: ExerciseItem | null;
     images: string[];
     name: string;
+    source?: any;
   }>({
     visible: false,
     exercise: null,
     images: [],
     name: '',
+    source: null,
   });
 
   const handleOpenExerciseDetail = (name: string, category?: string) => {
@@ -66,6 +69,7 @@ export function WorkoutsScreen() {
       exercise: result.exercise || null,
       images: result.images,
       name: name,
+      source: result.source,
     });
   };
 
@@ -381,17 +385,19 @@ export function WorkoutsScreen() {
                 return (
                   <View key={exIdx} style={styles.exerciseItem}>
                     <View style={styles.exHeader}>
-                      {/* Thumbnail Ilustrație */}
+                      {/* Thumbnail Ilustrație Locală Rapidă & Fluidă */}
                       <TouchableOpacity
                         style={styles.exThumbWrapper}
                         onPress={() => handleOpenExerciseDetail(ex.exercise_name, ex.target_muscle)}
                         activeOpacity={0.8}
                       >
-                        {thumbUri ? (
-                          <Image source={{ uri: thumbUri }} style={styles.exThumbImg} resizeMode="contain" />
-                        ) : (
-                          <Feather name="activity" size={20} color="#10B981" />
-                        )}
+                        <Image
+                          source={illu.source}
+                          style={styles.exThumbImg}
+                          contentFit="contain"
+                          autoplay={true}
+                          cachePolicy="memory-disk"
+                        />
                         <View style={styles.exThumbZoomBadge}>
                           <Feather name="maximize-2" size={9} color="#0F172A" />
                         </View>
@@ -449,7 +455,6 @@ export function WorkoutsScreen() {
 
             {activeExercises.map((ex, exIdx) => {
               const illu = getExerciseIllustration(ex.exercise_name, ex.target_muscle);
-              const thumbUri = illu.images[0];
 
               return (
                 <View key={exIdx} style={styles.activeExCard}>
@@ -460,11 +465,13 @@ export function WorkoutsScreen() {
                       onPress={() => handleOpenExerciseDetail(ex.exercise_name, ex.target_muscle)}
                       activeOpacity={0.8}
                     >
-                      {thumbUri ? (
-                        <Image source={{ uri: thumbUri }} style={styles.activeExThumbImg} resizeMode="contain" />
-                      ) : (
-                        <Feather name="activity" size={18} color="#10B981" />
-                      )}
+                      <Image
+                        source={illu.source}
+                        style={styles.activeExThumbImg}
+                        contentFit="contain"
+                        autoplay={true}
+                        cachePolicy="memory-disk"
+                      />
                       <View style={styles.exThumbZoomBadge}>
                         <Feather name="maximize-2" size={8} color="#0F172A" />
                       </View>
@@ -659,12 +666,13 @@ export function WorkoutsScreen() {
         </View>
       </Modal>
 
-      {/* Modal Detaliu Exercițiu & Animație Formă */}
+      {/* Modal Detaliu Exercițiu & Animație Formă Fluidă */}
       <ExerciseDetailModal
         visible={detailModalState.visible}
         exercise={detailModalState.exercise}
         images={detailModalState.images}
         exerciseName={detailModalState.name}
+        source={detailModalState.source}
         onClose={() => setDetailModalState((prev) => ({ ...prev, visible: false }))}
       />
     </SafeAreaView>
