@@ -1,0 +1,33 @@
+import { cx } from '../../lib/cx';
+import { DOMAIN } from '../../lib/domains';
+
+const D = DOMAIN.health;
+
+interface Props {
+  label: string;
+  value: number | null;
+  onChange: (value: number) => void;
+}
+
+/** Scala de durere 0-10 (0 = deloc, 10 = cea mai mare durere imaginabilă). */
+export function PainPicker({ label, value, onChange }: Props) {
+  return (
+    <div role="radiogroup" aria-label={label} className="grid grid-cols-6 gap-2">
+      {Array.from({ length: 11 }, (_, n) => (
+        <button
+          key={n}
+          type="button"
+          role="radio"
+          aria-checked={value === n}
+          onClick={() => onChange(n)}
+          className={cx(
+            'btn min-h-[48px] px-0 font-display text-xl',
+            value === n ? D.solid : 'border border-steel/30 bg-white text-steel active:bg-steel/10',
+          )}
+        >
+          {n}
+        </button>
+      ))}
+    </div>
+  );
+}

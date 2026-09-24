@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-chalk font-sans text-base text-steel antialiased;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overscroll-behavior-y: none;
+  }
+
+  button {
+    @apply select-none;
+  }
+
+  :focus-visible {
+    outline: 2px solid #10B981;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Glassmorphism Panel cu colturi rotunjite premium */
+  .panel {
+    @apply bg-panel/70 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-steel/70 mb-1.5 tracking-wide;
+  }
+
+  .field {
+    @apply w-full min-h-[48px] px-3 bg-white/5 border border-white/10 rounded-xl text-base text-steel placeholder:text-steel/40 focus:border-neon-mint focus:ring-1 focus:ring-neon-mint transition-all;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 min-h-[48px] px-4 rounded-xl font-semibold text-[15px] transition-all disabled:opacity-40 disabled:pointer-events-none active:scale-[0.98];
+  }
+
+  .btn-quiet {
+    @apply btn bg-white/5 text-steel hover:bg-white/10 active:bg-white/15;
+  }
+
+  .btn-outline {
+    @apply btn border border-white/10 text-steel hover:bg-white/5 active:bg-white/10;
+  }
+
+  /* Primary AI Action Button (fostul btn-steel) */
+  .btn-steel {
+    @apply btn bg-neon-mint text-chalk hover:brightness-110 active:brightness-90 shadow-[0_0_15px_rgba(16,185,129,0.3)];
+  }
+
+  .stepper-btn {
+    @apply inline-flex items-center justify-center w-12 min-h-[48px] shrink-0 bg-white/5 text-steel hover:bg-white/10 active:bg-white/15 rounded-xl transition-all;
+  }
+
+  /* Cifre mari (greutăți, cronometre): condensate, cu lățime fixă. */
+  .num {
+    @apply font-display font-bold tabular-nums tracking-tight;
+  }
+}
