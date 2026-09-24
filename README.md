@@ -1,10 +1,34 @@
 # CoreFit
 
-PWA offline-first cu trei aplicații într-una: **Antrenament**, **Sănătate** (mișcare bazată pe ghiduri și studii) și **Nutriție** (jurnal de calorii cu rețete). Interfața este în română.
+Aplicație completă de fitness și sănătate: **PWA Web** și **Aplicație Nativă Mobilă iOS/Android (`mobile/`)** cu integrare Apple Health/CoreMotion, baze de date offline-first (SQLite & IndexedDB), urmărire avansată a antrenamentelor (openGym), nutriție & rețete (OpenNutriTracker/NutriTrace), scanner cod de bare România și animații 3D anatomice fluide.
+
+---
+
+## 📱 Aplicația Nativă Mobilă (`mobile/`)
+
+Aplicație React Native (Expo SDK 57) dezvoltată special pentru performanță nativă direct pe iPhone și Android:
+
+- **Senzori Nativi & Apple Health**: Pedometru în timp real prin CoreMotion (`expo-sensors`), inele animate SVG pentru pași, hidratare și timpi de odihnă.
+- **Bază de date Offline-First SQLite**: Salvare 100% locală și securizată prin `expo-sqlite` și `zustand` (jurnal antrenamente, PR-uri, hidratare, greutate corporală, alimente).
+- **Antrenament Științific (openGym Parity)**: 4 rutine evidence-based (Hypertrophy 4-Day, PPL 3-Day, Full Body 3-Day, Mobility 2-Day), logger activ cu tipuri de serii (Normal, Warmup, Dropset, Failure), calcul automat 1RM (Epley), calculator de discuri olimpice, feedback haptic (`expo-haptics`) și antrenor vocal în română (`expo-speech`).
+- **Animații 3D Anatomice Fluide**: 30+ exerciții ilustrate prin GIF-uri 3D cu evidențierea mușchilor țintă în roșu, ritm biomecanic calibrat și accelerare grafică hardware prin `expo-image`.
+- **Nutriție & Scanner Cod de Bare România**: Jurnal de mese, rețete fitness cu adăugare instantanee dintr-un click, căutare în baza de date România (Open Food Facts Romania) și scanare ultrarapidă cu camera (`expo-camera`).
+- **Securitate & Backup**: Blocare cu Face ID / Touch ID (`expo-local-authentication`), prevenire stingere ecran (`expo-keep-awake`) și export complet JSON.
+
+### Pornire Aplicație Mobilă
+```bash
+cd mobile
+npm install
+npx expo start
+```
+
+---
+
+## 🌐 Aplicația Web (PWA)
 
 Stack: React 19, Vite, TypeScript, Tailwind 3, Dexie (IndexedDB), Supabase (cont și sincronizare), vite-plugin-pwa.
 
-## Pornire rapidă
+### Pornire rapidă Web
 
 ```bash
 npm install

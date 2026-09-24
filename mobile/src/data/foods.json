@@ -1,0 +1,128 @@
+[
+  {
+    "id": "chicken_breast",
+    "name": "Piept de pui la grătar",
+    "serving": "100g",
+    "calories": 165,
+    "protein": 31,
+    "carbs": 0,
+    "fat": 3.6
+  },
+  {
+    "id": "eggs",
+    "name": "Ouă întregi (fierte sau ochiuri)",
+    "serving": "2 buc (100g)",
+    "calories": 143,
+    "protein": 12.6,
+    "carbs": 0.8,
+    "fat": 9.5
+  },
+  {
+    "id": "egg_whites",
+    "name": "Albuș de ou",
+    "serving": "100g",
+    "calories": 52,
+    "protein": 11,
+    "carbs": 0.7,
+    "fat": 0.2
+  },
+  {
+    "id": "oats",
+    "name": "Fulgi de ovăz integrali",
+    "serving": "100g",
+    "calories": 389,
+    "protein": 16.9,
+    "carbs": 66.3,
+    "fat": 6.9
+  },
+  {
+    "id": "basmati_rice",
+    "name": "Orez basmati (fiert)",
+    "serving": "100g",
+    "calories": 130,
+    "protein": 2.7,
+    "carbs": 28.2,
+    "fat": 0.3
+  },
+  {
+    "id": "salmon",
+    "name": "File de somon la cuptor",
+    "serving": "100g",
+    "calories": 208,
+    "protein": 20,
+    "carbs": 0,
+    "fat": 13
+  },
+  {
+    "id": "greek_yogurt_0",
+    "name": "Iaurt grecesc 0% grăsime",
+    "serving": "150g",
+    "calories": 85,
+    "protein": 15,
+    "carbs": 6,
+    "fat": 0
+  },
+  {
+    "id": "whey_protein",
+    "name": "Pudră proteică Whey (1 cupă)",
+    "serving": "30g",
+    "calories": 120,
+    "protein": 24,
+    "carbs": 2,
+    "fat": 1.5
+  },
+  {
+    "id": "banana",
+    "name": "Banană medie",
+    "serving": "1 buc (120g)",
+    "calories": 105,
+    "protein": 1.3,
+    "carbs": 27,
+    "fat": 0.3
+  },
+  {
+    "id": "avocado",
+    "name": "Avocado",
+    "serving": "1/2 buc (75g)",
+    "calories": 120,
+    "protein": 1.5,
+    "carbs": 6,
+    "fat": 11
+  },
+  {
+    "id": "cottage_cheese",
+    "name": "Brânză cottage / Perle de brânză",
+    "serving": "150g",
+    "calories": 140,
+    "protein": 18,
+    "carbs": 5,
+    "fat": 4.5
+  },
+  {
+    "id": "almonds",
+    "name": "Migdale crude",
+    "serving": "30g",
+    "calories": 175,
+    "protein": 6.3,
+    "carbs": 6,
+    "fat": 15
+  },
+  {
+    "id": "sweet_potato",
+    "name": "Cartof dulce copt",
+    "serving": "150g",
+    "calories": 135,
+    "protein": 3,
+    "carbs": 31,
+    "fat": 0.2
+  },
+  {
+    "id": "olive_oil",
+    "name": "Ulei de măsline extra-virgin (1 lingură)",
+    "serving": "10g",
+    "calories": 88,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 10
+  }
+]

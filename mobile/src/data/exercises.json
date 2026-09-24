@@ -1,0 +1,452 @@
+[
+  {
+    "id": "bench_press",
+    "name": "Împins din Culcat cu Haltera (Bench Press)",
+    "category": "Piept",
+    "equipment": "Barbell",
+    "primary": "Piept (Mijlociu/Sternal)",
+    "secondary": [
+      "Triceps",
+      "Deltoid Anterior"
+    ],
+    "notes": "Păstrează călcâiele ferm pe sol și omoplații retractați.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0025.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0025.gif"
+  },
+  {
+    "id": "incline_bench_press",
+    "name": "Împins din Înclinat cu Haltera (Incline Bench Press)",
+    "category": "Piept",
+    "equipment": "Barbell",
+    "primary": "Piept Superior (Clavicular)",
+    "secondary": [
+      "Umeri Anteriori",
+      "Triceps"
+    ],
+    "notes": "Bancă la 30 grade pentru a nu transfera efortul complet pe deltoid.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0047.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0047.gif"
+  },
+  {
+    "id": "db_incline_press",
+    "name": "Împins din Înclinat cu Gantere",
+    "category": "Piept",
+    "equipment": "Dumbbell",
+    "primary": "Piept Superior",
+    "secondary": [
+      "Umeri Anteriori",
+      "Triceps"
+    ],
+    "notes": "Coborâre controlată pentru alungire profundă.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0314.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0314.gif"
+  },
+  {
+    "id": "cable_flyes",
+    "name": "Fluturări la Cabluri (Cable Crossover)",
+    "category": "Piept",
+    "equipment": "Cable",
+    "primary": "Piept",
+    "secondary": [
+      "Deltoid Anterior"
+    ],
+    "notes": "Tensiune constantă inclusiv la finalul contracției.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1269.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1269.gif"
+  },
+  {
+    "id": "dips_chest",
+    "name": "Flotări la Paralele (Dips)",
+    "category": "Piept",
+    "equipment": "Bodyweight",
+    "primary": "Piept Inferior",
+    "secondary": [
+      "Triceps",
+      "Deltoid"
+    ],
+    "notes": "Trunchiul aplecat ușor înainte.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0251.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0251.gif"
+  },
+  {
+    "id": "deadlift",
+    "name": "Îndreptări Tradiționale (Deadlift)",
+    "category": "Spate",
+    "equipment": "Barbell",
+    "primary": "Lanț Posterior (Lombari, Glutei)",
+    "secondary": [
+      "Trapez",
+      "Antebraț",
+      "Dorsali"
+    ],
+    "notes": "Păstrează coloana neutră și haltera lipită de tibii.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0032.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0032.gif"
+  },
+  {
+    "id": "barbell_row",
+    "name": "Ramat cu Haltera din Aplecat (Barbell Row)",
+    "category": "Spate",
+    "equipment": "Barbell",
+    "primary": "Spate Superior & Dorsali",
+    "secondary": [
+      "Biceps",
+      "Lombari"
+    ],
+    "notes": "Trage haltera spre ombilic cu coatele aproape de corp.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0027.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0027.gif"
+  },
+  {
+    "id": "lat_pulldown",
+    "name": "Tracțiuni la Scripete (Lat Pulldown)",
+    "category": "Spate",
+    "equipment": "Cable",
+    "primary": "Dorsali (Lats)",
+    "secondary": [
+      "Biceps",
+      "Romboid"
+    ],
+    "notes": "Trage coatele în jos și spre spate fără balans excesiv.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2330.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2330.gif"
+  },
+  {
+    "id": "pull_ups",
+    "name": "Tracțiuni la Bară (Pull-ups)",
+    "category": "Spate",
+    "equipment": "Bodyweight",
+    "primary": "Dorsali (Lats)",
+    "secondary": [
+      "Biceps",
+      "Antebrațe"
+    ],
+    "notes": "Extensie completă a brațelor la baza mișcării.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0140.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0140.gif"
+  },
+  {
+    "id": "chest_supported_row",
+    "name": "Ramat la Aparat cu Suport pe Piept",
+    "category": "Spate",
+    "equipment": "Machine",
+    "primary": "Spate Superior (Romboid, Trapez)",
+    "secondary": [
+      "Biceps"
+    ],
+    "notes": "Elimină complet stresul pe zona lombară.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0180.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0180.gif"
+  },
+  {
+    "id": "overhead_press",
+    "name": "Împins Deasupra Capului cu Haltera (OHP)",
+    "category": "Umeri",
+    "equipment": "Barbell",
+    "primary": "Deltoid Anterior",
+    "secondary": [
+      "Triceps",
+      "Trapez Superior"
+    ],
+    "notes": "Activează gluteii și abdomenul pentru stabilitate.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0091.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0091.gif"
+  },
+  {
+    "id": "cable_lateral_raise",
+    "name": "Ridicări Laterale la Cablu",
+    "category": "Umeri",
+    "equipment": "Cable",
+    "primary": "Deltoid Lateral",
+    "secondary": [
+      "Trapez"
+    ],
+    "notes": "Cablul setat la înălțimea genunchilor pentru rezistență pe alungire.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0178.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0178.gif"
+  },
+  {
+    "id": "db_lateral_raise",
+    "name": "Ridicări Laterale cu Gantere",
+    "category": "Umeri",
+    "equipment": "Dumbbell",
+    "primary": "Deltoid Lateral",
+    "secondary": [],
+    "notes": "Coatele ușor flexate, fără mișcări din trunchi.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0334.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0334.gif"
+  },
+  {
+    "id": "face_pull",
+    "name": "Face Pull la Scripete",
+    "category": "Umeri",
+    "equipment": "Cable",
+    "primary": "Deltoid Posterior & Coafează Rotatori",
+    "secondary": [
+      "Trapez Mijlociu"
+    ],
+    "notes": "Trage funia spre nivelul ochilor cu rotație externă.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/3697.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/3697.gif"
+  },
+  {
+    "id": "squat",
+    "name": "Genuflexiuni cu Haltera (Back Squat)",
+    "category": "Picioare",
+    "equipment": "Barbell",
+    "primary": "Cvadriceps",
+    "secondary": [
+      "Glutei",
+      "Adductori",
+      "Core"
+    ],
+    "notes": "Coborâre controlată, genunchii urmăresc direcția degetelor de la picioare.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0043.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0043.gif"
+  },
+  {
+    "id": "hack_squat",
+    "name": "Hack Squat la Aparat",
+    "category": "Picioare",
+    "equipment": "Machine",
+    "primary": "Cvadriceps",
+    "secondary": [
+      "Glutei"
+    ],
+    "notes": "Stabilitate mare ce permite focus maxim pe cvadriceps.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0046.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0046.gif"
+  },
+  {
+    "id": "leg_press",
+    "name": "Presa de Picioare (Leg Press)",
+    "category": "Picioare",
+    "equipment": "Machine",
+    "primary": "Cvadriceps & Glutei",
+    "secondary": [
+      "Ischiogambieri"
+    ],
+    "notes": "Nu lăsa bazinul să se curbeze de pe spătar.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2287.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2287.gif"
+  },
+  {
+    "id": "rdl",
+    "name": "Îndreptări Românești (Romanian Deadlift)",
+    "category": "Picioare",
+    "equipment": "Barbell",
+    "primary": "Ischiogambieri (Hamstrings)",
+    "secondary": [
+      "Glutei",
+      "Lombari"
+    ],
+    "notes": "Bazinul se deplasează spre spate, menținând o flexie minimă a genunchilor.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0085.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0085.gif"
+  },
+  {
+    "id": "leg_extension",
+    "name": "Extensii Picioare la Aparat",
+    "category": "Picioare",
+    "equipment": "Machine",
+    "primary": "Cvadriceps",
+    "secondary": [],
+    "notes": "Pauză de 1 secundă pe contracție de vârf.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0585.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0585.gif"
+  },
+  {
+    "id": "seated_leg_curl",
+    "name": "Flexii Picioare din Șezut",
+    "category": "Picioare",
+    "equipment": "Machine",
+    "primary": "Ischiogambieri",
+    "secondary": [],
+    "notes": "Poziție superioară de stretch comparativ cu varianta culcat.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0599.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0599.gif"
+  },
+  {
+    "id": "standing_calf_raise",
+    "name": "Ridicări pe Vârfuri din Picioare",
+    "category": "Picioare",
+    "equipment": "Machine",
+    "primary": "Gambe (Gastrocnemian)",
+    "secondary": [
+      "Solear"
+    ],
+    "notes": "Pauză de 2 secunde în partea de jos a cursei.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1372.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/1372.gif"
+  },
+  {
+    "id": "incline_db_curl",
+    "name": "Flexii Biceps din Înclinat cu Gantere",
+    "category": "Brațe",
+    "equipment": "Dumbbell",
+    "primary": "Biceps Brahial (Cap Lung)",
+    "secondary": [
+      "Brahial"
+    ],
+    "notes": "Banca la 45-60 grade pentru alungire extremă a bicepsului.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0318.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0318.gif"
+  },
+  {
+    "id": "barbell_curl",
+    "name": "Flexii cu Bara Dreaptă sau EZ",
+    "category": "Brațe",
+    "equipment": "Barbell",
+    "primary": "Biceps Brahial",
+    "secondary": [
+      "Antebrațe"
+    ],
+    "notes": "Menține coatele fixe pe linia torsului.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0031.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0031.gif"
+  },
+  {
+    "id": "hammer_curl",
+    "name": "Flexii Ciocan cu Gantere (Hammer Curl)",
+    "category": "Brațe",
+    "equipment": "Dumbbell",
+    "primary": "Brahial & Brahioradial",
+    "secondary": [
+      "Biceps"
+    ],
+    "notes": "Dezvoltă grosimea brațului și puterea antebrațului.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0165.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0165.gif"
+  },
+  {
+    "id": "triceps_pushdown",
+    "name": "Extensii Triceps la Scripete (Pushdown)",
+    "category": "Brațe",
+    "equipment": "Cable",
+    "primary": "Triceps (Cap Lateral/Medial)",
+    "secondary": [],
+    "notes": "Coatele lipite de corp, cursa completă în jos.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0201.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0201.gif"
+  },
+  {
+    "id": "overhead_triceps_ext",
+    "name": "Extensii Triceps deasupra Capului la Cablu",
+    "category": "Brațe",
+    "equipment": "Cable",
+    "primary": "Triceps (Capul Lung)",
+    "secondary": [],
+    "notes": "Capul lung este activat cel mai puternic cu umărul în flexie.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
+  },
+  {
+    "id": "skull_crushers",
+    "name": "Extensii Triceps din Culcat (Skull Crushers)",
+    "category": "Brațe",
+    "equipment": "Barbell",
+    "primary": "Triceps",
+    "secondary": [],
+    "notes": "Coboară haltera spre creștetul capului.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0060.gif"
+  },
+  {
+    "id": "hanging_leg_raise",
+    "name": "Ridicări de Picioare din Atârnat",
+    "category": "Abdomen",
+    "equipment": "Bodyweight",
+    "primary": "Abdomen Inferior",
+    "secondary": [
+      "Flexori ai Șoldului"
+    ],
+    "notes": "Ridică bazinul către piept, nu doar picioarele.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0472.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0472.gif"
+  },
+  {
+    "id": "cable_crunch",
+    "name": "Abdomene la Cablu din Genunchi",
+    "category": "Abdomen",
+    "equipment": "Cable",
+    "primary": "Drept Abdominal (Abs)",
+    "secondary": [],
+    "notes": "Rotunjește coloana pentru a contracta fibrele abdominale.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0175.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/0175.gif"
+  },
+  {
+    "id": "plank",
+    "name": "Scândură (Plank)",
+    "category": "Abdomen",
+    "equipment": "Bodyweight",
+    "primary": "Core Profund (Transvers Abdominal)",
+    "secondary": [
+      "Lombari",
+      "Umeri"
+    ],
+    "notes": "Menține corpul perfect aliniat fără coborârea șoldurilor.",
+    "images": [
+      "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2135.gif"
+    ],
+    "gif_url": "https://raw.githubusercontent.com/omercotkd/exercises-gifs/main/assets/2135.gif"
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "id": "recipe_pro_oats",
+    "title": "Terci de Ovăz Proteic cu Fructe de Pădure",
+    "category": "Mic Dejun",
+    "prep_time_minutes": 8,
+    "calories": 420,
+    "protein": 34,
+    "carbs": 55,
+    "fat": 7,
+    "ingredients": [
+      "60g fulgi de ovăz integrali",
+      "1 cupă (30g) pudră proteică de vanilie sau ciocolată",
+      "150ml lapte sau apă",
+      "50g afine sau zmeură proaspătă",
+      "1 linguriță semințe de chia"
+    ],
+    "instructions": "Fierbe ovăzul în lapte/apă 4-5 minute la foc mic. Ia cratița de pe foc, lasă 1 minut să se răcorească, apoi încorporează pudra proteică amestecând energic. Adaugă fructele de pădure deasupra."
+  },
+  {
+    "id": "recipe_chicken_rice_bowl",
+    "title": "Power Bowl cu Pui, Orez Basmati & Avocado",
+    "category": "Prânz / Cină",
+    "prep_time_minutes": 15,
+    "calories": 540,
+    "protein": 46,
+    "carbs": 58,
+    "fat": 14,
+    "ingredients": [
+      "160g piept de pui feliat și rumenit",
+      "180g orez basmati fiert",
+      "1/2 avocado feliat",
+      "100g broccoli la abur",
+      "1 linguriță sos de soia cu conținut redus de sare"
+    ],
+    "instructions": "Așază orezul fierbinte într-un bol. Adaugă feliile de piept de pui rumenit, bucățile de avocado cremos și broccoli la abur. Stropește cu puțin sos de soia."
+  },
+  {
+    "id": "recipe_egg_cottage_omelette",
+    "title": "Omletă Pufoasă cu Spanac & Brânză Cottage",
+    "category": "Mic Dejun",
+    "prep_time_minutes": 10,
+    "calories": 360,
+    "protein": 36,
+    "carbs": 6,
+    "fat": 18,
+    "ingredients": [
+      "2 ouă întregi + 2 albușuri",
+      "100g brânză cottage 2-4%",
+      "1 mână generoasă de frunze de spanac proaspăt",
+      "Sare, piper și oregano"
+    ],
+    "instructions": "Bate ouăle cu albușurile și condimentele. Toarnă în tigaia antiaderentă încinsă. Când omleta începe să se prindă, pune spanacul și brânza cottage pe jumătate din suprafață, apoi împăturește."
+  },
+  {
+    "id": "recipe_salmon_sweet_potato",
+    "title": "Somon Sălbatic cu Cartof Dulce Copt",
+    "category": "Prânz / Cină",
+    "prep_time_minutes": 20,
+    "calories": 510,
+    "protein": 38,
+    "carbs": 44,
+    "fat": 19,
+    "ingredients": [
+      "150g file de somon",
+      "200g cartof dulce tăiat cubulețe",
+      "1 linguriță ulei de măsline",
+      "Rozmarin, sare de mare și lămâie"
+    ],
+    "instructions": "Pune cuburile de cartof dulce la air-fryer sau cuptor cu rozmarin timp de 15 minute. Adaugă fileul de somon condimentat cu lămâie și gătește încă 8-10 minute până devine fraged."
+  },
+  {
+    "id": "recipe_protein_pancakes",
+    "title": "Clătite Proteice Rapide din 3 Ingrediente",
+    "category": "Gustare / Desert",
+    "prep_time_minutes": 10,
+    "calories": 310,
+    "protein": 30,
+    "carbs": 38,
+    "fat": 4,
+    "ingredients": [
+      "1 banană coaptă bine",
+      "1 cupă pudră proteică",
+      "2 ouă medii",
+      "Scorțișoară"
+    ],
+    "instructions": "Pasează banana cu o furculiță, adaugă ouăle și pudra proteică și omogenizează bine. Coace clătite mici într-o tigaie unsă cu puțin spray de ulei, 1-2 minute pe fiecare parte."
+  }
+]

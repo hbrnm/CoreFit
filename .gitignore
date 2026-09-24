@@ -5,3 +5,9 @@ dev-dist
 .env.local
 *.local
 .DS_Store
+.expo/
+.expo-shared/
+mobile/node_modules/
+mobile/.expo/
+mobile/.expo-shared/
+
