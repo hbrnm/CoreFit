@@ -1,11 +1,26 @@
 import { create } from 'zustand';
-import { getDb, getTodayDateString } from '../lib/db';
+import { getDb, getTodayDateString, checkAndUpdatePR } from '../lib/db';
 
-interface ProfileData {
+export interface ProfileData {
   name: string;
   step_goal: number;
   water_goal: number;
   calorie_goal: number;
+}
+
+export interface BodyWeightLog {
+  id: number;
+  date: string;
+  weight_kg: number;
+}
+
+export interface PRRecord {
+  id: number;
+  exercise_name: string;
+  max_weight: number;
+  reps: number;
+  est_1rm: number;
+  date: string;
 }
 
 interface AppState {
@@ -13,12 +28,20 @@ interface AppState {
   todayWater: number;
   todayWorkoutMinutes: number;
   todayBurnedKcal: number;
-  
+  bodyWeightLogs: BodyWeightLog[];
+  prRecords: PRRecord[];
+  isBiometricLocked: boolean;
+  isBiometricsEnabled: boolean;
+
   loadInitialData: () => void;
   updateProfileName: (newName: string) => void;
   updateStepGoal: (goal: number) => void;
   addWater: (amountMl: number) => void;
   logWorkoutSession: (routineName: string, durationSeconds: number, calories: number) => void;
+  logBodyWeight: (weightKg: number) => void;
+  recordSetPR: (exerciseName: string, weightKg: number, reps: number) => boolean;
+  setBiometricLock: (locked: boolean) => void;
+  setBiometricsEnabled: (enabled: boolean) => void;
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -31,6 +54,10 @@ export const useStore = create<AppState>((set, get) => ({
   todayWater: 0,
   todayWorkoutMinutes: 0,
   todayBurnedKcal: 0,
+  bodyWeightLogs: [],
+  prRecords: [],
+  isBiometricLocked: false,
+  isBiometricsEnabled: false,
 
   loadInitialData: () => {
     try {
@@ -60,10 +87,22 @@ export const useStore = create<AppState>((set, get) => ({
       const minutesTotal = Math.round((workoutRow?.totalSeconds ?? 0) / 60);
       const caloriesTotal = workoutRow?.totalCalories ?? 0;
 
+      // Body weight logs
+      const weights = db.getAllSync<BodyWeightLog>(
+        'SELECT * FROM body_weight_logs ORDER BY id DESC LIMIT 20'
+      );
+
+      // PR records
+      const prs = db.getAllSync<PRRecord>(
+        'SELECT * FROM pr_records ORDER BY est_1rm DESC'
+      );
+
       set({
         todayWater: waterTotal,
         todayWorkoutMinutes: minutesTotal,
         todayBurnedKcal: caloriesTotal,
+        bodyWeightLogs: weights || [],
+        prRecords: prs || [],
       });
     } catch (e) {
       console.warn('Eroare la incarcarea datelor SQLite:', e);
@@ -102,4 +141,27 @@ export const useStore = create<AppState>((set, get) => ({
       todayBurnedKcal: state.todayBurnedKcal + calories,
     }));
   },
+
+  logBodyWeight: (weightKg: number) => {
+    const db = getDb();
+    const today = getTodayDateString();
+    db.runSync('INSERT INTO body_weight_logs (date, weight_kg) VALUES (?, ?)', [today, weightKg]);
+    const weights = db.getAllSync<BodyWeightLog>(
+      'SELECT * FROM body_weight_logs ORDER BY id DESC LIMIT 20'
+    );
+    set({ bodyWeightLogs: weights || [] });
+  },
+
+  recordSetPR: (exerciseName: string, weightKg: number, reps: number) => {
+    const isNewPR = checkAndUpdatePR(exerciseName, weightKg, reps);
+    if (isNewPR) {
+      const db = getDb();
+      const prs = db.getAllSync<PRRecord>('SELECT * FROM pr_records ORDER BY est_1rm DESC');
+      set({ prRecords: prs || [] });
+    }
+    return isNewPR;
+  },
+
+  setBiometricLock: (locked: boolean) => set({ isBiometricLocked: locked }),
+  setBiometricsEnabled: (enabled: boolean) => set({ isBiometricsEnabled: enabled }),
 }));

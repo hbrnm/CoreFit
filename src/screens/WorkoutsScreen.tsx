@@ -4,13 +4,31 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { useStore } from '../store/useStore';
+import { calculate1RM } from '../lib/db';
 import routinesLibrary from '../data/defaultRoutines.json';
+import { PlateCalculatorModal } from '../components/PlateCalculatorModal';
+import { ExercisePickerModal, ExerciseItem } from '../components/ExercisePickerModal';
+
+type SetType = 'N' | 'W' | 'D' | 'F';
 
 interface SetLog {
   setNumber: number;
+  type: SetType; // N = Normal, W = Warmup, D = Dropset, F = Failure
   weight: string;
   reps: string;
   completed: boolean;
+}
+
+interface ActiveExercise {
+  exercise_name: string;
+  target_muscle: string;
+  secondary_muscles?: string[];
+  sets: number;
+  reps_range: string;
+  rir?: string | number;
+  rest_seconds: number;
+  notes?: string;
+  equipment?: string;
 }
 
 export function WorkoutsScreen() {
@@ -18,8 +36,14 @@ export function WorkoutsScreen() {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-  // Sesiune activa
+  // Modale OpenGym
+  const [isPlateCalcOpen, setIsPlateCalcOpen] = useState(false);
+  const [plateCalcWeight, setPlateCalcWeight] = useState(100);
+  const [isExercisePickerOpen, setIsExercisePickerOpen] = useState(false);
+
+  // Sesiune activa & exercitii custom
   const [activeSessionDay, setActiveSessionDay] = useState<number | null>(null);
+  const [activeExercises, setActiveExercises] = useState<ActiveExercise[]>([]);
   const [exerciseSets, setExerciseSets] = useState<{ [key: number]: SetLog[] }>({});
 
   // Timer odihna
@@ -27,11 +51,11 @@ export function WorkoutsScreen() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const logWorkoutSession = useStore((state) => state.logWorkoutSession);
-  
+  const recordSetPR = useStore((state) => state.recordSetPR);
+
   const currentRoutine = routinesLibrary[selectedRoutineIndex] || routinesLibrary[0];
   const currentDay = currentRoutine.days[selectedDayIndex] || currentRoutine.days[0];
 
-  // Reset day index daca rutina selectata are mai putine zile
   useEffect(() => {
     setSelectedDayIndex(0);
   }, [selectedRoutineIndex]);
@@ -57,34 +81,107 @@ export function WorkoutsScreen() {
     return () => clearInterval(interval);
   }, [isTimerRunning, secondsLeft]);
 
-  // Initializare sesiune
+  // Initializare sesiune activa
   const handleStartSession = (dayIdx: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     const day = currentRoutine.days[dayIdx];
+    const exercises: ActiveExercise[] = day.exercises.map((e) => ({ ...e }));
     const initialSets: { [key: number]: SetLog[] } = {};
 
-    day.exercises.forEach((ex, exIdx) => {
+    exercises.forEach((ex, exIdx) => {
       initialSets[exIdx] = Array.from({ length: ex.sets }, (_, i) => ({
         setNumber: i + 1,
+        type: 'N',
         weight: '60',
         reps: ex.reps_range.split('-')[0] || '8',
         completed: false,
       }));
     });
 
+    setActiveExercises(exercises);
     setExerciseSets(initialSets);
     setActiveSessionDay(dayIdx);
   };
 
-  // Bifare set
-  const toggleSetComplete = (exIdx: number, setIdx: number, restSeconds: number) => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  // Schimbare tip serie (Normal -> Warmup -> Dropset -> Failure)
+  const cycleSetType = (exIdx: number, setIdx: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const types: SetType[] = ['N', 'W', 'D', 'F'];
     setExerciseSets((prev) => {
       const sets = [...(prev[exIdx] || [])];
-      const isNowCompleted = !sets[setIdx].completed;
-      sets[setIdx] = { ...sets[setIdx], completed: isNowCompleted };
+      const curType = sets[setIdx].type;
+      const nextType = types[(types.indexOf(curType) + 1) % types.length];
+      sets[setIdx] = { ...sets[setIdx], type: nextType };
+      return { ...prev, [exIdx]: sets };
+    });
+  };
+
+  // Adaugare serie noua la un exercitiu
+  const handleAddSet = (exIdx: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setExerciseSets((prev) => {
+      const sets = [...(prev[exIdx] || [])];
+      const lastSet = sets[sets.length - 1];
+      const newSet: SetLog = {
+        setNumber: sets.length + 1,
+        type: 'N',
+        weight: lastSet ? lastSet.weight : '60',
+        reps: lastSet ? lastSet.reps : '8',
+        completed: false,
+      };
+      return { ...prev, [exIdx]: [...sets, newSet] };
+    });
+  };
+
+  // Adaugare exercitiu nou din biblioteca OpenGym in timpul sesiunii
+  const handleAddCustomExercise = (item: ExerciseItem) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    const newEx: ActiveExercise = {
+      exercise_name: item.name,
+      target_muscle: item.primary,
+      secondary_muscles: item.secondary,
+      sets: 3,
+      reps_range: '8-10',
+      rir: '1-2',
+      rest_seconds: 90,
+      notes: item.notes,
+      equipment: item.equipment,
+    };
+
+    const newIdx = activeExercises.length;
+    const newSets: SetLog[] = Array.from({ length: 3 }, (_, i) => ({
+      setNumber: i + 1,
+      type: 'N',
+      weight: '50',
+      reps: '10',
+      completed: false,
+    }));
+
+    setActiveExercises([...activeExercises, newEx]);
+    setExerciseSets({ ...exerciseSets, [newIdx]: newSets });
+  };
+
+  // Bifare set + Verificare Personal Record (PR)
+  const toggleSetComplete = (exIdx: number, setIdx: number, restSeconds: number, exName: string) => {
+    setExerciseSets((prev) => {
+      const sets = [...(prev[exIdx] || [])];
+      const current = sets[setIdx];
+      const isNowCompleted = !current.completed;
+      sets[setIdx] = { ...current, completed: isNowCompleted };
 
       if (isNowCompleted) {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        const w = parseFloat(current.weight) || 0;
+        const r = parseInt(current.reps, 10) || 0;
+
+        // Verifica PR
+        if (w > 0 && r > 0 && current.type !== 'W') {
+          const isPR = recordSetPR(exName, w, r);
+          if (isPR) {
+            Alert.alert('🏆 NOU RECORD PERSONAL (PR)!', `${exName}: ${w} kg x ${r} reps (1RM Estimat: ${calculate1RM(w, r)} kg)`);
+          }
+        }
+
         setSecondsLeft(restSeconds);
         setIsTimerRunning(true);
       }
@@ -97,11 +194,18 @@ export function WorkoutsScreen() {
   const handleFinishWorkout = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     const day = currentRoutine.days[activeSessionDay!];
-    
+
     let completedSetsCount = 0;
-    Object.values(exerciseSets).forEach((sets) => {
+    let totalVolumeKg = 0;
+
+    Object.entries(exerciseSets).forEach(([_, sets]) => {
       sets.forEach((s) => {
-        if (s.completed) completedSetsCount++;
+        if (s.completed) {
+          completedSetsCount++;
+          const w = parseFloat(s.weight) || 0;
+          const r = parseInt(s.reps, 10) || 0;
+          totalVolumeKg += w * r;
+        }
       });
     });
 
@@ -111,12 +215,18 @@ export function WorkoutsScreen() {
     logWorkoutSession(`${currentRoutine.routine_name} - ${day.day_title}`, durationMinutes * 60, estimatedKcal);
 
     Alert.alert(
-      'Antrenament Finalizat! 🏆',
-      `Ai completat ${completedSetsCount} serii din ${day.day_title}.\nEstimare: ~${estimatedKcal} kcal arse salvate în SQLite!`
+      'Antrenament Încheiat! 🏆',
+      `Volum Total Ridicat: ${totalVolumeKg.toLocaleString()} kg\nSerii Finalizate: ${completedSetsCount}\nCalorii Arse: ~${estimatedKcal} kcal\nSalvat în SQLite!`
     );
 
     setActiveSessionDay(null);
     setIsTimerRunning(false);
+  };
+
+  const openPlateCalcForWeight = (weightStr: string) => {
+    const val = parseFloat(weightStr) || 100;
+    setPlateCalcWeight(val);
+    setIsPlateCalcOpen(true);
   };
 
   const formatTime = (timeInSeconds: number) => {
@@ -128,24 +238,35 @@ export function WorkoutsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Header cu Buton Schimba Programul */}
+        {/* Header cu Butoane Utilitare */}
         <View style={styles.headerRow}>
           <View style={{ flex: 1 }}>
             <Text style={styles.badge}>{currentRoutine.level.toUpperCase()}</Text>
             <Text style={styles.mainTitle}>{currentRoutine.routine_name}</Text>
           </View>
-          
-          <TouchableOpacity
-            style={styles.changeRoutineBtn}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              setIsGalleryOpen(true);
-            }}
-            activeOpacity={0.8}
-          >
-            <Feather name="layers" size={16} color="#10B981" />
-            <Text style={styles.changeRoutineText}>Galerie</Text>
-          </TouchableOpacity>
+
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <TouchableOpacity
+              style={styles.utilBtn}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setIsPlateCalcOpen(true);
+              }}
+            >
+              <Feather name="disc" size={16} color="#06B6D4" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.changeRoutineBtn}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setIsGalleryOpen(true);
+              }}
+            >
+              <Feather name="layers" size={16} color="#10B981" />
+              <Text style={styles.changeRoutineText}>Galerie</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <Text style={styles.subDesc}>{currentRoutine.description}</Text>
@@ -157,16 +278,13 @@ export function WorkoutsScreen() {
               <Feather name="clock" size={20} color="#06B6D4" />
               <Text style={styles.timerBannerText}>Odihnă: {formatTime(secondsLeft)}</Text>
             </View>
-            <TouchableOpacity 
-              onPress={() => setIsTimerRunning(false)}
-              style={styles.skipBtn}
-            >
+            <TouchableOpacity onPress={() => setIsTimerRunning(false)} style={styles.skipBtn}>
               <Text style={styles.skipBtnText}>Oprește</Text>
             </TouchableOpacity>
           </View>
         )}
 
-        {/* Selectie Zi (daca nu e in sesiune activa) */}
+        {/* Vizualizare Zile / Sesiune Inactiva */}
         {activeSessionDay === null ? (
           <>
             <View style={styles.tabsRow}>
@@ -187,14 +305,12 @@ export function WorkoutsScreen() {
               ))}
             </View>
 
-            {/* Detalii Zi Curenta */}
             <View style={styles.dayCard}>
               <View style={styles.dayCardHeader}>
                 <Text style={styles.dayTitle}>{currentDay.day_title}</Text>
                 <Text style={styles.exerciseCount}>{currentDay.exercises.length} Exerciții</Text>
               </View>
 
-              {/* Lista Exercitii */}
               {currentDay.exercises.map((ex, exIdx) => (
                 <View key={exIdx} style={styles.exerciseItem}>
                   <View style={styles.exHeader}>
@@ -228,78 +344,125 @@ export function WorkoutsScreen() {
             </View>
           </>
         ) : (
-          /* MOD SESIUNE ACTIVĂ */
+          /* SESIUNE ACTIVĂ STIL OPEN GYM */
           <View style={styles.activeSessionContainer}>
             <View style={styles.activeHeader}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.activeBadge}>SESIUNE ACTIVĂ</Text>
                 <Text style={styles.activeTitle}>{currentRoutine.days[activeSessionDay].day_title}</Text>
               </View>
-              <TouchableOpacity 
-                style={styles.finishBtn} 
-                onPress={handleFinishWorkout}
-                activeOpacity={0.8}
-              >
+              <TouchableOpacity style={styles.finishBtn} onPress={handleFinishWorkout} activeOpacity={0.8}>
                 <Text style={styles.finishBtnText}>Încheie</Text>
               </TouchableOpacity>
             </View>
 
-            {currentRoutine.days[activeSessionDay].exercises.map((ex, exIdx) => (
+            {activeExercises.map((ex, exIdx) => (
               <View key={exIdx} style={styles.activeExCard}>
-                <Text style={styles.activeExName}>#{exIdx + 1} {ex.exercise_name}</Text>
-                <Text style={styles.activeExNotes}>🎯 {ex.target_muscle} • Odihnă: {ex.rest_seconds}s</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.activeExName}>#{exIdx + 1} {ex.exercise_name}</Text>
+                    <Text style={styles.activeExNotes}>🎯 {ex.target_muscle} • Odihnă: {ex.rest_seconds}s</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.plateIconBtn}
+                    onPress={() => {
+                      const firstWeight = (exerciseSets[exIdx] && exerciseSets[exIdx][0]?.weight) || '100';
+                      openPlateCalcForWeight(firstWeight);
+                    }}
+                  >
+                    <Feather name="disc" size={16} color="#06B6D4" />
+                  </TouchableOpacity>
+                </View>
 
+                {/* Tabel Seturi OpenGym */}
                 <View style={styles.setTable}>
                   <View style={styles.setRowHeader}>
-                    <Text style={[styles.setHeaderText, { width: 45 }]}>SET</Text>
+                    <Text style={[styles.setHeaderText, { width: 36, textAlign: 'center' }]}>TIP</Text>
+                    <Text style={[styles.setHeaderText, { width: 34 }]}>SET</Text>
                     <Text style={[styles.setHeaderText, { flex: 1 }]}>KG</Text>
                     <Text style={[styles.setHeaderText, { flex: 1 }]}>REPETĂRI</Text>
-                    <Text style={[styles.setHeaderText, { width: 50, textAlign: 'center' }]}>STATUS</Text>
+                    <Text style={[styles.setHeaderText, { width: 65, textAlign: 'center' }]}>1RM EST</Text>
+                    <Text style={[styles.setHeaderText, { width: 44, textAlign: 'center' }]}>STATUS</Text>
                   </View>
 
-                  {(exerciseSets[exIdx] || []).map((s, setIdx) => (
-                    <View key={setIdx} style={[styles.setRow, s.completed && styles.setRowCompleted]}>
-                      <Text style={[styles.setCellText, { width: 45, fontWeight: 'bold' }]}>#{s.setNumber}</Text>
-                      
-                      <TextInput
-                        style={styles.setInput}
-                        value={s.weight}
-                        keyboardType="numeric"
-                        onChangeText={(txt) => {
-                          const updated = [...exerciseSets[exIdx]];
-                          updated[setIdx].weight = txt;
-                          setExerciseSets({ ...exerciseSets, [exIdx]: updated });
-                        }}
-                      />
+                  {(exerciseSets[exIdx] || []).map((s, setIdx) => {
+                    const w = parseFloat(s.weight) || 0;
+                    const r = parseInt(s.reps, 10) || 0;
+                    const est1rm = calculate1RM(w, r);
 
-                      <TextInput
-                        style={styles.setInput}
-                        value={s.reps}
-                        keyboardType="numeric"
-                        onChangeText={(txt) => {
-                          const updated = [...exerciseSets[exIdx]];
-                          updated[setIdx].reps = txt;
-                          setExerciseSets({ ...exerciseSets, [exIdx]: updated });
-                        }}
-                      />
+                    return (
+                      <View key={setIdx} style={[styles.setRow, s.completed && styles.setRowCompleted]}>
+                        {/* Tip Serie (W/N/D/F) */}
+                        <TouchableOpacity
+                          style={[
+                            styles.typeChip,
+                            s.type === 'W' && styles.typeWarmup,
+                            s.type === 'D' && styles.typeDropset,
+                            s.type === 'F' && styles.typeFailure,
+                          ]}
+                          onPress={() => cycleSetType(exIdx, setIdx)}
+                        >
+                          <Text style={styles.typeChipText}>{s.type}</Text>
+                        </TouchableOpacity>
 
-                      <TouchableOpacity
-                        style={[styles.checkBtn, s.completed && styles.checkBtnDone]}
-                        onPress={() => toggleSetComplete(exIdx, setIdx, ex.rest_seconds)}
-                      >
-                        <Feather name={s.completed ? "check" : "circle"} size={18} color={s.completed ? "#0F172A" : "rgba(255,255,255,0.4)"} />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
+                        <Text style={[styles.setCellText, { width: 34, fontWeight: 'bold' }]}>#{s.setNumber}</Text>
+
+                        <TextInput
+                          style={styles.setInput}
+                          value={s.weight}
+                          keyboardType="numeric"
+                          onChangeText={(txt) => {
+                            const updated = [...exerciseSets[exIdx]];
+                            updated[setIdx].weight = txt;
+                            setExerciseSets({ ...exerciseSets, [exIdx]: updated });
+                          }}
+                        />
+
+                        <TextInput
+                          style={styles.setInput}
+                          value={s.reps}
+                          keyboardType="numeric"
+                          onChangeText={(txt) => {
+                            const updated = [...exerciseSets[exIdx]];
+                            updated[setIdx].reps = txt;
+                            setExerciseSets({ ...exerciseSets, [exIdx]: updated });
+                          }}
+                        />
+
+                        {/* 1RM Estimat */}
+                        <Text style={styles.est1rmText}>{est1rm > 0 ? `${est1rm}k` : '-'}</Text>
+
+                        {/* Checkbox Status */}
+                        <TouchableOpacity
+                          style={[styles.checkBtn, s.completed && styles.checkBtnDone]}
+                          onPress={() => toggleSetComplete(exIdx, setIdx, ex.rest_seconds, ex.exercise_name)}
+                        >
+                          <Feather name={s.completed ? "check" : "circle"} size={16} color={s.completed ? "#0F172A" : "rgba(255,255,255,0.4)"} />
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
                 </View>
+
+                {/* Buton Adaugă Serie */}
+                <TouchableOpacity style={styles.addSetBtn} onPress={() => handleAddSet(exIdx)}>
+                  <Feather name="plus" size={14} color="#10B981" />
+                  <Text style={styles.addSetText}>Adaugă Serie</Text>
+                </TouchableOpacity>
               </View>
             ))}
 
-            <TouchableOpacity 
-              style={styles.bottomFinishBtn}
-              onPress={handleFinishWorkout}
+            {/* Buton Adauga Exercitiu din Biblioteca OpenGym */}
+            <TouchableOpacity
+              style={styles.addExBtn}
+              onPress={() => setIsExercisePickerOpen(true)}
               activeOpacity={0.8}
             >
+              <Feather name="plus-circle" size={18} color="#10B981" />
+              <Text style={styles.addExBtnText}>+ Adaugă Alt Exercițiu la Sesiune</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.bottomFinishBtn} onPress={handleFinishWorkout} activeOpacity={0.8}>
               <Feather name="check-circle" size={22} color="#0F172A" />
               <Text style={styles.bottomFinishText}>FINALIZEAZĂ ANTRENAMENTUL</Text>
             </TouchableOpacity>
@@ -307,13 +470,21 @@ export function WorkoutsScreen() {
         )}
       </ScrollView>
 
-      {/* Modal Galerie de Programe */}
-      <Modal
-        visible={isGalleryOpen}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setIsGalleryOpen(false)}
-      >
+      {/* Modale */}
+      <PlateCalculatorModal
+        visible={isPlateCalcOpen}
+        initialWeight={plateCalcWeight}
+        onClose={() => setIsPlateCalcOpen(false)}
+      />
+
+      <ExercisePickerModal
+        visible={isExercisePickerOpen}
+        onClose={() => setIsExercisePickerOpen(false)}
+        onSelectExercise={handleAddCustomExercise}
+      />
+
+      {/* Modal Galerie */}
+      <Modal visible={isGalleryOpen} animationType="slide" transparent={true} onRequestClose={() => setIsGalleryOpen(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -395,6 +566,15 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 21,
     fontWeight: 'bold',
+  },
+  utilBtn: {
+    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(6, 182, 212, 0.3)',
+    borderRadius: 10,
+    padding: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   changeRoutineBtn: {
     flexDirection: 'row',
@@ -613,6 +793,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginTop: 2,
   },
+  plateIconBtn: {
+    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+    borderRadius: 8,
+    padding: 6,
+  },
   setTable: {
     backgroundColor: 'rgba(0,0,0,0.2)',
     borderRadius: 10,
@@ -620,6 +805,7 @@ const styles = StyleSheet.create({
   },
   setRowHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
     paddingBottom: 6,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.06)',
@@ -627,36 +813,65 @@ const styles = StyleSheet.create({
   },
   setHeaderText: {
     color: 'rgba(255,255,255,0.4)',
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '700',
   },
   setRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 4,
-    gap: 8,
+    gap: 6,
   },
   setRowCompleted: {
     opacity: 0.7,
   },
+  typeChip: {
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    backgroundColor: '#334155',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  typeWarmup: {
+    backgroundColor: '#EAB308',
+  },
+  typeDropset: {
+    backgroundColor: '#8B5CF6',
+  },
+  typeFailure: {
+    backgroundColor: '#EF4444',
+  },
+  typeChipText: {
+    color: '#FFF',
+    fontSize: 11,
+    fontWeight: 'bold',
+  },
   setCellText: {
     color: '#FFF',
-    fontSize: 13,
+    fontSize: 12,
   },
   setInput: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
     color: '#FFF',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 13,
+    textAlign: 'center',
+  },
+  est1rmText: {
+    width: 65,
+    color: '#10B981',
+    fontWeight: '700',
+    fontSize: 11,
     textAlign: 'center',
   },
   checkBtn: {
-    width: 50,
-    height: 36,
+    width: 44,
+    height: 32,
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: 8,
     alignItems: 'center',
@@ -665,6 +880,35 @@ const styles = StyleSheet.create({
   checkBtnDone: {
     backgroundColor: '#10B981',
   },
+  addSetBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    marginTop: 8,
+    gap: 4,
+  },
+  addSetText: {
+    color: '#10B981',
+    fontWeight: '700',
+    fontSize: 12,
+  },
+  addExBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderRadius: 12,
+    paddingVertical: 14,
+    gap: 8,
+  },
+  addExBtnText: {
+    color: '#10B981',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
   bottomFinishBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -672,7 +916,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
     borderRadius: 14,
     paddingVertical: 16,
-    marginTop: 10,
+    marginTop: 6,
     gap: 8,
   },
   bottomFinishText: {
