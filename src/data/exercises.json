@@ -5,8 +5,15 @@
     "category": "Piept",
     "equipment": "Barbell",
     "primary": "Piept (Mijlociu/Sternal)",
-    "secondary": ["Triceps", "Deltoid Anterior"],
-    "notes": "Păstrează călcâiele ferm pe sol și omoplații retractați."
+    "secondary": [
+      "Triceps",
+      "Deltoid Anterior"
+    ],
+    "notes": "Păstrează călcâiele ferm pe sol și omoplații retractați.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/1.jpg"
+    ]
   },
   {
     "id": "incline_bench_press",
@@ -14,8 +21,15 @@
     "category": "Piept",
     "equipment": "Barbell",
     "primary": "Piept Superior (Clavicular)",
-    "secondary": ["Umeri Anteriori", "Triceps"],
-    "notes": "Bancă la 30 grade pentru a nu transfera efortul complet pe deltoid."
+    "secondary": [
+      "Umeri Anteriori",
+      "Triceps"
+    ],
+    "notes": "Bancă la 30 grade pentru a nu transfera efortul complet pe deltoid.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Bench_Press_-_Medium_Grip/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Bench_Press_-_Medium_Grip/1.jpg"
+    ]
   },
   {
     "id": "db_incline_press",
@@ -23,8 +37,15 @@
     "category": "Piept",
     "equipment": "Dumbbell",
     "primary": "Piept Superior",
-    "secondary": ["Umeri Anteriori", "Triceps"],
-    "notes": "Coborâre controlată pentru alungire profundă."
+    "secondary": [
+      "Umeri Anteriori",
+      "Triceps"
+    ],
+    "notes": "Coborâre controlată pentru alungire profundă.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/1.jpg"
+    ]
   },
   {
     "id": "cable_flyes",
@@ -32,8 +53,14 @@
     "category": "Piept",
     "equipment": "Cable",
     "primary": "Piept",
-    "secondary": ["Deltoid Anterior"],
-    "notes": "Tensiune constantă inclusiv la finalul contracției."
+    "secondary": [
+      "Deltoid Anterior"
+    ],
+    "notes": "Tensiune constantă inclusiv la finalul contracției.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crossover/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crossover/1.jpg"
+    ]
   },
   {
     "id": "dips_chest",
@@ -41,8 +68,15 @@
     "category": "Piept",
     "equipment": "Bodyweight",
     "primary": "Piept Inferior",
-    "secondary": ["Triceps", "Deltoid"],
-    "notes": "Trunchiul aplecat ușor înainte."
+    "secondary": [
+      "Triceps",
+      "Deltoid"
+    ],
+    "notes": "Trunchiul aplecat ușor înainte.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/1.jpg"
+    ]
   },
   {
     "id": "deadlift",
@@ -50,8 +84,16 @@
     "category": "Spate",
     "equipment": "Barbell",
     "primary": "Lanț Posterior (Lombari, Glutei)",
-    "secondary": ["Trapez", "Antebraț", "Dorsali"],
-    "notes": "Păstrează coloana neutră și haltera lipită de tibii."
+    "secondary": [
+      "Trapez",
+      "Antebraț",
+      "Dorsali"
+    ],
+    "notes": "Păstrează coloana neutră și haltera lipită de tibii.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/1.jpg"
+    ]
   },
   {
     "id": "barbell_row",
@@ -59,8 +101,15 @@
     "category": "Spate",
     "equipment": "Barbell",
     "primary": "Spate Superior & Dorsali",
-    "secondary": ["Biceps", "Lombari"],
-    "notes": "Trage haltera spre ombilic cu coatele aproape de corp."
+    "secondary": [
+      "Biceps",
+      "Lombari"
+    ],
+    "notes": "Trage haltera spre ombilic cu coatele aproape de corp.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/1.jpg"
+    ]
   },
   {
     "id": "lat_pulldown",
@@ -68,8 +117,15 @@
     "category": "Spate",
     "equipment": "Cable",
     "primary": "Dorsali (Lats)",
-    "secondary": ["Biceps", "Romboid"],
-    "notes": "Trage coatele în jos și spre spate fără balans excesiv."
+    "secondary": [
+      "Biceps",
+      "Romboid"
+    ],
+    "notes": "Trage coatele în jos și spre spate fără balans excesiv.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/1.jpg"
+    ]
   },
   {
     "id": "pull_ups",
@@ -77,8 +133,15 @@
     "category": "Spate",
     "equipment": "Bodyweight",
     "primary": "Dorsali (Lats)",
-    "secondary": ["Biceps", "Antebrațe"],
-    "notes": "Extensie completă a brațelor la baza mișcării."
+    "secondary": [
+      "Biceps",
+      "Antebrațe"
+    ],
+    "notes": "Extensie completă a brațelor la baza mișcării.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/1.jpg"
+    ]
   },
   {
     "id": "chest_supported_row",
@@ -86,8 +149,14 @@
     "category": "Spate",
     "equipment": "Machine",
     "primary": "Spate Superior (Romboid, Trapez)",
-    "secondary": ["Biceps"],
-    "notes": "Elimină complet stresul pe zona lombară."
+    "secondary": [
+      "Biceps"
+    ],
+    "notes": "Elimină complet stresul pe zona lombară.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/1.jpg"
+    ]
   },
   {
     "id": "overhead_press",
@@ -95,8 +164,15 @@
     "category": "Umeri",
     "equipment": "Barbell",
     "primary": "Deltoid Anterior",
-    "secondary": ["Triceps", "Trapez Superior"],
-    "notes": "Activează gluteii și abdomenul pentru stabilitate."
+    "secondary": [
+      "Triceps",
+      "Trapez Superior"
+    ],
+    "notes": "Activează gluteii și abdomenul pentru stabilitate.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Military_Press/1.jpg"
+    ]
   },
   {
     "id": "cable_lateral_raise",
@@ -104,8 +180,14 @@
     "category": "Umeri",
     "equipment": "Cable",
     "primary": "Deltoid Lateral",
-    "secondary": ["Trapez"],
-    "notes": "Cablul setat la înălțimea genunchilor pentru rezistență pe alungire."
+    "secondary": [
+      "Trapez"
+    ],
+    "notes": "Cablul setat la înălțimea genunchilor pentru rezistență pe alungire.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/1.jpg"
+    ]
   },
   {
     "id": "db_lateral_raise",
@@ -114,7 +196,11 @@
     "equipment": "Dumbbell",
     "primary": "Deltoid Lateral",
     "secondary": [],
-    "notes": "Coatele ușor flexate, fără mișcări din trunchi."
+    "notes": "Coatele ușor flexate, fără mișcări din trunchi.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/1.jpg"
+    ]
   },
   {
     "id": "face_pull",
@@ -122,8 +208,14 @@
     "category": "Umeri",
     "equipment": "Cable",
     "primary": "Deltoid Posterior & Coafează Rotatori",
-    "secondary": ["Trapez Mijlociu"],
-    "notes": "Trage funia spre nivelul ochilor cu rotație externă."
+    "secondary": [
+      "Trapez Mijlociu"
+    ],
+    "notes": "Trage funia spre nivelul ochilor cu rotație externă.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Face_Pull/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Face_Pull/1.jpg"
+    ]
   },
   {
     "id": "squat",
@@ -131,8 +223,16 @@
     "category": "Picioare",
     "equipment": "Barbell",
     "primary": "Cvadriceps",
-    "secondary": ["Glutei", "Adductori", "Core"],
-    "notes": "Coborâre controlată, genunchii urmăresc direcția degetelor de la picioare."
+    "secondary": [
+      "Glutei",
+      "Adductori",
+      "Core"
+    ],
+    "notes": "Coborâre controlată, genunchii urmăresc direcția degetelor de la picioare.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Full_Squat/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Full_Squat/1.jpg"
+    ]
   },
   {
     "id": "hack_squat",
@@ -140,8 +240,14 @@
     "category": "Picioare",
     "equipment": "Machine",
     "primary": "Cvadriceps",
-    "secondary": ["Glutei"],
-    "notes": "Stabilitate mare ce permite focus maxim pe cvadriceps."
+    "secondary": [
+      "Glutei"
+    ],
+    "notes": "Stabilitate mare ce permite focus maxim pe cvadriceps.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hack_Squat/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hack_Squat/1.jpg"
+    ]
   },
   {
     "id": "leg_press",
@@ -149,8 +255,14 @@
     "category": "Picioare",
     "equipment": "Machine",
     "primary": "Cvadriceps & Glutei",
-    "secondary": ["Ischiogambieri"],
-    "notes": "Nu lăsa bazinul să se curbeze de pe spătar."
+    "secondary": [
+      "Ischiogambieri"
+    ],
+    "notes": "Nu lăsa bazinul să se curbeze de pe spătar.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/1.jpg"
+    ]
   },
   {
     "id": "rdl",
@@ -158,8 +270,15 @@
     "category": "Picioare",
     "equipment": "Barbell",
     "primary": "Ischiogambieri (Hamstrings)",
-    "secondary": ["Glutei", "Lombari"],
-    "notes": "Bazinul se deplasează spre spate, menținând o flexie minimă a genunchilor."
+    "secondary": [
+      "Glutei",
+      "Lombari"
+    ],
+    "notes": "Bazinul se deplasează spre spate, menținând o flexie minimă a genunchilor.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Romanian_Deadlift/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Romanian_Deadlift/1.jpg"
+    ]
   },
   {
     "id": "leg_extension",
@@ -168,7 +287,11 @@
     "equipment": "Machine",
     "primary": "Cvadriceps",
     "secondary": [],
-    "notes": "Pauză de 1 secundă pe contracție de vârf."
+    "notes": "Pauză de 1 secundă pe contracție de vârf.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/1.jpg"
+    ]
   },
   {
     "id": "seated_leg_curl",
@@ -177,7 +300,11 @@
     "equipment": "Machine",
     "primary": "Ischiogambieri",
     "secondary": [],
-    "notes": "Poziție superioară de stretch comparativ cu varianta culcat."
+    "notes": "Poziție superioară de stretch comparativ cu varianta culcat.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Leg_Curls/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Leg_Curls/1.jpg"
+    ]
   },
   {
     "id": "standing_calf_raise",
@@ -185,8 +312,14 @@
     "category": "Picioare",
     "equipment": "Machine",
     "primary": "Gambe (Gastrocnemian)",
-    "secondary": ["Solear"],
-    "notes": "Pauză de 2 secunde în partea de jos a cursei."
+    "secondary": [
+      "Solear"
+    ],
+    "notes": "Pauză de 2 secunde în partea de jos a cursei.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Calf_Raises/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Calf_Raises/1.jpg"
+    ]
   },
   {
     "id": "incline_db_curl",
@@ -194,8 +327,14 @@
     "category": "Brațe",
     "equipment": "Dumbbell",
     "primary": "Biceps Brahial (Cap Lung)",
-    "secondary": ["Brahial"],
-    "notes": "Banca la 45-60 grade pentru alungire extremă a bicepsului."
+    "secondary": [
+      "Brahial"
+    ],
+    "notes": "Banca la 45-60 grade pentru alungire extremă a bicepsului.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Incline_Dumbbell_Curl/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Incline_Dumbbell_Curl/1.jpg"
+    ]
   },
   {
     "id": "barbell_curl",
@@ -203,8 +342,14 @@
     "category": "Brațe",
     "equipment": "Barbell",
     "primary": "Biceps Brahial",
-    "secondary": ["Antebrațe"],
-    "notes": "Menține coatele fixe pe linia torsului."
+    "secondary": [
+      "Antebrațe"
+    ],
+    "notes": "Menține coatele fixe pe linia torsului.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/1.jpg"
+    ]
   },
   {
     "id": "hammer_curl",
@@ -212,8 +357,14 @@
     "category": "Brațe",
     "equipment": "Dumbbell",
     "primary": "Brahial & Brahioradial",
-    "secondary": ["Biceps"],
-    "notes": "Dezvoltă grosimea brațului și puterea antebrațului."
+    "secondary": [
+      "Biceps"
+    ],
+    "notes": "Dezvoltă grosimea brațului și puterea antebrațului.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/1.jpg"
+    ]
   },
   {
     "id": "triceps_pushdown",
@@ -222,7 +373,11 @@
     "equipment": "Cable",
     "primary": "Triceps (Cap Lateral/Medial)",
     "secondary": [],
-    "notes": "Coatele lipite de corp, cursa completă în jos."
+    "notes": "Coatele lipite de corp, cursa completă în jos.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Triceps_Pushdown/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Triceps_Pushdown/1.jpg"
+    ]
   },
   {
     "id": "overhead_triceps_ext",
@@ -231,7 +386,11 @@
     "equipment": "Cable",
     "primary": "Triceps (Capul Lung)",
     "secondary": [],
-    "notes": "Capul lung este activat cel mai puternic cu umărul în flexie."
+    "notes": "Capul lung este activat cel mai puternic cu umărul în flexie.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Overhead_Barbell_Triceps_Extension/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Overhead_Barbell_Triceps_Extension/1.jpg"
+    ]
   },
   {
     "id": "skull_crushers",
@@ -240,7 +399,11 @@
     "equipment": "Barbell",
     "primary": "Triceps",
     "secondary": [],
-    "notes": "Coboară haltera spre creștetul capului."
+    "notes": "Coboară haltera spre creștetul capului.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_EZ_Bar_Triceps_Extension/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_EZ_Bar_Triceps_Extension/1.jpg"
+    ]
   },
   {
     "id": "hanging_leg_raise",
@@ -248,8 +411,14 @@
     "category": "Abdomen",
     "equipment": "Bodyweight",
     "primary": "Abdomen Inferior",
-    "secondary": ["Flexori ai Șoldului"],
-    "notes": "Ridică bazinul către piept, nu doar picioarele."
+    "secondary": [
+      "Flexori ai Șoldului"
+    ],
+    "notes": "Ridică bazinul către piept, nu doar picioarele.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hanging_Leg_Raise/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hanging_Leg_Raise/1.jpg"
+    ]
   },
   {
     "id": "cable_crunch",
@@ -258,7 +427,11 @@
     "equipment": "Cable",
     "primary": "Drept Abdominal (Abs)",
     "secondary": [],
-    "notes": "Rotunjește coloana pentru a contracta fibrele abdominale."
+    "notes": "Rotunjește coloana pentru a contracta fibrele abdominale.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/1.jpg"
+    ]
   },
   {
     "id": "plank",
@@ -266,7 +439,14 @@
     "category": "Abdomen",
     "equipment": "Bodyweight",
     "primary": "Core Profund (Transvers Abdominal)",
-    "secondary": ["Lombari", "Umeri"],
-    "notes": "Menține corpul perfect aliniat fără coborârea șoldurilor."
+    "secondary": [
+      "Lombari",
+      "Umeri"
+    ],
+    "notes": "Menține corpul perfect aliniat fără coborârea șoldurilor.",
+    "images": [
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg",
+      "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/1.jpg"
+    ]
   }
 ]

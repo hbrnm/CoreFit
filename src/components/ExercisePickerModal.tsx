@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, FlatList, Image } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import exercisesList from '../data/exercises.json';
-
-export interface ExerciseItem {
-  id: string;
-  name: string;
-  category: string;
-  equipment: string;
-  primary: string;
-  secondary: string[];
-  notes: string;
-}
+import { ExerciseItem } from '../lib/exerciseHelper';
+export { ExerciseItem };
+import { ExerciseDetailModal } from './ExerciseDetailModal';
 
 interface ExercisePickerModalProps {
   visible: boolean;
@@ -25,8 +18,11 @@ const CATEGORIES = ['Toate', 'Piept', 'Spate', 'Umeri', 'Picioare', 'Brațe', 'A
 export function ExercisePickerModal({ visible, onClose, onSelectExercise }: ExercisePickerModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Toate');
+  const [detailExercise, setDetailExercise] = useState<ExerciseItem | null>(null);
 
-  const filteredExercises = exercisesList.filter((ex) => {
+  const typedList = exercisesList as ExerciseItem[];
+
+  const filteredExercises = typedList.filter((ex) => {
     const matchesSearch =
       ex.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ex.primary.toLowerCase().includes(searchQuery.toLowerCase());
@@ -38,6 +34,11 @@ export function ExercisePickerModal({ visible, onClose, onSelectExercise }: Exer
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onSelectExercise(item);
     onClose();
+  };
+
+  const handleOpenDetail = (item: ExerciseItem) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setDetailExercise(item);
   };
 
   return (
@@ -102,23 +103,60 @@ export function ExercisePickerModal({ visible, onClose, onSelectExercise }: Exer
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.exerciseCard}
-                onPress={() => handleSelect(item)}
-                activeOpacity={0.7}
-              >
-                <View style={styles.exTop}>
-                  <Text style={styles.exName}>{item.name}</Text>
-                  <View style={styles.equipBadge}>
-                    <Text style={styles.equipText}>{item.equipment}</Text>
-                  </View>
-                </View>
+            renderItem={({ item }) => {
+              const thumbUri = item.images && item.images.length > 0 ? item.images[0] : null;
 
-                <Text style={styles.exPrimary}>🎯 {item.primary}</Text>
-                <Text style={styles.exNotes} numberOfLines={2}>💡 {item.notes}</Text>
-              </TouchableOpacity>
-            )}
+              return (
+                <TouchableOpacity
+                  style={styles.exerciseCard}
+                  onPress={() => handleSelect(item)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.cardContentRow}>
+                    {/* Thumbnail Ilustrație Exercițiu */}
+                    {thumbUri ? (
+                      <TouchableOpacity
+                        style={styles.thumbWrapper}
+                        onPress={() => handleOpenDetail(item)}
+                        activeOpacity={0.8}
+                      >
+                        <Image source={{ uri: thumbUri }} style={styles.thumbImage} resizeMode="contain" />
+                        <View style={styles.thumbZoomBadge}>
+                          <Feather name="maximize-2" size={10} color="#0F172A" />
+                        </View>
+                      </TouchableOpacity>
+                    ) : (
+                      <View style={[styles.thumbWrapper, styles.thumbPlaceholder]}>
+                        <Feather name="activity" size={20} color="rgba(255,255,255,0.4)" />
+                      </View>
+                    )}
+
+                    <View style={{ flex: 1 }}>
+                      <View style={styles.exTop}>
+                        <Text style={styles.exName} numberOfLines={2}>{item.name}</Text>
+                      </View>
+
+                      <View style={styles.metaRow}>
+                        <Text style={styles.exPrimary}>🎯 {item.primary}</Text>
+                        <View style={styles.equipBadge}>
+                          <Text style={styles.equipText}>{item.equipment}</Text>
+                        </View>
+                      </View>
+
+                      <Text style={styles.exNotes} numberOfLines={1}>💡 {item.notes}</Text>
+                    </View>
+
+                    {/* Buton Info (i) */}
+                    <TouchableOpacity
+                      style={styles.infoBtn}
+                      onPress={() => handleOpenDetail(item)}
+                    >
+                      <Feather name="info" size={18} color="#10B981" />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Text style={styles.emptyText}>Niciun exercițiu găsit pentru căutarea ta.</Text>
@@ -127,6 +165,15 @@ export function ExercisePickerModal({ visible, onClose, onSelectExercise }: Exer
           />
         </View>
       </View>
+
+      {/* Modal Detaliu Exercițiu cu Ilustrații & Animație Formă */}
+      <ExerciseDetailModal
+        visible={!!detailExercise}
+        exercise={detailExercise}
+        images={detailExercise?.images || []}
+        exerciseName={detailExercise?.name || ''}
+        onClose={() => setDetailExercise(null)}
+      />
     </Modal>
   );
 }
@@ -248,5 +295,51 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.4)',
     fontSize: 14,
     textAlign: 'center',
+  },
+  cardContentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  thumbWrapper: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  thumbImage: {
+    width: '100%',
+    height: '100%',
+  },
+  thumbPlaceholder: {
+    backgroundColor: '#1E293B',
+  },
+  thumbZoomBadge: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderRadius: 6,
+    padding: 3,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    marginBottom: 4,
+  },
+  infoBtn: {
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: 'rgba(16,185,129,0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

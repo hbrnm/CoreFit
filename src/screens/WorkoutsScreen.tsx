@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Modal, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
@@ -8,6 +8,8 @@ import { calculate1RM } from '../lib/db';
 import routinesLibrary from '../data/defaultRoutines.json';
 import { PlateCalculatorModal } from '../components/PlateCalculatorModal';
 import { ExercisePickerModal, ExerciseItem } from '../components/ExercisePickerModal';
+import { ExerciseDetailModal } from '../components/ExerciseDetailModal';
+import { getExerciseIllustration } from '../lib/exerciseHelper';
 import { VoiceCues, setVoiceCoachEnabled, getVoiceCoachEnabled } from '../lib/voiceCoach';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
@@ -42,6 +44,30 @@ export function WorkoutsScreen() {
   const [isPlateCalcOpen, setIsPlateCalcOpen] = useState(false);
   const [plateCalcWeight, setPlateCalcWeight] = useState(100);
   const [isExercisePickerOpen, setIsExercisePickerOpen] = useState(false);
+
+  // Modal Ilustrație & Detaliu Exercițiu
+  const [detailModalState, setDetailModalState] = useState<{
+    visible: boolean;
+    exercise: ExerciseItem | null;
+    images: string[];
+    name: string;
+  }>({
+    visible: false,
+    exercise: null,
+    images: [],
+    name: '',
+  });
+
+  const handleOpenExerciseDetail = (name: string, category?: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const result = getExerciseIllustration(name, category);
+    setDetailModalState({
+      visible: true,
+      exercise: result.exercise || null,
+      images: result.images,
+      name: name,
+    });
+  };
 
   // Sesiune activa & exercitii custom
   const [activeSessionDay, setActiveSessionDay] = useState<number | null>(null);
@@ -348,27 +374,55 @@ export function WorkoutsScreen() {
                 <Text style={styles.exerciseCount}>{currentDay.exercises.length} Exerciții</Text>
               </View>
 
-              {currentDay.exercises.map((ex, exIdx) => (
-                <View key={exIdx} style={styles.exerciseItem}>
-                  <View style={styles.exHeader}>
-                    <Text style={styles.exNumber}>#{exIdx + 1}</Text>
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.exName}>{ex.exercise_name}</Text>
-                      <Text style={styles.exMuscles}>
-                        🎯 {ex.target_muscle} {ex.secondary_muscles && ex.secondary_muscles.length > 0 ? `• ${ex.secondary_muscles.join(', ')}` : ''}
-                      </Text>
+              {currentDay.exercises.map((ex, exIdx) => {
+                const illu = getExerciseIllustration(ex.exercise_name, ex.target_muscle);
+                const thumbUri = illu.images[0];
+
+                return (
+                  <View key={exIdx} style={styles.exerciseItem}>
+                    <View style={styles.exHeader}>
+                      {/* Thumbnail Ilustrație */}
+                      <TouchableOpacity
+                        style={styles.exThumbWrapper}
+                        onPress={() => handleOpenExerciseDetail(ex.exercise_name, ex.target_muscle)}
+                        activeOpacity={0.8}
+                      >
+                        {thumbUri ? (
+                          <Image source={{ uri: thumbUri }} style={styles.exThumbImg} resizeMode="contain" />
+                        ) : (
+                          <Feather name="activity" size={20} color="#10B981" />
+                        )}
+                        <View style={styles.exThumbZoomBadge}>
+                          <Feather name="maximize-2" size={9} color="#0F172A" />
+                        </View>
+                      </TouchableOpacity>
+
+                      <View style={{ flex: 1 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <Text style={styles.exName}>#{exIdx + 1} {ex.exercise_name}</Text>
+                          <TouchableOpacity
+                            onPress={() => handleOpenExerciseDetail(ex.exercise_name, ex.target_muscle)}
+                            style={styles.smallInfoBtn}
+                          >
+                            <Feather name="info" size={15} color="#10B981" />
+                          </TouchableOpacity>
+                        </View>
+                        <Text style={styles.exMuscles}>
+                          🎯 {ex.target_muscle} {ex.secondary_muscles && ex.secondary_muscles.length > 0 ? `• ${ex.secondary_muscles.join(', ')}` : ''}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
 
-                  <View style={styles.exMetaRow}>
-                    <View style={styles.pill}><Text style={styles.pillText}>{ex.sets} serii x {ex.reps_range} rep</Text></View>
-                    <View style={[styles.pill, { backgroundColor: 'rgba(249,115,22,0.15)' }]}><Text style={[styles.pillText, { color: '#F97316' }]}>RIR {ex.rir}</Text></View>
-                    <View style={[styles.pill, { backgroundColor: 'rgba(6,182,212,0.15)' }]}><Text style={[styles.pillText, { color: '#06B6D4' }]}>{ex.rest_seconds}s pauză</Text></View>
-                  </View>
+                    <View style={styles.exMetaRow}>
+                      <View style={styles.pill}><Text style={styles.pillText}>{ex.sets} serii x {ex.reps_range} rep</Text></View>
+                      <View style={[styles.pill, { backgroundColor: 'rgba(249,115,22,0.15)' }]}><Text style={[styles.pillText, { color: '#F97316' }]}>RIR {ex.rir}</Text></View>
+                      <View style={[styles.pill, { backgroundColor: 'rgba(6,182,212,0.15)' }]}><Text style={[styles.pillText, { color: '#06B6D4' }]}>{ex.rest_seconds}s pauză</Text></View>
+                    </View>
 
-                  <Text style={styles.exNotes}>💡 {ex.notes}</Text>
-                </View>
-              ))}
+                    <Text style={styles.exNotes}>💡 {ex.notes}</Text>
+                  </View>
+                );
+              })}
 
               <TouchableOpacity
                 style={styles.startBtn}
@@ -393,23 +447,53 @@ export function WorkoutsScreen() {
               </TouchableOpacity>
             </View>
 
-            {activeExercises.map((ex, exIdx) => (
-              <View key={exIdx} style={styles.activeExCard}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.activeExName}>#{exIdx + 1} {ex.exercise_name}</Text>
-                    <Text style={styles.activeExNotes}>🎯 {ex.target_muscle} • Odihnă: {ex.rest_seconds}s</Text>
+            {activeExercises.map((ex, exIdx) => {
+              const illu = getExerciseIllustration(ex.exercise_name, ex.target_muscle);
+              const thumbUri = illu.images[0];
+
+              return (
+                <View key={exIdx} style={styles.activeExCard}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    {/* Thumbnail Ilustrație Sesiune Activă */}
+                    <TouchableOpacity
+                      style={styles.activeExThumbWrapper}
+                      onPress={() => handleOpenExerciseDetail(ex.exercise_name, ex.target_muscle)}
+                      activeOpacity={0.8}
+                    >
+                      {thumbUri ? (
+                        <Image source={{ uri: thumbUri }} style={styles.activeExThumbImg} resizeMode="contain" />
+                      ) : (
+                        <Feather name="activity" size={18} color="#10B981" />
+                      )}
+                      <View style={styles.exThumbZoomBadge}>
+                        <Feather name="maximize-2" size={8} color="#0F172A" />
+                      </View>
+                    </TouchableOpacity>
+
+                    <View style={{ flex: 1, paddingHorizontal: 10 }}>
+                      <Text style={styles.activeExName}>#{exIdx + 1} {ex.exercise_name}</Text>
+                      <Text style={styles.activeExNotes}>🎯 {ex.target_muscle} • Odihnă: {ex.rest_seconds}s</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <TouchableOpacity
+                        style={styles.smallInfoBtn}
+                        onPress={() => handleOpenExerciseDetail(ex.exercise_name, ex.target_muscle)}
+                      >
+                        <Feather name="info" size={16} color="#10B981" />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={styles.plateIconBtn}
+                        onPress={() => {
+                          const firstWeight = (exerciseSets[exIdx] && exerciseSets[exIdx][0]?.weight) || '100';
+                          openPlateCalcForWeight(firstWeight);
+                        }}
+                      >
+                        <Feather name="disc" size={16} color="#06B6D4" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <TouchableOpacity
-                    style={styles.plateIconBtn}
-                    onPress={() => {
-                      const firstWeight = (exerciseSets[exIdx] && exerciseSets[exIdx][0]?.weight) || '100';
-                      openPlateCalcForWeight(firstWeight);
-                    }}
-                  >
-                    <Feather name="disc" size={16} color="#06B6D4" />
-                  </TouchableOpacity>
-                </View>
 
                 {/* Tabel Seturi OpenGym */}
                 <View style={styles.setTable}>
@@ -487,7 +571,8 @@ export function WorkoutsScreen() {
                   <Text style={styles.addSetText}>Adaugă Serie</Text>
                 </TouchableOpacity>
               </View>
-            ))}
+            );
+          })}
 
             {/* Buton Adauga Exercitiu din Biblioteca OpenGym */}
             <TouchableOpacity
@@ -573,6 +658,15 @@ export function WorkoutsScreen() {
           </View>
         </View>
       </Modal>
+
+      {/* Modal Detaliu Exercițiu & Animație Formă */}
+      <ExerciseDetailModal
+        visible={detailModalState.visible}
+        exercise={detailModalState.exercise}
+        images={detailModalState.images}
+        exerciseName={detailModalState.name}
+        onClose={() => setDetailModalState((prev) => ({ ...prev, visible: false }))}
+      />
     </SafeAreaView>
   );
 }
@@ -717,15 +811,62 @@ const styles = StyleSheet.create({
   },
   exerciseItem: {
     backgroundColor: 'rgba(255,255,255,0.04)',
-    borderRadius: 12,
+    borderRadius: 14,
     padding: 12,
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
   },
   exHeader: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 10,
-    marginBottom: 8,
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 10,
+  },
+  exThumbWrapper: {
+    width: 54,
+    height: 54,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  exThumbImg: {
+    width: '100%',
+    height: '100%',
+  },
+  exThumbZoomBadge: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    borderRadius: 5,
+    padding: 2,
+  },
+  activeExThumbWrapper: {
+    width: 48,
+    height: 48,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  activeExThumbImg: {
+    width: '100%',
+    height: '100%',
+  },
+  smallInfoBtn: {
+    padding: 5,
+    borderRadius: 8,
+    backgroundColor: 'rgba(16,185,129,0.12)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   exNumber: {
     color: '#10B981',
