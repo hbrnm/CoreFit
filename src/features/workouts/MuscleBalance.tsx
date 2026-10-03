@@ -7,6 +7,7 @@ import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
 import { DOMAIN, PLATE } from '../../lib/domains';
 import { muscleBalance, type MuscleWindow } from '../../lib/muscles';
+import { BodyMap, shade } from '../../components/BodyMap';
 import { formatNum } from '../../lib/numbers';
 import Dexie from 'dexie';
 import { Panel, Segmented } from '../../components/ui';
@@ -41,6 +42,7 @@ export function MuscleBalance() {
   const rows = muscleBalance(logs, catalog, today, window);
   const quiet = rows.filter((r) => r.sets === 0);
   const max = Math.max(1, ...rows.map((r) => r.sets));
+  const setsOf = new Map(rows.map((r) => [r.muscle, r.sets]));
 
   return (
     <Panel title="Echilibru muscular" edge={D.edge}>
@@ -49,6 +51,10 @@ export function MuscleBalance() {
           Seturi de lucru. Grupa principală contează 1, o grupă ajutătoare 0,5. Încălzirea nu intră.
         </p>
         <Segmented<MuscleWindow> label="Perioadă" options={WINDOWS} value={window} onChange={setWindow} activeClass={D.solid} />
+        <BodyMap
+          fill={(m) => shade(PLATE.red, (setsOf.get(m) ?? 0) / max)}
+          describe={(m) => `${formatNum(setsOf.get(m) ?? 0, 1)} seturi`}
+        />
         <ul className="flex flex-col gap-2">
           {rows.map((row) => (
             <li key={row.muscle}>

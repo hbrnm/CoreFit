@@ -9,17 +9,19 @@ import type { SessionSummary } from '../../lib/workoutOps';
 import { Notice, Panel, Segmented, Sheet } from '../../components/ui';
 import { ActiveWorkout } from './ActiveWorkout';
 import { HistoryPanel } from './HistoryPanel';
+import { ProgressPanel } from './ProgressPanel';
 import { RoutinesPanel } from './RoutinesPanel';
 import { StartPanel } from './StartPanel';
 
 const D = DOMAIN.workouts;
 
-type Sub = 'start' | 'routines' | 'history';
+type Sub = 'start' | 'routines' | 'history' | 'progress';
 
 const SUBS: ReadonlyArray<{ value: Sub; label: string }> = [
   { value: 'start', label: 'Programul Meu AI' },
   { value: 'routines', label: 'Galerie' },
   { value: 'history', label: 'Istoric' },
+  { value: 'progress', label: 'Progres' },
 ];
 
 export function WorkoutsTab() {
@@ -51,11 +53,12 @@ export function WorkoutsTab() {
             value={sub}
             onChange={setSub}
             activeClass={D.solid}
-            columns={3}
+            columns={4}
           />
           {sub === 'start' && <StartPanel />}
           {sub === 'routines' && <RoutinesPanel />}
           {sub === 'history' && <HistoryPanel />}
+          {sub === 'progress' && <ProgressPanel />}
         </>
       )}
 

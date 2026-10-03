@@ -1,6 +1,7 @@
 import { builtinExercise, type Exercise } from '../data/exercises';
 import type { LocalCustomExercise, LocalWorkoutLog, LocalWorkoutSession } from './db';
 import { addDays, localDateStr, startOfWeek } from './date';
+import { estimate1RM } from './numbers';
 
 /** Catalogul complet: exerciții predefinite plus cele create de utilizator. */
 export function buildCatalog(custom: LocalCustomExercise[]): Map<string, Exercise> {
@@ -154,4 +155,19 @@ export function groupLinked<T>(rows: readonly T[], isLinkedToNext: (row: T) => b
   });
   if (current.length > 0) groups.push(current);
   return groups;
+}
+
+/**
+ * Cel mai bun 1RM estimat dintr-o listă de serii, și seria din care vine.
+ * Doar seriile de 1-12 repetări cu greutate: peste 12, estimarea nu e de încredere.
+ */
+export function bestEstimated1RM(
+  sets: ReadonlyArray<Pick<LocalWorkoutLog, 'weight_kg' | 'reps'>>,
+): { value: number; weightKg: number; reps: number } | null {
+  let best: { value: number; weightKg: number; reps: number } | null = null;
+  for (const s of sets) {
+    const value = estimate1RM(s.weight_kg, s.reps);
+    if (value !== null && (!best || value > best.value)) best = { value, weightKg: s.weight_kg, reps: s.reps };
+  }
+  return best;
 }

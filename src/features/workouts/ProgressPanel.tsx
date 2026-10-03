@@ -8,11 +8,13 @@ import { db } from '../../lib/db';
 import { addDays, formatDayMonth, localDateStr } from '../../lib/date';
 import { PLATE } from '../../lib/domains';
 import { formatNum } from '../../lib/numbers';
-import { epley, findExercise, setScore, setVolume } from '../../lib/workoutStats';
+import { bestEstimated1RM, findExercise, setScore, setVolume } from '../../lib/workoutStats';
 import { LineChart } from '../../components/charts';
 import { Panel, Segmented } from '../../components/ui';
 import { ActivityHeatmap } from './ActivityHeatmap';
+import { FatiguePanel } from './FatiguePanel';
 import { MuscleBalance } from './MuscleBalance';
+import { OneRmCalculator } from './OneRmCalculator';
 
 export function ProgressPanel() {
   const { userId } = useApp();
@@ -46,13 +48,15 @@ export function ProgressPanel() {
 
   const perDay = useMemo(() => {
     if (!exercise) return [];
+    // 1RM estimat doar din seriile de 1-12 repetări; o serie de 30 cu o ganteră ușoară nu e un 1RM
     const best = new Map<string, number>();
     for (const l of logs ?? []) {
       if (l.exercise_id !== exercise.id) continue;
       const date = localDateStr(new Date(l.logged_at));
-      const score = exercise.kind === 'reps' ? epley(l.weight_kg, l.reps) : l.reps;
+      const score = exercise.kind === 'reps' ? (bestEstimated1RM([l])?.value ?? 0) : l.reps;
       if (score > (best.get(date) ?? 0)) best.set(date, score);
     }
+    for (const [date, score] of best) if (score <= 0) best.delete(date);
     const from = span === '4' ? addDays(today, -27) : span === '12' ? addDays(today, -83) : null;
     return [...best.entries()]
       .filter(([date]) => !from || date >= from)
@@ -66,6 +70,8 @@ export function ProgressPanel() {
     let bestScore = 0;
     let bestSet: { weight: number; reps: number } | null = null;
     let volume = 0;
+    const mine = (logs ?? []).filter((l) => l.exercise_id === exercise.id);
+    const oneRm = exercise.kind === 'reps' ? bestEstimated1RM(mine) : null;
     for (const l of logs ?? []) {
       if (l.exercise_id !== exercise.id) continue;
       heaviest = Math.max(heaviest, l.weight_kg);
@@ -76,17 +82,19 @@ export function ProgressPanel() {
         bestSet = { weight: l.weight_kg, reps: l.reps };
       }
     }
-    return { heaviest, bestSet, volume };
+    return { heaviest, bestSet, volume, oneRm };
   }, [logs, exercise]);
 
   if (!logs) return null;
   if (logs.length === 0) {
     return (
       <div className="flex flex-col gap-4">
+        <FatiguePanel />
         <MuscleBalance />
         <Panel>
           <p className="text-steel/70">Progresul pe exercițiu apare după primele serii notate.</p>
         </Panel>
+        <OneRmCalculator />
         <ActivityHeatmap />
       </div>
     );
@@ -96,6 +104,7 @@ export function ProgressPanel() {
 
   return (
     <div className="flex flex-col gap-4">
+      <FatiguePanel />
       <MuscleBalance />
       <Panel title="Progres pe exercițiu">
         <div className="flex flex-col gap-4">
@@ -114,7 +123,9 @@ export function ProgressPanel() {
 
           <div>
             <p className="mb-1 text-sm text-steel/70">
-              {exercise?.kind === 'reps' ? '1RM estimat, cea mai bună serie din fiecare zi' : 'Cea mai bună serie din fiecare zi'}
+              {exercise?.kind === 'reps'
+                ? '1RM estimat, cea mai bună serie de 1-12 repetări din fiecare zi'
+                : 'Cea mai bună serie din fiecare zi'}
             </p>
             <Segmented<'4' | '12' | 'all'>
               label="Perioadă"
@@ -131,6 +142,15 @@ export function ProgressPanel() {
               <LineChart points={perDay} color={PLATE.red} unit={unit} />
             </div>
           </div>
+
+          {records?.oneRm && (
+            <p className="text-[15px]">
+              1RM estimat: <span className="num text-2xl">{formatNum(records.oneRm.value, 1)} kg</span>{' '}
+              <span className="text-steel/60">
+                din seria de {formatNum(records.oneRm.weightKg, 2)} kg x {records.oneRm.reps}
+              </span>
+            </p>
+          )}
 
           {records && (
             <dl className="grid grid-cols-3 gap-3 text-[15px]">
@@ -157,6 +177,7 @@ export function ProgressPanel() {
         </div>
       </Panel>
 
+      <OneRmCalculator />
       <ActivityHeatmap />
     </div>
   );
