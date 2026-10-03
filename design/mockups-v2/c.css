@@ -114,3 +114,29 @@ main { padding-left: 16px; padding-right: 16px; }
 .tabs a.on { color: var(--brand-fg); }
 .tabs a.on svg { stroke-width: 1.75; }
 .tabs a.on::after { display: none; }
+
+/* Monocrom (decizia 6): culoare doar pentru acțiuni */
+:root, [data-theme='dark'] { --workouts: var(--fg); --nutrition: var(--fg); --health: var(--fg); }
+.cap i { background: var(--subtle) !important; }
+.stack i:first-child, .kv .k i[style*="brand"] { background: var(--fg) !important; opacity: 1; }
+.note { color: var(--fg); }
+.top span svg, [data-theme='dark'] .top span svg { color: var(--muted); }
+
+/* Runda 2 (stil C, monocrom) */
+.useg { display: flex; gap: 22px; margin-top: 16px; border-bottom: 1px solid var(--line); }
+.useg span { padding-bottom: 10px; font-weight: 650; color: var(--subtle); font-size: 15px; }
+.useg span.on { color: var(--fg); box-shadow: inset 0 -2px 0 var(--fg); }
+.list { margin-top: 6px; }
+.li { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-top: 1px solid var(--line); gap: 12px; }
+.li:first-child { border-top: 0; }
+.li .d { font-size: 13px; color: var(--subtle); }
+.li b { font-weight: 700; }
+.btn.ghost { background: transparent; color: var(--fg); border: 1.5px solid var(--line); justify-content: center; }
+.btn.center { justify-content: center; }
+.mini { display: flex; gap: 10px; align-items: center; }
+.mini .bar { width: 96px; height: 6px; border-radius: 99px; background: var(--fill); overflow: hidden; }
+.mini .bar i { display: block; height: 100%; background: var(--fg); }
+.pick { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px; font-weight: 650; margin-top: 16px; }
+.fullscreen { min-height: 844px; display: flex; flex-direction: column; }
+.ctrls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ctrls span { height: 52px; border-radius: 14px; background: var(--fill); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px; }

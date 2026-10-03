@@ -107,3 +107,26 @@ table.sets { width: 100%; border-collapse: separate; border-spacing: 0 4px; marg
 .daterow svg.off { color: var(--line); }
 .food { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 10px; border-top: 1px solid var(--line); }
 .food .n { font-weight: 550; }
+
+/* Monocrom (decizia 6): culoare doar pentru acțiuni */
+:root, [data-theme='dark'] { --workouts: var(--fg); --nutrition: var(--fg); --health: var(--fg); --success-text: var(--fg); --warning: var(--muted); }
+.eyebrow { color: var(--subtle); }
+.bar > i { background: var(--fg) !important; }
+.card svg[style] { color: var(--fg) !important; }
+.sync svg { color: var(--muted); }
+
+/* Runda 2: liste în carduri (Profil), formular (Conectare) */
+.group { padding: 0; }
+.group .gh { padding: 14px 16px 4px; font-size: 13px; font-weight: 600; color: var(--subtle); text-transform: uppercase; letter-spacing: .06em; }
+.li { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-top: 1px solid var(--line); gap: 12px; }
+.group .li:first-of-type { border-top: 0; }
+.li .v { color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.li .v svg { width: 16px; height: 16px; color: var(--subtle); }
+.seg3 { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--raised); border-radius: 10px; padding: 3px; margin: 8px 16px 16px; }
+.seg3 span, .seg2 span { text-align: center; padding: 8px 0; font-size: 14px; font-weight: 600; color: var(--muted); border-radius: 8px; }
+.seg3 span.on, .seg2 span.on { background: var(--surface); color: var(--fg); box-shadow: 0 1px 3px rgba(15,23,42,.12); }
+.seg2 { display: grid; grid-template-columns: 1fr 1fr; background: var(--raised); border-radius: 10px; padding: 3px; }
+.input { margin-top: 6px; height: 50px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); padding: 0 14px; display: flex; align-items: center; color: var(--fg); font-size: 16px; }
+.input.ph { color: var(--subtle); }
+.lbl { font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 14px; }
+.danger { color: var(--fg); font-weight: 600; }
