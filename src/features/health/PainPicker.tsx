@@ -22,7 +22,7 @@ export function PainPicker({ label, value, onChange }: Props) {
           onClick={() => onChange(n)}
           className={cx(
             'btn min-h-[48px] px-0 font-display text-xl',
-            value === n ? D.solid : 'border border-steel/30 bg-white text-steel active:bg-steel/10',
+            value === n ? D.solid : 'border border-white/10 bg-white/5 text-steel active:bg-steel/10',
           )}
         >
           {n}

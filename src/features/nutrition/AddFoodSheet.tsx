@@ -203,7 +203,7 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
             {tab === 'foods' && <FoodSearch onPick={setPicked} />}
 
             {tab === 'recipes' && (
-              <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white">
+              <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
                 {(recipes ?? []).map((r) => {
                   const per = perServing(recipeTotals(r.ingredients), r.servings);
                   return (

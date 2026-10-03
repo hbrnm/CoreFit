@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Plus, Star } from 'lucide-react';
+import { Pencil, Plus, Star } from 'lucide-react';
 import {
   BUILTIN_EXERCISES,
   EQUIPMENT_LABELS,
@@ -38,6 +38,9 @@ export function ExercisePicker({ onPick, onClose }: Props) {
   const catalog = useCatalog(userId);
   const [query, setQuery] = useState('');
   const [muscle, setMuscle] = useState<Muscle | 'all'>('all');
+  const [gear, setGear] = useState<Equipment | 'all'>('all');
+  /** exercițiul propriu în editare; null = exercițiu nou */
+  const [editing, setEditing] = useState<Exercise | null>(null);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [creating, setCreating] = useState(false);
 
@@ -57,6 +60,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
   const q = query.trim().toLowerCase();
   const shown = all
     .filter((e) => (muscle === 'all' || e.muscle === muscle) && (q === '' || e.name.toLowerCase().includes(q)))
+    .filter((e) => gear === 'all' || e.equipment === gear)
     .filter((e) => !onlyFavorites || favorites.has(e.id))
     .sort((a, b) => Number(favorites.has(b.id)) - Number(favorites.has(a.id)) || a.name.localeCompare(b.name, 'ro'));
 
@@ -66,10 +70,20 @@ export function ExercisePicker({ onPick, onClose }: Props) {
     void saveProfilePatch(userId, { favorite_exercise_ids: next });
   };
 
-  const createExercise = async () => {
+  const openForm = (exercise: Exercise | null) => {
+    setEditing(exercise);
+    setName(exercise?.name ?? '');
+    setNewMuscle(exercise?.muscle ?? 'chest');
+    setEquipment(exercise?.equipment ?? 'dumbbell');
+    setKind(exercise?.kind ?? 'reps');
+    setError(null);
+    setCreating(true);
+  };
+
+  const saveExercise = async () => {
     const trimmed = name.trim();
     if (trimmed.length < 2) return setError('Scrie numele exercițiului.');
-    const id = newId();
+    const id = editing?.id ?? newId();
     try {
       await db.customExercises.put({
         id,
@@ -81,15 +95,29 @@ export function ExercisePicker({ onPick, onClose }: Props) {
         deleted: false,
         ...stamp(),
       });
-      onPick({ id, name: trimmed, muscle: newMuscle, equipment, kind, custom: true });
+      if (editing) {
+        // seriile notate păstrează numele de atunci; aici se schimbă doar exercițiul pentru viitor
+        setCreating(false);
+        setEditing(null);
+      } else {
+        onPick({ id, name: trimmed, muscle: newMuscle, equipment, kind, custom: true });
+      }
     } catch {
       setError('Exercițiul nu s-a putut salva pe dispozitiv.');
     }
   };
 
+  const deleteExercise = async () => {
+    if (!editing) return;
+    if (!window.confirm(`Ștergi ${editing.name}? Seriile notate rămân în istoric.`)) return;
+    await db.customExercises.update(editing.id, { deleted: true, ...stamp() });
+    setCreating(false);
+    setEditing(null);
+  };
+
   if (creating) {
     return (
-      <Sheet title="Exercițiu nou" onClose={onClose}>
+      <Sheet title={editing ? 'Exercițiul tău' : 'Exercițiu nou'} onClose={onClose}>
         <div className="flex flex-col gap-4">
           <div>
             <label htmlFor="ex-name" className="label">
@@ -143,6 +171,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
             />
             <p className="mt-2 text-sm text-steel/70">
               Greutate: kg și repetări. Corp: repetări, cu greutate adăugată opțional. Durată: secunde.
+              {editing && ' Schimbarea tipului nu modifică seriile notate deja.'}
             </p>
           </div>
           {error && <Notice tone="error">{error}</Notice>}
@@ -150,10 +179,15 @@ export function ExercisePicker({ onPick, onClose }: Props) {
             <button type="button" className="btn-quiet" onClick={() => setCreating(false)}>
               Înapoi
             </button>
-            <button type="button" className={`btn ${D.solid}`} onClick={() => void createExercise()}>
+            <button type="button" className={`btn ${D.solid}`} onClick={() => void saveExercise()}>
               Salvează
             </button>
           </div>
+          {editing && (
+            <button type="button" className="btn-outline border-plate-red text-plate-red" onClick={() => void deleteExercise()}>
+              Șterge exercițiul
+            </button>
+          )}
         </div>
       </Sheet>
     );
@@ -179,24 +213,40 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               aria-pressed={muscle === m}
               className={cx(
                 'btn min-h-[40px] shrink-0 px-3 text-sm',
-                muscle === m ? D.solid : 'border border-steel/30 bg-white text-steel',
+                muscle === m ? D.solid : 'border border-white/10 bg-white/5 text-steel',
               )}
             >
               {m === 'all' ? 'Toate' : MUSCLE_LABELS[m]}
             </button>
           ))}
         </div>
+        <div className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-1" role="group" aria-label="Echipament">
+          {(['all', ...EQUIPMENT] as const).map((g) => (
+            <button
+              key={g}
+              type="button"
+              onClick={() => setGear(g)}
+              aria-pressed={gear === g}
+              className={cx(
+                'btn min-h-[40px] shrink-0 px-3 text-sm',
+                gear === g ? D.solid : 'border border-white/10 bg-white/5 text-steel',
+              )}
+            >
+              {g === 'all' ? 'Orice echipament' : EQUIPMENT_LABELS[g]}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           aria-pressed={onlyFavorites}
-          className={cx('btn min-h-[44px]', onlyFavorites ? D.solid : 'border border-steel/30 bg-white text-steel')}
+          className={cx('btn min-h-[44px]', onlyFavorites ? D.solid : 'border border-white/10 bg-white/5 text-steel')}
           onClick={() => setOnlyFavorites((v) => !v)}
         >
           <Star size={16} />
           {onlyFavorites ? 'Doar favorite' : 'Arată favoritele primele'}
         </button>
 
-        <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white">
+        <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
           {shown.map((e) => (
             <li key={e.id} className="flex items-stretch">
               <button
@@ -218,15 +268,26 @@ export function ExercisePicker({ onPick, onClose }: Props) {
                   <span className="font-semibold">{e.name}</span>
                   <span className="text-sm text-steel/60">
                     {MUSCLE_LABELS[e.muscle]}, {EQUIPMENT_LABELS[e.equipment]}
+                    {e.custom ? ', al tău' : ''}
                   </span>
                 </span>
               </button>
+              {e.custom && (
+                <button
+                  type="button"
+                  aria-label={`Editează ${e.name}`}
+                  className="flex w-12 items-center justify-center text-steel/60"
+                  onClick={() => openForm(e)}
+                >
+                  <Pencil size={16} />
+                </button>
+              )}
             </li>
           ))}
           {shown.length === 0 && <li className="px-3 py-4 text-steel/70">Niciun exercițiu găsit.</li>}
         </ul>
 
-        <button type="button" className="btn-outline" onClick={() => setCreating(true)}>
+        <button type="button" className="btn-outline" onClick={() => openForm(null)}>
           <Plus size={18} />
           Exercițiu nou
         </button>

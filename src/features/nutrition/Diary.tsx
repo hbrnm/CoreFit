@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Dexie from 'dexie';
-import { Camera, ChevronLeft, ChevronRight, Minus, Plus, ScanBarcode, Search, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus, Plus, Trash2 } from 'lucide-react';
 import { useApp } from '../../context';
 import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
@@ -112,22 +112,6 @@ export function Diary() {
         </button>
       </div>
       <DiarySummary totals={totals} targets={targets} fiberTarget={fiberTarget} sugarCap={sugarCap} goTo={goTo} />
-
-      {/* Smart Logging Actions */}
-      <div className="grid grid-cols-3 gap-2">
-        <button className="btn-quiet flex flex-col gap-1 items-center py-3 h-auto rounded-2xl" onClick={() => alert('AI Photo Scan (Mock) - Va recunoaște mâncarea automat!')}>
-          <Camera size={24} className="text-plate-green" />
-          <span className="text-[11px] font-semibold tracking-wide">PHOTO SCAN</span>
-        </button>
-        <button className="btn-quiet flex flex-col gap-1 items-center py-3 h-auto rounded-2xl" onClick={() => alert('Barcode Scan (Mock)')}>
-          <ScanBarcode size={24} className="text-plate-blue" />
-          <span className="text-[11px] font-semibold tracking-wide">BARCODE</span>
-        </button>
-        <button className="btn-quiet flex flex-col gap-1 items-center py-3 h-auto rounded-2xl" onClick={() => setAdding('snack')}>
-          <Search size={24} className="text-plate-yellow" />
-          <span className="text-[11px] font-semibold tracking-wide">SEARCH</span>
-        </button>
-      </div>
 
       {list.length === 0 && (yesterday ?? []).length > 0 && (
         <button

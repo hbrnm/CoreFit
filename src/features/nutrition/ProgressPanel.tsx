@@ -151,7 +151,7 @@ export function ProgressPanel() {
             tone="info"
             title="Ținte incomplete"
             action={
-              <button type="button" className="btn-outline bg-white" onClick={() => goTo('profile')}>
+              <button type="button" className="btn-outline" onClick={() => goTo('profile')}>
                 Completează profilul
               </button>
             }

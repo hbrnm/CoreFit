@@ -18,7 +18,7 @@ const D = DOMAIN.workouts;
 type Sub = 'start' | 'routines' | 'history' | 'progress';
 
 const SUBS: ReadonlyArray<{ value: Sub; label: string }> = [
-  { value: 'start', label: 'Programul Meu AI' },
+  { value: 'start', label: 'Start' },
   { value: 'routines', label: 'Galerie' },
   { value: 'history', label: 'Istoric' },
   { value: 'progress', label: 'Progres' },

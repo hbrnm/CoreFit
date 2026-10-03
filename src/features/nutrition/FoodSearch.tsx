@@ -233,7 +233,7 @@ export function FoodSearch({ onPick }: Props) {
 
       {message && <Notice tone="warn">{message}</Notice>}
 
-      <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white">
+      <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
         {localMatches.map((f, i) => (
           <li key={`${f.source}-${f.name}-${i}`}>
             <button
@@ -262,7 +262,7 @@ export function FoodSearch({ onPick }: Props) {
       )}
 
       {online && online.length > 0 && (
-        <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white">
+        <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
           {online.map((p) => (
             <li key={p.barcode || p.name}>
               <button type="button" onClick={() => pickOff(p)} className="flex min-h-[56px] w-full flex-col justify-center px-3 text-left active:bg-steel/5">

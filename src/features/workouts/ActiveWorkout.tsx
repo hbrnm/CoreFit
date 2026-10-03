@@ -571,19 +571,6 @@ export function ActiveWorkout({ session, onFinished }: Props) {
         Renunță la antrenament
       </button>
 
-      {/* Floating Voice Coach Indicator */}
-      <div className="fixed bottom-24 right-4 z-40 flex items-center justify-center cursor-pointer active:scale-95 transition-transform">
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-panel shadow-[0_0_20px_rgba(6,182,212,0.3)] border border-neon-cyan/30" onClick={() => speak('Inspiră adânc pe coborâre, expiră pe urcare. Încă 2 repetări!')}>
-          <div className="absolute inset-0 rounded-full animate-ping bg-neon-cyan/20"></div>
-          {/* Audio wave bars animation mock */}
-          <div className="flex items-center gap-1">
-            <div className="w-1 h-3 bg-neon-cyan rounded-full animate-pulse"></div>
-            <div className="w-1 h-5 bg-neon-mint rounded-full animate-pulse delay-75"></div>
-            <div className="w-1 h-3 bg-neon-cyan rounded-full animate-pulse delay-150"></div>
-          </div>
-        </div>
-      </div>
-
       {rest && (
         <div
           role="timer"
