@@ -23,6 +23,8 @@ export interface Exercise {
   kind: ExerciseKind;
   /** grupe care ajută, doar unde rolul e standard; izolările nu au */
   synergists?: Muscle[];
+  /** repetările (sau secundele) se notează pe o singură parte: "8 pe parte" */
+  perSide?: boolean;
   custom?: boolean;
 }
 
@@ -153,6 +155,9 @@ const SYNERGISTS: Partial<Record<string, Muscle[]>> = {
   'hip-thrust': ['hamstrings'],
 };
 
+/** Exerciții unilaterale: se lucrează pe rând fiecare parte, iar valoarea notată e pe o parte. */
+const PER_SIDE = new Set(['db-row', 'lunge', 'bulgarian-split-squat', 'step-up', 'side-plank']);
+
 export const BUILTIN_EXERCISES: Exercise[] = ROWS.map(([id, name, muscle, equipment, kind]) => ({
   id,
   name,
@@ -160,6 +165,7 @@ export const BUILTIN_EXERCISES: Exercise[] = ROWS.map(([id, name, muscle, equipm
   equipment,
   kind,
   synergists: SYNERGISTS[id],
+  ...(PER_SIDE.has(id) ? { perSide: true } : {}),
 }));
 
 const BY_ID = new Map(BUILTIN_EXERCISES.map((e) => [e.id, e]));

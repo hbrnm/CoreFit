@@ -103,7 +103,8 @@ supabase/migrations/   schema, RLS, triggere
 - **Scanarea cu camera** folosește `BarcodeDetector`: merge în Chrome pe Android; pe iPhone (Safari) nu e activ implicit, deci acolo scrii codul manual.
 - **Consumul estimat** are nevoie de cel puțin 10 zile cu mâncare notată și greutăți; dacă uiți mese, iese prea mic.
 - Tipurile de set din versiunea inițială (power, miofibrilar, sarcoplasmatic) au fost înlocuite cu serii de lucru și de încălzire, ca în aplicațiile obișnuite de antrenament.
-- **Progresia automată** (`lib/progression.ts`) e o funcție pură, ușor de testat, dar cu simplificări asumate: greutatea e presupusă uniformă pe toate seriile unui exercițiu (nu urmărește fiecare serie separat), iar "liniar" și "Greyskull" cad automat pe comportamentul "dublă" pentru exercițiile cu greutatea corpului sau cronometrate (nu există o greutate de crescut fiabil). Regula se aplică doar la pornirea unui antrenament din rutină; exercițiile adăugate liber în timpul unui antrenament repetă simplu ultima performanță, ca înainte.
+- **Progresia automată** (`lib/progression.ts`) e o funcție pură, cu teste în `lib/progression.test.ts`. Seriile cu aceeași greutate urcă împreună; cele cu greutăți diferite (piramidă, back-off) progresează fiecare separat la regula dublă. După 3 sesiuni la rând la aceeași greutate fără progres, "liniar" și "dublă" fac deload cu procentul de reset al rutinei (Greyskull își păstrează resetul propriu). "Liniar" și "Greyskull" cad pe "dublă" pentru exercițiile cu greutatea corpului sau cronometrate; la plafonul de repetări, un exercițiu cu greutatea corpului fără greutate adăugată primește o serie în plus (până la 5), apoi aplicația recomandă greutate sau o variantă mai grea. Regula se aplică doar la pornirea unui antrenament din rutină; exercițiile adăugate liber în timpul unui antrenament repetă simplu ultima performanță.
+- **Exercițiile pe o parte** (fandări, ramat cu o mână, step-up, Bulgarian split squat, plank lateral) se notează pe o parte: "8 pe parte". Doar exercițiile predefinite au marcajul; cele proprii nu îl au încă.
 - **Superseturile** se definesc doar în editorul de rutină (nu și ad-hoc, în timpul antrenamentului) și leagă un exercițiu de următorul din listă, nu de un exercițiu anume: mutarea unui rând cu săgețile sus/jos desface automat legăturile din jur, ca să nu apară perechi accidentale — re-leagă manual dacă mai ai nevoie după reordonare.
 - Service worker-ul precache-uiește doar fișierele aplicației; răspunsurile Supabase și Open Food Facts nu sunt puse în cache.
 
@@ -121,4 +122,6 @@ supabase/migrations/   schema, RLS, triggere
 | Piramida McGill | `features/spine-health/McGillBigThree.tsx` | 6-4-2, 10 s |
 | Prag de încredere la potrivirea ingredientelor | `lib/foodMatch.ts`, `CONFIDENT` | 0,6 |
 | Salt dublu la Greyskull | `lib/progression.ts`, `GREYSKULL_BIG_BEAT` | AMRAP cu 5+ peste țintă |
+| Sesiuni fără progres până la deload | `lib/progression.ts`, `STALL_SESSIONS` | 3 |
+| Serii maxime la greutatea corpului | `lib/progression.ts`, `BODYWEIGHT_MAX_SETS` | 5 |
 | Superseturi | `lib/workoutStats.ts`, `groupLinked` | grupare pe rutină, fără limită de exerciții |

@@ -11,7 +11,7 @@ import {
   type RoutineExercise,
   type EffortScale,
 } from './db';
-import { DEFAULT_PROGRESSION, suggestNextSets, type ProgressionRule } from './progression';
+import { DEFAULT_PROGRESSION, STALL_SESSIONS, suggestNextSets, type ProgressionRule } from './progression';
 import {
   detectRecords,
   findExercise,
@@ -110,6 +110,16 @@ export async function previousNonDeloadSets(
   exerciseId: string,
   excludeSessionId: string | null,
 ): Promise<LocalWorkoutLog[]> {
+  return (await recentNonDeloadSessions(userId, exerciseId, excludeSessionId, 1))[0] ?? [];
+}
+
+/** Ultimele `count` sesiuni (fără deload) cu exercițiul, cea mai recentă prima. */
+export async function recentNonDeloadSessions(
+  userId: string,
+  exerciseId: string,
+  excludeSessionId: string | null,
+  count: number,
+): Promise<LocalWorkoutLog[][]> {
   const recent = await db.workoutLogs
     .where('[user_id+logged_at]')
     .between([userId, Dexie.minKey], [userId, Dexie.maxKey])
@@ -124,6 +134,7 @@ export async function previousNonDeloadSets(
     .limit(200)
     .toArray();
   if (recent.length === 0) return [];
+  const sessions: LocalWorkoutLog[][] = [];
 
   const bySession = new Map<string, LocalWorkoutLog[]>();
   const order: string[] = [];
@@ -138,10 +149,11 @@ export async function previousNonDeloadSets(
   for (const sid of order) {
     const session = await db.workoutSessions.get(sid);
     if (session && !session.deleted && !session.is_deload) {
-      return (bySession.get(sid) ?? []).sort((a, b) => a.set_order - b.set_order);
+      sessions.push((bySession.get(sid) ?? []).sort((a, b) => a.set_order - b.set_order));
+      if (sessions.length >= count) break;
     }
   }
-  return [];
+  return sessions;
 }
 
 async function exerciseKindOf(exerciseId: string): Promise<ExerciseKind> {
@@ -171,28 +183,27 @@ export async function buildDraftExercise(
 ): Promise<DraftExercise> {
   let target: Array<{ weight_kg: number; reps: number }>;
   let note: string | null = null;
+  let setCount = Math.max(1, spec.sets);
 
   if (rule.kind === 'none') {
     target = await previousSets(userId, spec.exercise_id, sessionId);
   } else {
-    const previous = await previousNonDeloadSets(userId, spec.exercise_id, sessionId);
+    const [previous = [], ...older] = await recentNonDeloadSessions(userId, spec.exercise_id, sessionId, STALL_SESSIONS);
     if (previous.length === 0) {
       target = [];
     } else {
       const kind = await exerciseKindOf(spec.exercise_id);
-      const suggestion = suggestNextSets(
-        rule,
-        kind,
-        spec.rep_min,
-        spec.rep_max,
-        previous.map((p) => ({ weight_kg: p.weight_kg, reps: p.reps })),
-      );
+      const toPast = (logs: LocalWorkoutLog[]) => logs.map((p) => ({ weight_kg: p.weight_kg, reps: p.reps }));
+      const suggestion = suggestNextSets(rule, kind, spec.rep_min, spec.rep_max, toPast(previous), {
+        history: older.map(toPast),
+      });
       target = suggestion.sets.map((s) => ({ weight_kg: s.weight, reps: s.reps }));
       note = suggestion.note || null;
+      if (suggestion.setCount) setCount = Math.max(setCount, suggestion.setCount);
     }
   }
 
-  const sets: DraftSet[] = Array.from({ length: Math.max(1, spec.sets) }, (_, i) => {
+  const sets: DraftSet[] = Array.from({ length: setCount }, (_, i) => {
     const p = target[i] ?? target[target.length - 1];
     return {
       key: newId(),
