@@ -42,6 +42,8 @@ export interface DraftExercise {
   progressionNote: string | null;
   /** true = formează un superset cu exercițiul următor din listă (fără pauză între ele) */
   linkedToNext: boolean;
+  /** ținta din rutină („3 × 6–8”); lipsește la exercițiile adăugate din mers în schițele vechi */
+  repRange?: { min: number; max: number };
 }
 
 export interface Draft {
@@ -218,7 +220,14 @@ export async function buildDraftExercise(
       log_id: null,
     };
   });
-  return { exercise_id: spec.exercise_id, rest_s: spec.rest_s || DEFAULT_REST_S, sets, progressionNote: note, linkedToNext: spec.linked_to_next ?? false };
+  return {
+    exercise_id: spec.exercise_id,
+    rest_s: spec.rest_s || DEFAULT_REST_S,
+    sets,
+    progressionNote: note,
+    linkedToNext: spec.linked_to_next ?? false,
+    repRange: { min: spec.rep_min, max: spec.rep_max },
+  };
 }
 
 // ------------------------------------------------------------------ sesiuni
@@ -231,6 +240,12 @@ export async function startSession(
   past?: { startedAt: string; endedAt: string },
 ): Promise<string> {
   const id = newId();
+  const exercises: DraftExercise[] = [];
+  for (const spec of routine?.exercises ?? []) {
+    exercises.push(await buildDraftExercise(userId, spec, id, resolveProgression(routine, spec)));
+  }
+  // schița întâi: ecranul activ apare odată cu sesiunea și citește schița o singură dată
+  saveDraft(id, past ? { exercises, backfill: { endedAt: past.endedAt } } : { exercises });
   await db.workoutSessions.put({
     id,
     user_id: userId,
@@ -246,12 +261,6 @@ export async function startSession(
     deleted: false,
     ...stamp(),
   });
-
-  const exercises: DraftExercise[] = [];
-  for (const spec of routine?.exercises ?? []) {
-    exercises.push(await buildDraftExercise(userId, spec, id, resolveProgression(routine, spec)));
-  }
-  saveDraft(id, past ? { exercises, backfill: { endedAt: past.endedAt } } : { exercises });
   return id;
 }
 

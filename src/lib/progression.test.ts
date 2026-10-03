@@ -161,7 +161,7 @@ describe('serii cu greutăți diferite (piramidă, back-off)', () => {
       { weight: 90, reps: 11 },
       { weight: 82.5, reps: 8 },
     ]);
-    expect(s.note).toMatch(/1 serie primește \+2\.5 kg/);
+    expect(s.note).toMatch(/1 serie primește \+2,5 kg/);
   });
 
   it('serii cu aceeași greutate urcă împreună, ca înainte', () => {
@@ -191,6 +191,12 @@ describe('deload la stagnare', () => {
     expect(s.note).toMatch(/deload/);
   });
 
+  it('greutatea după deload se rotunjește în jos la pasul rutinei', () => {
+    const row = sets(67.5, 8, 8, 8);
+    const s = suggestNextSets(rule('linear'), 'reps', 10, 10, row, { history: [row, row] });
+    expect(s.sets[0].weight).toBe(60); // 60,75 nu se poate încărca; pasul e 2,5
+  });
+
   it('nu face deload cu mai puțin istoric decât pragul', () => {
     const s = suggestNextSets(rule('linear'), 'reps', 5, 5, stuck, { history: [stuck] });
     expect(s.sets[0].weight).toBe(100);
@@ -211,7 +217,7 @@ describe('deload la stagnare', () => {
   it('dublă: stagnare sub plafon → deload', () => {
     const flat = sets(60, 10, 9, 8);
     const s = suggestNextSets(rule('double'), 'reps', 8, 12, flat, { history: [flat, flat] });
-    expect(s.sets.every((x) => x.weight === 54 && x.reps === 8)).toBe(true);
+    expect(s.sets.every((x) => x.weight === 52.5 && x.reps === 8)).toBe(true); // 54 rotunjit în jos la pasul de 2,5
   });
 
   it('nu se aplică exercițiilor fără greutate de redus', () => {

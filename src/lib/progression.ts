@@ -1,4 +1,5 @@
 import type { ExerciseKind } from '../data/exercises';
+import { formatNum } from './numbers';
 
 /*
  * Progresie automată: sugerează greutatea și repetările pentru sesiunea următoare,
@@ -78,6 +79,8 @@ export interface ProgressionContext {
 }
 
 const round2 = (n: number): number => Math.round(n * 100) / 100;
+/** kg în text, cu virgulă: „2,5” */
+const kg = (n: number): string => formatNum(round2(n), 2);
 
 const topWeight = (sets: PastSet[]): number => Math.max(...sets.map((s) => s.weight_kg));
 const totalReps = (sets: PastSet[]): number => sets.reduce((sum, s) => sum + s.reps, 0);
@@ -95,10 +98,16 @@ function isStalled(previous: PastSet[], history: PastSet[][], succeeded: (s: Pas
   return totalReps(window[0]) <= totalReps(window[window.length - 1]);
 }
 
-function deload(repMin: number, resetPct: number, previous: PastSet[]): Suggestion {
+/** Greutatea după deload, rotunjită la pasul rutinei ca să se poată încărca pe bară (60,75 → 60). */
+function deloadWeight(weight: number, resetPct: number, stepKg: number): number {
+  const raw = weight * (1 - resetPct);
+  return stepKg > 0 ? round2(Math.floor(raw / stepKg + 1e-9) * stepKg) : round2(raw);
+}
+
+function deload(repMin: number, resetPct: number, stepKg: number, previous: PastSet[]): Suggestion {
   return {
-    sets: previous.map((s) => ({ weight: round2(s.weight_kg * (1 - resetPct)), reps: repMin })),
-    note: `${STALL_SESSIONS} sesiuni la rând fără progres la ${round2(topWeight(previous))} kg: deload, greutatea scade cu ${Math.round(resetPct * 100)}%.`,
+    sets: previous.map((s) => ({ weight: deloadWeight(s.weight_kg, resetPct, stepKg), reps: repMin })),
+    note: `${STALL_SESSIONS} sesiuni la rând fără progres la ${kg(topWeight(previous))} kg: deload, greutatea scade cu ${Math.round(resetPct * 100)}%.`,
   };
 }
 
@@ -127,7 +136,7 @@ function doubleProgression(
       ),
       note:
         raised > 0
-          ? `Seriile au greutăți diferite și progresează separat: ${raised} ${raised === 1 ? 'serie primește' : 'serii primesc'} +${round2(incrementKg)} kg, restul o repetare în plus.`
+          ? `Seriile au greutăți diferite și progresează separat: ${raised} ${raised === 1 ? 'serie primește' : 'serii primesc'} +${kg(incrementKg)} kg, restul o repetare în plus.`
           : 'Seriile au greutăți diferite și progresează separat: o repetare în plus la fiecare, unde a fost posibil.',
     };
   }
@@ -136,7 +145,7 @@ function doubleProgression(
     if (kind === 'reps') {
       return {
         sets: previous.map((s) => ({ weight: round2(s.weight_kg + incrementKg), reps: repMin })),
-        note: `Ai atins ${repMax} ${unit} la toate seriile: +${round2(incrementKg)} kg, repetările reîncep de la ${repMin}.`,
+        note: `Ai atins ${repMax} ${unit} la toate seriile: +${kg(incrementKg)} kg, repetările reîncep de la ${repMin}.`,
       };
     }
     if (unweighted && previous.length < BODYWEIGHT_MAX_SETS) {
@@ -169,7 +178,7 @@ function linearProgression(repMin: number, incrementKg: number, previous: PastSe
   if (success) {
     return {
       sets: previous.map((s) => ({ weight: round2(s.weight_kg + incrementKg), reps: repMin })),
-      note: `Ai reușit toate seriile la ${repMin} repetări: +${round2(incrementKg)} kg.`,
+      note: `Ai reușit toate seriile la ${repMin} repetări: +${kg(incrementKg)} kg.`,
     };
   }
   return {
@@ -191,10 +200,10 @@ function greyskullProgression(
 
   if (amrap.reps >= repMax + GREYSKULL_BIG_BEAT) {
     delta = incrementKg * 2;
-    note = `Serie AMRAP cu ${amrap.reps} repetări, mult peste țintă: salt dublu, +${round2(delta)} kg.`;
+    note = `Serie AMRAP cu ${amrap.reps} repetări, mult peste țintă: salt dublu, +${kg(delta)} kg.`;
   } else if (amrap.reps >= repMax) {
     delta = incrementKg;
-    note = `Serie AMRAP cu ${amrap.reps} repetări, peste țintă: +${round2(delta)} kg.`;
+    note = `Serie AMRAP cu ${amrap.reps} repetări, peste țintă: +${kg(delta)} kg.`;
   } else if (amrap.reps < repMin) {
     return {
       sets: previous.map((s) => ({ weight: round2(s.weight_kg * (1 - resetPct)), reps: repMin })),
@@ -238,7 +247,7 @@ export function suggestNextSets(
       rule.kind === 'linear'
         ? (sets: PastSet[]) => sets.every((s) => s.reps >= lo)
         : (sets: PastSet[]) => sets.every((s) => s.reps >= hi);
-    if (isStalled(previous, context.history ?? [], succeeded)) return deload(lo, rule.resetPct, previous);
+    if (isStalled(previous, context.history ?? [], succeeded)) return deload(lo, rule.resetPct, rule.incrementKg, previous);
   }
 
   switch (rule.kind) {

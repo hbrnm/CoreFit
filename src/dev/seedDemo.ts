@@ -60,8 +60,8 @@ export async function seedDemo(userId: string, mode: 'full' | 'empty' = 'full'):
   });
   if (mode === 'empty') return;
 
-  const upper: LocalRoutine = { id: newId(), user_id: userId, name: 'Upper A', notes: '', exercises: UPPER_A, default_progression: 'double', progression_increment_kg: 2.5, progression_reset_pct: 10, is_deload: false, ...synced() };
-  const lower: LocalRoutine = { id: newId(), user_id: userId, name: 'Lower A', notes: '', exercises: LOWER_A, default_progression: 'double', progression_increment_kg: 2.5, progression_reset_pct: 10, is_deload: false, ...synced() };
+  const upper: LocalRoutine = { id: newId(), user_id: userId, name: 'Upper A', notes: '', exercises: UPPER_A, default_progression: 'double', progression_increment_kg: 2.5, progression_reset_pct: 0.1, is_deload: false, ...synced() };
+  const lower: LocalRoutine = { id: newId(), user_id: userId, name: 'Lower A', notes: '', exercises: LOWER_A, default_progression: 'double', progression_increment_kg: 2.5, progression_reset_pct: 0.1, is_deload: false, ...synced() };
   await db.routines.bulkPut([upper, lower]);
   // azi Upper A, joi Lower A
   const weekday = ((new Date().getDay() + 6) % 7) + 1;
@@ -79,7 +79,7 @@ export async function seedDemo(userId: string, mode: 'full' | 'empty' = 'full'):
       const bench = 67.5 + Math.floor((8 - w) / 2) * 2.5;
       for (const spec of routine.exercises) {
         for (let s = 0; s < spec.sets; s += 1) {
-          const kg = spec.exercise_id === 'bench-press' ? bench : spec.exercise_id === 'barbell-row' ? 62.5 : spec.exercise_id === 'overhead-press' ? 45 : spec.exercise_id === 'back-squat' ? 100 : spec.exercise_id === 'deadlift' ? 130 : 0;
+          const kg = spec.exercise_id === 'bench-press' ? bench : spec.exercise_id === 'barbell-row' ? bench - 7.5 : spec.exercise_id === 'overhead-press' ? bench - 25 : spec.exercise_id === 'back-squat' ? 100 : spec.exercise_id === 'deadlift' ? 130 : 0;
           logs.push({ id: newId(), user_id: userId, session_id: id, exercise_id: spec.exercise_id, exercise_name: '', set_type: 'work', set_order: s, weight_kg: kg, reps: spec.rep_max - s, rpe: null, effort_scale: null, pain_detected: false, logged_at: at(day, 18, 5 + s * 3), ...synced() });
         }
       }
@@ -106,7 +106,7 @@ export async function seedDemo(userId: string, mode: 'full' | 'empty' = 'full'):
   // mâncare: 4 săptămâni în jur de 2.250 kcal; azi 1.840 (fără cină)
   const entries: LocalFoodEntry[] = [];
   const food = (date: string, meal: LocalFoodEntry['meal'], name: string, amount: string, kcal: number, p: number, c: number, f: number): LocalFoodEntry => ({
-    id: newId(), user_id: userId, log_date: date, meal, name, amount_text: amount, kcal, protein: p, carbs: c, fat: f, fiber: 4, sugar: 6, sodium: 300, source: 'builtin', logged_at: at(date, meal === 'breakfast' ? 8 : meal === 'lunch' ? 13 : meal === 'snack' ? 16 : 20), ...synced(),
+    id: newId(), user_id: userId, log_date: date, meal, name, amount_text: amount, grams: amount.endsWith(' g') && !amount.includes(',') ? Number(amount.slice(0, -2)) : null, kcal, protein: p, carbs: c, fat: f, fiber: 4, sugar: 6, sodium: 300, source: 'builtin', logged_at: at(date, meal === 'breakfast' ? 8 : meal === 'lunch' ? 13 : meal === 'snack' ? 16 : 20), ...synced(),
   });
   for (let i = 27; i >= 1; i -= 1) {
     const day = addDays(today, -i);

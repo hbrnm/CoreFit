@@ -305,7 +305,7 @@ export class CoreFitDB extends Dexie {
       })
       .upgrade(async (tx) => {
         const now = new Date().toISOString();
-        const byName = new Map(BUILTIN_EXERCISES.map((e) => [e.name, e.id]));
+        const byName = new Map(BUILTIN_EXERCISES.map((e) => [e.en ?? e.name, e.id]));
 
         await tx
           .table('profiles')

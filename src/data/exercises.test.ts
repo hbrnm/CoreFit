@@ -23,7 +23,18 @@ describe('catalogul de exerciții', () => {
 
   it('fiecare exercițiu din catalog se recunoaște după propriul nume (importul se bazează pe asta)', () => {
     for (const e of BUILTIN_EXERCISES) {
+      expect(matchExercise(e.en ?? '', BUILTIN_EXERCISES)?.id, e.en).toBe(e.id);
       expect(matchExercise(e.name, BUILTIN_EXERCISES)?.id, e.name).toBe(e.id);
     }
+  });
+
+  it('numele românești sunt unice și fiecare are numele englezesc pentru import', () => {
+    const plain = BUILTIN_EXERCISES.map((e) => e.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase());
+    expect(new Set(plain).size).toBe(plain.length);
+    for (const e of BUILTIN_EXERCISES) expect(e.en, e.id).toBeTruthy();
+  });
+
+  it('recunoaște numele fără diacritice', () => {
+    expect(matchExercise('Impins cu bara la piept', BUILTIN_EXERCISES)?.id).toBe('bench-press');
   });
 });

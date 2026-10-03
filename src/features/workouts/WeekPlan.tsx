@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { Check } from 'lucide-react';
 import { useApp } from '../../context';
 import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db, saveProfilePatch, type LocalRoutine } from '../../lib/db';
-import { formatWeekdayShort } from '../../lib/date';
+import { addDays, formatWeekdayShort, localDateStr } from '../../lib/date';
 import { DOMAIN } from '../../lib/domains';
 import { clearMove, moveRoutineThisWeek, planForWeek, setWeekSlot, type DayPlan } from '../../lib/schedule';
-import { Panel, Sheet } from '../../components/ui';
+import { Sheet } from '../../components/ui';
+import { cx } from '../../lib/cx';
 
 const D = DOMAIN.workouts;
 
@@ -24,8 +26,19 @@ export function WeekPlan() {
     [userId],
   );
 
+  const days = profile ? planForWeek(profile, today) : [];
+  const first = days[0]?.date ?? today;
+  const { data: sessions } = useLive(
+    () =>
+      db.workoutSessions
+        .where('[user_id+started_at]')
+        .between([userId, addDays(first, -1)], [userId, '\uffff'])
+        .filter((x) => !x.deleted && x.ended_at !== null)
+        .toArray(),
+    [userId, first],
+  );
+
   if (!profile) return null;
-  const days = planForWeek(profile, today);
   const nameOf = (id: string | null) => routines?.find((r) => r.id === id)?.name ?? (id ? 'Rutină ștearsă' : '');
 
   const choosePermanent = async (day: DayPlan, routineId: string | null) => {
@@ -37,28 +50,44 @@ export function WeekPlan() {
     setOpen(null);
   };
 
+  const doneDays = new Set((sessions ?? []).map((x) => localDateStr(new Date(x.started_at))));
+
   return (
-    <Panel title="Planul săptămânii">
-      <p className="mb-3 text-sm text-muted">Rutina fixă se repetă. O mutare ține doar săptămâna aceasta.</p>
-      <ul className="flex flex-col gap-2">
+    <section className="border-t border-line pt-4">
+      <h2 className="text-[13px] font-bold uppercase tracking-[0.08em] text-subtle">Planul săptămânii</h2>
+      <ul className="mt-1">
         {days.map((day) => {
           const fixed = nameOf(day.permanentId);
           const moved = nameOf(day.movedId);
+          const done = day.date <= today && doneDays.has(day.date);
+          const name = moved || fixed;
           return (
-            <li key={day.date}>
-              <button type="button" className="btn-quiet w-full justify-between px-3 text-left" onClick={() => setOpen(day)}>
-                <span>
-                  <span className="block font-semibold capitalize">{formatWeekdayShort(day.date)}</span>
-                  <span className="block text-sm font-normal text-muted">
-                    {moved ? `${moved}, doar săptămâna aceasta` : fixed || 'Nicio rutină'}
-                    {day.movedTo ? `. Mutată pe ${formatWeekdayShort(day.movedTo)}` : ''}
-                  </span>
+            <li key={day.date} className="border-b border-line last:border-b-0">
+              <button
+                type="button"
+                className="flex min-h-[52px] w-full items-center gap-4 py-2 text-left"
+                onClick={() => setOpen(day)}
+                aria-label={`${formatWeekdayShort(day.date)}: ${name || 'odihnă'}${done ? ', făcut' : ''}. Schimbă`}
+              >
+                <span className={cx('w-10 shrink-0 capitalize text-subtle', day.date === today && 'font-bold text-fg')}>
+                  {formatWeekdayShort(day.date).replace('.', '')}
                 </span>
+                <span className="flex-1">
+                  <span className={cx('block text-[17px]', name ? 'font-semibold' : 'text-subtle')}>{name || 'Odihnă'}</span>
+                  {(moved || day.movedTo) && (
+                    <span className="block text-sm text-muted">
+                      {moved ? 'doar săptămâna aceasta' : ''}
+                      {day.movedTo ? `mutată pe ${formatWeekdayShort(day.movedTo)}` : ''}
+                    </span>
+                  )}
+                </span>
+                {done && <Check size={18} className="text-subtle" aria-hidden="true" />}
               </button>
             </li>
           );
         })}
       </ul>
+      <p className="mt-2 text-sm text-subtle">Apasă pe o zi ca s-o schimbi. Rutina fixă se repetă; o mutare ține doar săptămâna aceasta.</p>
 
       {open && (
         <Sheet title={formatWeekdayShort(open.date)} onClose={() => setOpen(null)}>
@@ -104,6 +133,6 @@ export function WeekPlan() {
           </div>
         </Sheet>
       )}
-    </Panel>
+    </section>
   );
 }

@@ -220,3 +220,36 @@ export function Sheet({ title, onClose, children }: SheetProps) {
     </div>
   );
 }
+
+interface UnderlineTabsProps<T extends string> {
+  label: string;
+  options: ReadonlyArray<{ value: T; label: string }>;
+  value: T;
+  onChange: (value: T) => void;
+}
+
+/** Subsecțiunile unui ecran, în stilul C: text, cea activă subliniată, fără fundal. */
+export function UnderlineTabs<T extends string>({ label, options, value, onChange }: UnderlineTabsProps<T>) {
+  return (
+    <div role="tablist" aria-label={label} className="flex gap-6 overflow-x-auto border-b border-line">
+      {options.map((o) => {
+        const selected = o.value === value;
+        return (
+          <button
+            key={o.value}
+            type="button"
+            role="tab"
+            aria-selected={selected}
+            onClick={() => onChange(o.value)}
+            className={cx(
+              '-mb-px min-h-[44px] shrink-0 border-b-2 text-[17px] font-semibold',
+              selected ? 'border-fg text-fg' : 'border-transparent text-subtle',
+            )}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}

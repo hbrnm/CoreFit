@@ -37,12 +37,12 @@ export function ProgressPanel() {
   const exerciseOptions = useMemo(() => {
     const counts = new Map<string, { name: string; n: number }>();
     for (const l of logs ?? []) {
-      const c = counts.get(l.exercise_id) ?? { name: l.exercise_name, n: 0 };
+      const c = counts.get(l.exercise_id) ?? { name: findExercise(catalog, l.exercise_id, l.exercise_name).name, n: 0 };
       c.n += 1;
       counts.set(l.exercise_id, c);
     }
     return [...counts.entries()].sort((a, b) => b[1].n - a[1].n).map(([id, v]) => ({ id, name: v.name }));
-  }, [logs]);
+  }, [logs, catalog]);
 
   const activeId = selected || exerciseOptions[0]?.id || '';
   const exercise = activeId ? findExercise(catalog, activeId, exerciseOptions.find((o) => o.id === activeId)?.name) : null;
