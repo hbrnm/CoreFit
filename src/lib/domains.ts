@@ -1,69 +1,50 @@
 import type { Tab } from '../context';
 
-/** Culorile discurilor de haltere: fiecare zonă a aplicației are culoarea ei. */
-export const PLATE = {
-  red: '#EF4444',    // Crimson
-  blue: '#06B6D4',   // Electric Cyan
-  green: '#10B981',  // Neon Mint
-  yellow: '#F97316', // Sunset Orange
-  steel: '#F8FAFC',  // Off-White
-  chalk: '#0F172A',  // Deep Slate
-  gray: '#94A3B8',   // Slate 400
-} as const;
+/*
+ * Culorile din JS (grafice, cronometre, hărți musculare) ca valori CSS care urmează tema:
+ * `rgb(var(--workouts))` e portocaliu închis în modul deschis și portocaliu deschis în cel închis.
+ * Se folosesc în `style`, nu în atributele SVG, unde var() nu merge peste tot.
+ */
+export type Tone = 'brand' | 'workouts' | 'health' | 'nutrition' | 'success' | 'warning' | 'danger' | 'fg' | 'subtle' | 'surface';
+
+const VAR: Record<Tone, string> = {
+  brand: 'brand-fg',
+  workouts: 'workouts',
+  health: 'health',
+  nutrition: 'nutrition',
+  success: 'success',
+  warning: 'warning',
+  danger: 'danger',
+  fg: 'fg',
+  subtle: 'subtle',
+  surface: 'surface',
+};
+
+/** Culoarea unui ton, opțional transparentă (0..1). */
+export function tone(t: Tone, alpha = 1): string {
+  return alpha >= 1 ? `rgb(var(--${VAR[t]}))` : `rgb(var(--${VAR[t]}) / ${alpha})`;
+}
 
 interface DomainStyle {
   label: string;
-  /** bară de accent (fundal) */
+  /** bară subțire de accent sub antet */
   bar: string;
-  /** text colorat */
+  /** text și iconițe în culoarea secțiunii */
   text: string;
-  /** buton principal */
+  /** butonul principal și opțiunea selectată: aceeași culoare de brand în toată aplicația */
   solid: string;
-  /** culoarea accent pentru checkbox-uri */
+  /** culoarea checkbox-urilor */
   accent: string;
-  /** marginea panoului cu accent */
+  /** marginea colorată a unui panou */
   edge: string;
 }
 
+const SOLID = 'bg-brand text-on-brand active:bg-brand/90';
+
 export const DOMAIN: Record<Tab, DomainStyle> = {
-  home: {
-    label: 'Acasă',
-    bar: 'bg-white',
-    text: 'text-white',
-    solid: 'bg-white text-chalk active:bg-white/85',
-    accent: 'accent-white',
-    edge: 'border-l-white',
-  },
-  workouts: {
-    label: 'Antrenament',
-    bar: 'bg-plate-red',
-    text: 'text-plate-red',
-    solid: 'bg-plate-red text-white active:bg-plate-red/85',
-    accent: 'accent-plate-red',
-    edge: 'border-l-plate-red',
-  },
-  health: {
-    label: 'Sănătate',
-    bar: 'bg-plate-blue',
-    text: 'text-plate-blue',
-    solid: 'bg-plate-blue text-white active:bg-plate-blue/85',
-    accent: 'accent-plate-blue',
-    edge: 'border-l-plate-blue',
-  },
-  nutrition: {
-    label: 'Nutriție',
-    bar: 'bg-plate-green',
-    text: 'text-plate-green',
-    solid: 'bg-plate-green text-white active:bg-plate-green/85',
-    accent: 'accent-plate-green',
-    edge: 'border-l-plate-green',
-  },
-  profile: {
-    label: 'Profil',
-    bar: 'bg-neon-mint',
-    text: 'text-neon-mint',
-    solid: 'bg-neon-mint text-chalk active:brightness-90',
-    accent: 'accent-neon-mint',
-    edge: 'border-l-neon-mint',
-  },
+  home: { label: 'Acasă', bar: 'bg-brand', text: 'text-brand-fg', solid: SOLID, accent: 'accent-brand', edge: 'border-l-brand' },
+  workouts: { label: 'Antrenament', bar: 'bg-workouts', text: 'text-workouts', solid: SOLID, accent: 'accent-brand', edge: 'border-l-workouts' },
+  health: { label: 'Sănătate', bar: 'bg-health', text: 'text-health', solid: SOLID, accent: 'accent-brand', edge: 'border-l-health' },
+  nutrition: { label: 'Nutriție', bar: 'bg-nutrition', text: 'text-nutrition', solid: SOLID, accent: 'accent-brand', edge: 'border-l-nutrition' },
+  profile: { label: 'Profil', bar: 'bg-brand', text: 'text-brand-fg', solid: SOLID, accent: 'accent-brand', edge: 'border-l-brand' },
 };

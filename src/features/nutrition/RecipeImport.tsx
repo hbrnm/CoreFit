@@ -192,7 +192,7 @@ export function RecipeImport({ onClose, onImported }: Props) {
 
           {mode === 'link' ? (
             <div className="flex flex-col gap-3">
-              <p className="text-[15px] text-steel/80">
+              <p className="text-[15px] text-fg">
                 Funcționează pentru paginile care descriu rețeta în format standard (majoritatea site-urilor mari de
                 rețete). Multe site-uri blochează însă accesul direct dintr-o aplicație; dacă nu merge, folosește
                 fila „Text”.
@@ -219,7 +219,7 @@ export function RecipeImport({ onClose, onImported }: Props) {
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              <p className="text-[15px] text-steel/80">
+              <p className="text-[15px] text-fg">
                 Lipește titlul și lista de ingrediente (unul pe rând, cu cantitate). Restul textului, cum e modul de
                 preparare, e ignorat automat dacă are un antet ca „Mod de preparare”.
               </p>
@@ -274,12 +274,12 @@ export function RecipeImport({ onClose, onImported }: Props) {
                     aria-pressed={r.include}
                     aria-label={r.include ? 'Exclude ingredientul' : 'Include ingredientul'}
                     onClick={() => patchRow(r.key, { include: !r.include })}
-                    className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded ${r.include ? 'bg-plate-green text-white' : 'border border-steel/30'}`}
+                    className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded ${r.include ? 'bg-brand text-on-brand' : 'border border-line-strong'}`}
                   >
                     {r.include && <Check size={16} />}
                   </button>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-steel/50">{r.line.raw}</p>
+                    <p className="truncate text-sm text-subtle">{r.line.raw}</p>
                     <input
                       className="field mt-1 px-2 py-1.5"
                       value={r.name}
@@ -287,10 +287,10 @@ export function RecipeImport({ onClose, onImported }: Props) {
                       aria-label="Numele ingredientului"
                     />
                     <div className="mt-2 flex items-center gap-2">
-                      {attention && r.include && <AlertTriangle size={16} className="shrink-0 text-plate-yellow" aria-hidden="true" />}
+                      {attention && r.include && <AlertTriangle size={16} className="shrink-0 text-warning" aria-hidden="true" />}
                       <button
                         type="button"
-                        className="min-h-[36px] truncate text-left text-sm font-semibold text-plate-green underline-offset-2 active:underline"
+                        className="min-h-[36px] truncate text-left text-sm font-semibold text-brand-fg underline-offset-2 active:underline"
                         onClick={() => setPickingFor(r.key)}
                       >
                         {r.food ? `${r.food.name}${r.food.brand ? `, ${r.food.brand}` : ''}` : 'Alege alimentul'}
@@ -305,7 +305,7 @@ export function RecipeImport({ onClose, onImported }: Props) {
                           onChange={(e) => patchRow(r.key, { grams: e.target.value })}
                           aria-label={`Grame, ${r.name}`}
                         />
-                        <span className="text-sm text-steel/60">
+                        <span className="text-sm text-muted">
                           g, {formatNum(((parseDecimal(r.grams) ?? 0) * r.food.per100.kcal100) / 100, 0)} kcal
                         </span>
                       </div>
@@ -314,7 +314,7 @@ export function RecipeImport({ onClose, onImported }: Props) {
                   <button
                     type="button"
                     aria-label={`Șterge ${r.name}`}
-                    className="-mr-2 flex h-10 w-10 shrink-0 items-center justify-center text-steel/50 active:text-plate-red"
+                    className="-mr-2 flex h-10 w-10 shrink-0 items-center justify-center text-subtle active:text-danger"
                     onClick={() => setRows((list) => list.filter((x) => x.key !== r.key))}
                   >
                     <Trash2 size={18} />

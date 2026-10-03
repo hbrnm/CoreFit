@@ -50,7 +50,7 @@ export function HistoryPanel() {
       <div className="flex flex-col gap-3">
         <BackfillForm sessions={data.sessions} />
         <Panel>
-          <p className="text-steel/70">Nu ai încă antrenamente încheiate. Cele terminate apar aici.</p>
+          <p className="text-muted">Nu ai încă antrenamente încheiate. Cele terminate apar aici.</p>
         </Panel>
       </div>
     );
@@ -83,8 +83,8 @@ export function HistoryPanel() {
               >
                 <div className="min-w-0">
                   <p className="truncate font-semibold">{s.name}</p>
-                  <p className="text-sm capitalize text-steel/60">{formatDateLong(s.started_at)}</p>
-                  <p className="text-[15px] text-steel/80">
+                  <p className="text-sm capitalize text-muted">{formatDateLong(s.started_at)}</p>
+                  <p className="text-[15px] text-fg">
                     {s.kind === 'cardio'
                       ? `${minutes} min, ${s.intensity === 'vigorous' ? 'intens' : 'moderat'}`
                       : `${minutes} min, ${work.length} serii, ${formatNum(volume, 0)} kg volum`}
@@ -94,7 +94,7 @@ export function HistoryPanel() {
               </button>
   
               {isOpen && (
-                <div className="border-t border-steel/10 p-3">
+                <div className="border-t border-line p-3">
                   {s.kind === 'strength' && (
                     <ul className="flex flex-col gap-2 text-[15px]">
                       {[...byExercise.entries()].map(([id, list]) => {
@@ -116,10 +116,10 @@ export function HistoryPanel() {
                       })}
                     </ul>
                   )}
-                  {s.notes && <p className="mt-2 text-[15px] text-steel/70">{s.notes}</p>}
+                  {s.notes && <p className="mt-2 text-[15px] text-muted">{s.notes}</p>}
                   <button
                     type="button"
-                    className="btn-outline mt-3 border-plate-red text-plate-red"
+                    className="btn-danger mt-3 "
                     onClick={() => {
                       if (window.confirm('Ștergi acest antrenament?')) void deleteSession(s.id);
                     }}

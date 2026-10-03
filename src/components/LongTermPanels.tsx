@@ -115,7 +115,7 @@ export function TodayMission() {
   return (
     <Panel title="Misiunea de azi" edge={DOMAIN.profile.edge}>
       <p className="text-lg leading-snug">{mission.text}</p>
-      <p className="mt-2 text-sm text-steel/60">O singură acțiune, din ce ai notat. Nu se pierde nimic dacă o sari.</p>
+      <p className="mt-2 text-sm text-muted">O singură acțiune, din ce ai notat. Nu se pierde nimic dacă o sari.</p>
     </Panel>
   );
 }
@@ -174,7 +174,7 @@ export function MyPlan() {
                 : 'nicio sesiune de mobilitate în ultimele 7 zile.'}
           </p>
         </section>
-        <p className="text-sm text-steel/60">
+        <p className="text-sm text-muted">
           Nu este un scor. Sunt doar lucrurile deja notate în aplicație. Forța și minutele urmează recomandarea OMS 2020.
         </p>
       </div>

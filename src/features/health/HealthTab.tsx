@@ -45,7 +45,7 @@ export function HealthTab() {
     <div className="flex flex-col gap-4">
       <div>
         <h1 className="font-display text-3xl font-bold leading-tight">Sănătate</h1>
-        <p className="text-steel/70">Mișcare pe baza ghidurilor și a studiilor.</p>
+        <p className="text-muted">Mișcare pe baza ghidurilor și a studiilor.</p>
       </div>
       <Segmented<Sub>
         label="Secțiuni sănătate"

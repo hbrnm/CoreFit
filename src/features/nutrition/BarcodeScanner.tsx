@@ -75,8 +75,8 @@ export function BarcodeScanner({ onDetected, onClose }: Props) {
           <Notice tone="error">{error}</Notice>
         ) : (
           <>
-            <video ref={videoRef} playsInline muted className="aspect-[4/3] w-full bg-steel object-cover" />
-            <p className="text-sm text-steel/70">Ține codul în cadru, bine luminat.</p>
+            <video ref={videoRef} playsInline muted className="aspect-[4/3] w-full bg-black object-cover" />
+            <p className="text-sm text-muted">Ține codul în cadru, bine luminat.</p>
           </>
         )}
         <button type="button" className="btn-quiet" onClick={onClose}>

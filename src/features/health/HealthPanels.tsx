@@ -12,7 +12,7 @@ import { useApp } from '../../context';
 import { useLive } from '../../hooks/useLive';
 import { db } from '../../lib/db';
 import { formatDateTime } from '../../lib/date';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { Notice, Panel, SyncMark } from '../../components/ui';
 import { WeeklyGoals } from '../../components/WeeklyGoals';
 import { RecoveryNote } from './RecoveryNote';
@@ -42,22 +42,22 @@ export function HealthHome({ onOpen, onStart }: HomeProps) {
     <div className="flex flex-col gap-4">
       <Panel edge={D.edge}>
         <p className="font-display text-xl font-bold">Pauză de mișcare, 3 minute</p>
-        <p className="mt-1 text-[15px] text-steel/80">Pentru cine stă mult jos. Mers, ridicări de pe scaun și mobilitate.</p>
+        <p className="mt-1 text-[15px] text-fg">Pentru cine stă mult jos. Mers, ridicări de pe scaun și mobilitate.</p>
         <button type="button" className={`btn mt-3 w-full ${D.solid}`} onClick={() => onStart('desk-break')}>
           <Play size={18} />
           Începe pauza
         </button>
       </Panel>
 
-      <WeeklyGoals color={PLATE.blue} />
+      <WeeklyGoals color={tone('health')} />
 
       <RecoveryNote />
 
       <Panel title="Ultimele sesiuni">
         {sessions && sessions.length === 0 && (
-          <p className="text-steel/70">Nicio sesiune încă. Alege un program din secțiunea Programe.</p>
+          <p className="text-muted">Nicio sesiune încă. Alege un program din secțiunea Programe.</p>
         )}
-        <ul className="divide-y divide-steel/10">
+        <ul className="divide-y divide-line">
           {sessions?.map((s) => {
             const program = programById(s.program_id);
             return (
@@ -70,7 +70,7 @@ export function HealthHome({ onOpen, onStart }: HomeProps) {
                   >
                     {program?.title ?? s.program_id}
                   </button>
-                  <p className="text-sm text-steel/60">
+                  <p className="text-sm text-muted">
                     {formatDateTime(s.completed_at)}, {Math.max(1, Math.round(s.duration_s / 60))} min
                     {s.pain_before !== null && s.pain_after !== null
                       ? `, durere ${s.pain_before}, apoi ${s.pain_after}`
@@ -96,7 +96,7 @@ export function ProgramsPanel({ onOpen }: { onOpen: (programId: string) => void 
         if (programs.length === 0) return null;
         return (
           <Panel key={region.id} title={region.label}>
-            <ul className="divide-y divide-steel/10">
+            <ul className="divide-y divide-line">
               {programs.map((p) => (
                 <li key={p.id}>
                   <button
@@ -106,9 +106,9 @@ export function ProgramsPanel({ onOpen }: { onOpen: (programId: string) => void 
                   >
                     <span className="min-w-0">
                       <span className="block font-semibold">{p.title}</span>
-                      <span className="block text-sm text-steel/60">{EVIDENCE_LABELS[p.evidence]}</span>
+                      <span className="block text-sm text-muted">{EVIDENCE_LABELS[p.evidence]}</span>
                     </span>
-                    <ChevronRight size={20} className="shrink-0 text-steel/40" />
+                    <ChevronRight size={20} className="shrink-0 text-subtle" />
                   </button>
                 </li>
               ))}
@@ -154,9 +154,9 @@ export function InfoPanel() {
           {[...sources.values()].map((s) => (
             <li key={s.label}>
               <p className="font-semibold">{s.label}</p>
-              <p className="text-steel/70">{s.detail}</p>
+              <p className="text-muted">{s.detail}</p>
               {s.url && (
-                <a className="text-plate-blue underline" href={s.url} target="_blank" rel="noreferrer">
+                <a className="text-health underline" href={s.url} target="_blank" rel="noreferrer">
                   Deschide sursa
                 </a>
               )}

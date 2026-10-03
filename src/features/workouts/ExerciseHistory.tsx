@@ -3,7 +3,7 @@ import { useApp } from '../../context';
 import { useLive } from '../../hooks/useLive';
 import { db, type EffortScale } from '../../lib/db';
 import { formatDayMonth, localDateStr } from '../../lib/date';
-import { PLATE } from '../../lib/domains';
+import { tone } from '../../lib/domains';
 import { formatEffort } from '../../lib/effort';
 import { formatNum } from '../../lib/numbers';
 import { epley } from '../../lib/workoutStats';
@@ -28,7 +28,7 @@ export function ExerciseHistory({ exercise }: Props) {
   );
 
   if (!logs) return null;
-  if (logs.length === 0) return <p className="mt-2 text-sm text-steel/60">Nicio serie de lucru notată până acum.</p>;
+  if (logs.length === 0) return <p className="mt-2 text-sm text-muted">Nicio serie de lucru notată până acum.</p>;
 
   const byDay = new Map<string, typeof logs>();
   for (const log of logs) {
@@ -48,9 +48,9 @@ export function ExerciseHistory({ exercise }: Props) {
     });
 
   return (
-    <div className="mt-2 flex flex-col gap-2 border-t border-steel/10 pt-2">
-      <LineChart points={points} color={PLATE.red} height={110} unit={exercise.kind === 'reps' ? 'kg' : ''} />
-      <ul className="flex flex-col gap-1 text-sm text-steel/80">
+    <div className="mt-2 flex flex-col gap-2 border-t border-line pt-2">
+      <LineChart points={points} color={tone('workouts')} height={110} unit={exercise.kind === 'reps' ? 'kg' : ''} />
+      <ul className="flex flex-col gap-1 text-sm text-fg">
         {days.map(([date, sets]) => (
           <li key={date}>
             <span className="font-semibold">{formatDayMonth(date)}: </span>

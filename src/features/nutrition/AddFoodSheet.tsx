@@ -128,7 +128,7 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
           <div className="flex flex-col gap-4">
             <div>
               <p className="font-display text-2xl font-bold">{chosenRecipe.name}</p>
-              <p className="text-steel/70">
+              <p className="text-muted">
                 O porție: {formatNum(perServing(recipeTotals(chosenRecipe.ingredients), chosenRecipe.servings).kcal, 0)} kcal
               </p>
             </div>
@@ -170,7 +170,7 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
                       <button type="button" className="btn-quiet w-full justify-between px-3 text-left" onClick={() => void repeat(item)}>
                         <span className="min-w-0">
                           <span className="block truncate font-semibold">{item.name}</span>
-                          <span className="block text-sm font-normal text-steel/60">
+                          <span className="block text-sm font-normal text-muted">
                             {item.amountText}
                             {item.yesterday ? ' · ieri' : item.times > 1 ? ` · de ${item.times} ori` : ''}
                           </span>
@@ -203,14 +203,14 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
             {tab === 'foods' && <FoodSearch onPick={setPicked} />}
 
             {tab === 'recipes' && (
-              <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
+              <ul className="divide-y divide-line border-y border-line bg-fg/5">
                 {(recipes ?? []).map((r) => {
                   const per = perServing(recipeTotals(r.ingredients), r.servings);
                   return (
                     <li key={r.id}>
                       <button
                         type="button"
-                        className="flex min-h-[56px] w-full flex-col justify-center px-3 text-left active:bg-steel/5"
+                        className="flex min-h-[56px] w-full flex-col justify-center px-3 text-left active:bg-fg/5"
                         onClick={() => {
                           setRecipeId(r.id);
                           setServings('1');
@@ -220,7 +220,7 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
                         }}
                       >
                         <span className="font-semibold">{r.name}</span>
-                        <span className="text-sm text-steel/60">
+                        <span className="text-sm text-muted">
                           {formatNum(per.kcal, 0)} kcal pe porție, proteine {formatNum(per.protein)} g
                         </span>
                       </button>
@@ -228,7 +228,7 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
                   );
                 })}
                 {(recipes ?? []).length === 0 && (
-                  <li className="px-3 py-4 text-steel/70">Nu ai rețete. Creează una din secțiunea Rețete.</li>
+                  <li className="px-3 py-4 text-muted">Nu ai rețete. Creează una din secțiunea Rețete.</li>
                 )}
               </ul>
             )}

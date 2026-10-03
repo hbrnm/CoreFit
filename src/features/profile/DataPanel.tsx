@@ -110,7 +110,7 @@ function CsvImport() {
   return (
     <Panel title="Import din altă aplicație" edge={D.edge}>
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           Exportul CSV din Hevy, Strong sau FitNotes. Fișierul se citește pe telefon și nu pleacă nicăieri. Un import
           repetat nu dublează antrenamentele.
         </p>
@@ -131,11 +131,11 @@ function CsvImport() {
                 columns={2}
               />
             )}
-            <div className="rounded-md bg-steel/5 p-3 text-[15px]">
+            <div className="rounded-md bg-fg/5 p-3 text-[15px]">
               <p className="font-semibold">
                 {SOURCE_LABELS[p.parsed.source]}: {plural(p.plan.sessions.length, 'antrenament', 'antrenamente')}, {plural(p.plan.logs.length, 'serie', 'serii')}
               </p>
-              <p className="text-steel/70">
+              <p className="text-muted">
                 {fmtDay(p.parsed.workouts[0].startedAt)} – {fmtDay(p.parsed.workouts[p.parsed.workouts.length - 1].startedAt)}
               </p>
               <p className="mt-2">
@@ -143,13 +143,13 @@ function CsvImport() {
                 {p.plan.newCustom.length > 0 && `, ${plural(p.plan.newCustom.length, 'nou (devine exercițiu propriu)', 'noi (devin exerciții proprii)')}`}.
               </p>
               {p.plan.newCustom.length > 0 && (
-                <p className="text-steel/70">
+                <p className="text-muted">
                   {p.plan.newCustom.length === 1 ? 'Nou' : 'Noi'}: {p.plan.newCustom.map((c) => c.name).join(', ')}
                 </p>
               )}
               {p.plan.guessedMuscle.length > 0 && (
                 <div className="mt-2 flex flex-col gap-2">
-                  <p className="text-steel/70">Fișierul nu spune grupa musculară. Alege-o acum, pentru statistici corecte:</p>
+                  <p className="text-muted">Fișierul nu spune grupa musculară. Alege-o acum, pentru statistici corecte:</p>
                   {p.plan.guessedMuscle.map((name, i) => (
                     <label key={name} className="flex items-center justify-between gap-2">
                       <span className="min-w-0 truncate">{name}</span>
@@ -171,13 +171,13 @@ function CsvImport() {
                 </div>
               )}
               {p.parsed.skippedRows > 0 && (
-                <p className="text-steel/70">
+                <p className="text-muted">
                   {plural(p.parsed.skippedRows, 'rând', 'rânduri')} fără repetări sau durată (de ex. cardio pe distanță){' '}
                   {p.parsed.skippedRows === 1 ? 'se sare' : 'se sar'}.
                 </p>
               )}
               {p.already > 0 && (
-                <p className="text-steel/70">
+                <p className="text-muted">
                   {p.already === 1 ? 'Un antrenament e deja importat și rămâne' : `${plural(p.already, 'antrenament', 'antrenamente')} sunt deja importate și rămân`} cum{' '}
                   {p.already === 1 ? 'este' : 'sunt'}.
                 </p>
@@ -185,7 +185,7 @@ function CsvImport() {
               {p.plan.matched.length > 0 && (
                 <details className="mt-2">
                   <summary className="cursor-pointer font-semibold">Cum s-au potrivit exercițiile</summary>
-                  <ul className="mt-1 text-steel/80">
+                  <ul className="mt-1 text-fg">
                     {p.plan.matched.map((m) => (
                       <li key={m.from}>
                         {m.from} → {m.to}
@@ -251,7 +251,7 @@ function PlanShare() {
   return (
     <Panel title="Planul tău" edge={D.edge}>
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           Rutinele și zilele lor, într-un fișier mic, fără antrenamente sau date personale. Un plan primit se adaugă lângă al
           tău și nu îl înlocuiește.
         </p>
@@ -292,7 +292,7 @@ function Backup() {
   return (
     <Panel title="Copie de siguranță" edge={D.edge}>
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           Toate datele tale, într-un fișier JSON. Păstrează-l în iCloud Drive sau Google Drive, mai ales dacă folosești
           aplicația fără cont.
         </p>

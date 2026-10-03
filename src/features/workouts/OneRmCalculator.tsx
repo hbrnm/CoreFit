@@ -18,7 +18,7 @@ export function OneRmCalculator() {
   return (
     <Panel title="Calculator 1RM" edge={D.edge}>
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           Pentru o serie pe care n-ai făcut-o încă: din greutate și repetări, 1RM-ul estimat (formula Epley) și ce greutate
           se potrivește pentru alt număr de repetări.
         </p>
@@ -37,7 +37,7 @@ export function OneRmCalculator() {
           </div>
         </div>
         {oneRm === null ? (
-          <p className="text-[15px] text-steel/70">
+          <p className="text-[15px] text-muted">
             {tooMany
               ? `Peste ${MAX_1RM_REPS} repetări estimarea nu mai e de încredere.`
               : 'Scrie o greutate și un număr întreg de repetări.'}
@@ -50,7 +50,7 @@ export function OneRmCalculator() {
             <table className="w-full text-[15px] tabular-nums">
               <caption className="sr-only">Greutatea pentru fiecare număr de repetări</caption>
               <thead>
-                <tr className="text-left text-sm text-steel/60">
+                <tr className="text-left text-sm text-muted">
                   <th scope="col" className="font-normal">Repetări</th>
                   <th scope="col" className="font-normal">Greutate</th>
                   <th scope="col" className="font-normal">% din 1RM</th>
@@ -60,7 +60,7 @@ export function OneRmCalculator() {
                 {Array.from({ length: MAX_1RM_REPS }, (_, i) => i + 1).map((n) => {
                   const kg = weightForReps(oneRm, n) as number;
                   return (
-                    <tr key={n} className={n === r ? 'font-semibold text-plate-red' : undefined}>
+                    <tr key={n} className={n === r ? 'font-semibold text-workouts' : undefined}>
                       <td>{n}</td>
                       <td>{formatNum(kg, 1)} kg</td>
                       <td>{Math.round((kg / oneRm) * 100)}%</td>

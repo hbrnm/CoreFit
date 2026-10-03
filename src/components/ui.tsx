@@ -10,12 +10,12 @@ export function SyncMark({ status }: { status: SyncStatus }) {
   const { cloud } = useApp();
   if (!cloud) return null;
   if (status === 'synced') {
-    return <Check size={16} className="text-plate-green" aria-label="Sincronizat" />;
+    return <Check size={16} className="text-success" aria-label="Sincronizat" />;
   }
   if (status === 'error') {
-    return <AlertTriangle size={16} className="text-plate-red" aria-label="Eroare de sincronizare" />;
+    return <AlertTriangle size={16} className="text-danger" aria-label="Eroare de sincronizare" />;
   }
-  return <RefreshCw size={16} className="text-steel/50" aria-label="În așteptare" />;
+  return <RefreshCw size={16} className="text-subtle" aria-label="În așteptare" />;
 }
 
 interface PanelProps {
@@ -49,10 +49,10 @@ interface NoticeProps {
 }
 
 const NOTICE_TONE: Record<NoticeProps['tone'], string> = {
-  warn: 'border-l-plate-yellow bg-plate-yellow/20',
-  error: 'border-l-plate-red bg-plate-red/10',
-  info: 'border-l-steel bg-steel/5',
-  ok: 'border-l-plate-green bg-plate-green/10',
+  warn: 'border-l-warning bg-warning/15',
+  error: 'border-l-danger bg-danger/10',
+  info: 'border-l-brand bg-brand/10',
+  ok: 'border-l-success bg-success/10',
 };
 
 export function Notice({ tone, title, children, action }: NoticeProps) {
@@ -175,7 +175,7 @@ export function Segmented<T extends string>({
             onClick={() => onChange(o.value)}
             className={cx(
               'btn min-h-[44px] px-2 text-sm',
-              selected ? activeClass : 'border border-white/10 bg-white/5 text-steel active:bg-white/10',
+              selected ? activeClass : 'border border-line bg-fg/5 text-fg active:bg-fg/10',
             )}
           >
             {o.label}
@@ -196,23 +196,23 @@ interface SheetProps {
 export function Sheet({ title, onClose, children }: SheetProps) {
   return (
     <div
-      className="fixed inset-0 z-40 flex flex-col justify-end bg-steel/50"
+      className="fixed inset-0 z-40 flex flex-col justify-end bg-black/50"
       role="dialog"
       aria-modal="true"
       aria-label={title}
       onClick={onClose}
     >
       <div
-        className="mx-auto flex max-h-[92vh] w-full max-w-md flex-col rounded-t-xl bg-chalk"
+        className="mx-auto flex max-h-[92vh] w-full max-w-md flex-col rounded-t-2xl bg-canvas shadow-sheet"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-steel/15 pl-4">
+        <div className="flex items-center justify-between border-b border-line pl-4">
           <h2 className="font-display text-xl font-bold">{title}</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Închide"
-            className="flex h-12 w-12 items-center justify-center text-steel/70"
+            className="flex h-12 w-12 items-center justify-center text-muted"
           >
             <X size={22} />
           </button>

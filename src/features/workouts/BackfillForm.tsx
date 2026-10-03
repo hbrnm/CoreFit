@@ -64,7 +64,7 @@ export function BackfillForm({ sessions }: Props) {
   return (
     <Panel title="Antrenament trecut" edge={D.edge}>
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           Pentru un antrenament făcut fără telefon. După ce alegi datele, îl completezi ca pe oricare altul.
         </p>
         <div className="grid grid-cols-2 gap-3">

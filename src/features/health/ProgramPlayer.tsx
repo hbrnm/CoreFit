@@ -3,7 +3,7 @@ import { ShieldAlert } from 'lucide-react';
 import type { HealthProgram } from '../../data/health';
 import { useApp } from '../../context';
 import { db, newId, nowIso, stamp } from '../../lib/db';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { Notice, Panel } from '../../components/ui';
 import { PlateTimer } from '../spine-health/PlateTimer';
 import { PainPicker } from './PainPicker';
@@ -220,7 +220,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
   const isRest = step.kind === 'rest';
   const upcoming = steps[stepIdx + 1];
   const nextName = isRest && upcoming ? program.exercises[upcoming.exIdx].name : '';
-  const plateColor = isRest ? PLATE.yellow : PLATE.blue;
+  const plateColor = isRest ? tone('warning') : tone('health');
   const totalMs = (step.seconds ?? 0) * 1000;
   const progress = timing && totalMs > 0 ? 1 - remainingMs / totalMs : 0;
 
@@ -228,7 +228,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
     <div className="flex flex-col gap-4">
       <div>
         <h2 className="font-display text-2xl font-bold leading-tight">{program.title}</h2>
-        <div className="mt-2 h-1.5 w-full bg-steel/10" aria-hidden="true">
+        <div className="mt-2 h-1.5 w-full bg-fg/10" aria-hidden="true">
           <div className={`h-full ${D.bar}`} style={{ width: `${(stepIdx / steps.length) * 100}%` }} />
         </div>
       </div>
@@ -238,24 +238,24 @@ export function ProgramPlayer({ program, onExit }: Props) {
           {isRest ? (
             <>
               <p className="font-display text-2xl font-bold">Odihnă</p>
-              <p className="text-[15px] text-steel/70">Urmează: {nextName}</p>
+              <p className="text-[15px] text-muted">Urmează: {nextName}</p>
             </>
           ) : (
             <>
               <p className="font-display text-2xl font-bold">{exercise.name}</p>
-              <p className="text-[15px] text-steel/70">
+              <p className="text-[15px] text-muted">
                 Seria {step.setNo} din {step.sets}
                 {sideText ? `, ${sideText}` : ''}
               </p>
               <p className="text-[15px] leading-snug">{exercise.how}</p>
-              {exercise.progress && <p className="text-sm text-steel/60">{exercise.progress}</p>}
+              {exercise.progress && <p className="text-sm text-muted">{exercise.progress}</p>}
             </>
           )}
 
           {(isRest || step.seconds !== null) && (
             <PlateTimer color={plateColor} progress={progress}>
               <span className="num text-7xl leading-none">{Math.ceil(remainingMs / 1000)}</span>
-              <span className="mt-1 text-sm font-medium text-steel/70">
+              <span className="mt-1 text-sm font-medium text-muted">
                 {isRest ? 'odihnă' : timing ? 'menține' : 'gata de start'}
               </span>
             </PlateTimer>
@@ -264,7 +264,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
           {!isRest && step.reps !== null && (
             <p className="num text-center text-6xl leading-none">
               {step.reps}
-              <span className="ml-2 text-xl font-semibold text-steel/60">repetări</span>
+              <span className="ml-2 text-xl font-semibold text-muted">repetări</span>
             </p>
           )}
         </div>
@@ -286,7 +286,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
             Sari peste
           </button>
         )}
-        <button type="button" className="btn-outline border-plate-red text-plate-red" onClick={stopForPain}>
+        <button type="button" className="btn-danger" onClick={stopForPain}>
           <ShieldAlert size={18} />
           Am durere
         </button>

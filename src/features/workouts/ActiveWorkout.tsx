@@ -308,14 +308,14 @@ export function ActiveWorkout({ session, onFinished }: Props) {
       <div className="flex items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl font-bold leading-tight">{session.name}</h1>
-          <p className="text-steel/70">
+          <p className="text-muted">
             {backfill
               ? `Antrenament trecut, ${formatDateTime(session.started_at)}. ${doneCount} serii notate.`
               : `${doneCount} serii notate, ${formatClock(elapsed)}`}
           </p>
           <button
             type="button"
-            className="mt-1 text-sm font-semibold text-plate-red"
+            className="mt-1 text-sm font-semibold text-workouts"
             onClick={() => profile && void saveProfilePatch(userId, { effort_scale: scale === 'rir' ? 'rpe' : 'rir' })}
           >
             Notezi efortul în {scale === 'rir' ? 'RIR' : 'RPE'}. Schimbă.
@@ -337,7 +337,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
         return groups.map((idxs, gi) => (
           <div key={gi} className={idxs.length > 1 ? 'flex flex-col gap-0.5' : undefined}>
             {idxs.length > 1 && (
-              <p className="px-1 pb-0.5 text-sm font-semibold text-plate-red">Superset, {idxs.length} exerciții, fără pauză între ele</p>
+              <p className="px-1 pb-0.5 text-sm font-semibold text-workouts">Superset, {idxs.length} exerciții, fără pauză între ele</p>
             )}
             {idxs.map((exIndex) => {
         const de = draft.exercises[exIndex];
@@ -365,16 +365,16 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                     type="button"
                     onClick={() => void removeExercise(exIndex)}
                     aria-label={`Scoate ${ex.name}`}
-                    className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center text-steel/50 active:text-plate-red"
+                    className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center text-subtle active:text-danger"
                   >
                     <Trash2 size={18} />
                   </button>
                 </div>
-                <p className="text-sm text-steel/60">
+                <p className="text-sm text-muted">
                   {MUSCLE_LABELS[ex.muscle]}, {EQUIPMENT_LABELS[ex.equipment]}
                 </p>
                 {previous.length > 0 && (
-                  <p className="mt-1 text-sm text-steel/70">
+                  <p className="mt-1 text-sm text-muted">
                     Ultima dată:{' '}
                     {previous
                       .map((p) => {
@@ -389,7 +389,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                   </p>
                 )}
                 {de.progressionNote && (
-                  <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-plate-red">
+                  <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-workouts">
                     <TrendingUp size={14} aria-hidden="true" />
                     {de.progressionNote}
                   </p>
@@ -403,7 +403,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                     <span className="flex items-center gap-1">
                       <button
                         type="button"
-                        className="h-9 w-11 rounded-md bg-steel/10 font-semibold"
+                        className="h-9 w-11 rounded-md bg-fg/10 font-semibold"
                         aria-label={`Pauză mai scurtă la ${ex.name}`}
                         onClick={() => changeRest(exIndex, -15)}
                       >
@@ -412,7 +412,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                       <span className="min-w-[5.5rem] text-center tabular-nums">Pauză {de.rest_s || DEFAULT_REST_S} s</span>
                       <button
                         type="button"
-                        className="h-9 w-11 rounded-md bg-steel/10 font-semibold"
+                        className="h-9 w-11 rounded-md bg-fg/10 font-semibold"
                         aria-label={`Pauză mai lungă la ${ex.name}`}
                         onClick={() => changeRest(exIndex, 15)}
                       >
@@ -423,7 +423,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                   {exIndex < draft.exercises.length - 1 && (
                     <button
                       type="button"
-                      className="flex h-9 items-center gap-1 rounded-md bg-steel/10 px-3 font-semibold"
+                      className="flex h-9 items-center gap-1 rounded-md bg-fg/10 px-3 font-semibold"
                       aria-pressed={de.linkedToNext}
                       onClick={() => toggleSuperset(exIndex)}
                     >
@@ -435,7 +435,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
               </div>
             </div>
 
-            <div className="grid grid-cols-[2.25rem_1fr_1fr_3rem] items-center gap-2 pb-1 text-sm text-steel/60">
+            <div className="grid grid-cols-[2.25rem_1fr_1fr_3rem] items-center gap-2 pb-1 text-sm text-muted">
               <span>Serie</span>
               <span>{ex.kind === 'duration' ? '' : ex.kind === 'bodyweight' ? '+ kg' : 'kg'}</span>
               <span>{unit}</span>
@@ -450,7 +450,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                     key={s.key}
                     className={cx(
                       'grid grid-cols-[2.25rem_1fr_1fr_3rem] items-center gap-2 rounded-md',
-                      s.done && 'bg-plate-green/10',
+                      s.done && 'bg-success/10',
                     )}
                   >
                     <button
@@ -462,7 +462,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                       aria-label={s.kind === 'work' ? 'Marchează ca încălzire' : 'Marchează ca serie de lucru'}
                       className={cx(
                         'flex h-12 items-center justify-center font-display text-xl font-bold',
-                        s.kind === 'warmup' ? 'text-plate-yellow' : 'text-steel',
+                        s.kind === 'warmup' ? 'text-warning' : 'text-fg',
                       )}
                     >
                       {s.kind === 'warmup' ? 'Î' : workNumber}
@@ -478,7 +478,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                             aria-label={running ? 'Oprește cronometrul și notează timpul' : 'Pornește cronometrul seriei'}
                             className={cx(
                               'flex h-12 items-center justify-center gap-1 rounded-lg font-display text-lg font-bold tabular-nums',
-                              running ? `${D.solid}` : 'bg-steel/10 text-steel disabled:opacity-40',
+                              running ? `${D.solid}` : 'bg-fg/10 text-fg disabled:opacity-40',
                             )}
                           >
                             {running ? <Square size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
@@ -511,7 +511,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                       aria-label={s.done ? 'Anulează seria' : 'Bifează seria'}
                       className={cx(
                         'flex h-12 w-12 items-center justify-center rounded-lg',
-                        s.done ? 'bg-plate-green text-white' : 'bg-steel/10 text-steel/60 active:bg-steel/20',
+                        s.done ? 'bg-success-solid text-on-brand' : 'bg-fg/10 text-muted active:bg-fg/20',
                       )}
                     >
                       <Check size={22} />
@@ -525,7 +525,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                             key={option}
                             type="button"
                             aria-pressed={selected}
-                            className={cx('min-h-[40px] min-w-[40px] px-2 text-sm font-semibold', selected ? D.solid : 'bg-steel/10 text-steel')}
+                            className={cx('min-h-[40px] min-w-[40px] px-2 text-sm font-semibold', selected ? D.solid : 'bg-fg/10 text-fg')}
                             onClick={() => editValue(exIndex, s, { effort: selected ? '' : option })}
                           >
                             {label}
@@ -567,7 +567,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
         />
       </div>
 
-      <button type="button" className="btn-outline border-plate-red text-plate-red" onClick={() => void discard()}>
+      <button type="button" className="btn-danger" onClick={() => void discard()}>
         Renunță la antrenament
       </button>
 
@@ -575,27 +575,27 @@ export function ActiveWorkout({ session, onFinished }: Props) {
         <div
           role="timer"
           aria-live="off"
-          className="fixed inset-0 z-50 mx-auto flex w-full max-w-md flex-col items-center justify-center gap-6 bg-chalk/90 backdrop-blur-md px-6 text-white"
+          className="fixed inset-0 z-50 mx-auto flex w-full max-w-md flex-col items-center justify-center gap-6 bg-canvas/95 backdrop-blur-md px-6 text-fg"
         >
           <div className="text-center">
-            <h3 className="text-neon-mint font-semibold uppercase tracking-wider text-sm mb-1">Timp de recuperare</h3>
-            <p className="text-white/60 text-sm">Pregătește-te pentru următoarea serie</p>
+            <h3 className="text-brand-fg font-semibold uppercase tracking-wider text-sm mb-1">Timp de recuperare</h3>
+            <p className="text-muted text-sm">Pregătește-te pentru următoarea serie</p>
           </div>
 
           <div className="relative flex items-center justify-center w-64 h-64">
             <svg className="absolute inset-0 w-full h-full transform -rotate-90">
-              <circle cx="128" cy="128" r="120" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-white/10" />
+              <circle cx="128" cy="128" r="120" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-fg/10" />
               <circle 
                 cx="128" cy="128" r="120" 
                 stroke="currentColor" 
                 strokeWidth="8" 
                 fill="transparent" 
-                className="text-neon-mint transition-all duration-1000 ease-linear"
+                className="text-brand-fg transition-all duration-1000 ease-linear"
                 strokeDasharray={2 * Math.PI * 120}
                 strokeDashoffset={2 * Math.PI * 120 * (1 - Math.max(0, Math.min(1, (rest.endsAt - now) / (rest.total * 1000))))}
               />
             </svg>
-            <span className="num text-7xl font-bold tracking-tighter text-white shadow-neon-mint drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+            <span className="num text-7xl font-bold tracking-tighter text-fg">
               {formatClock((rest.endsAt - now) / 1000)}
             </span>
           </div>
@@ -603,21 +603,21 @@ export function ActiveWorkout({ session, onFinished }: Props) {
           <div className="flex items-center gap-4 mt-4">
             <button
               type="button"
-              className="btn-quiet h-12 w-16 text-lg text-white bg-white/5 border border-white/10 rounded-xl"
+              className="btn-quiet h-12 w-16 text-lg"
               onClick={() => setRest((r) => (r ? { ...r, endsAt: r.endsAt - 15_000 } : r))}
             >
               -15s
             </button>
             <button 
               type="button" 
-              className="btn-steel h-14 px-8 text-lg shadow-[0_0_15px_rgba(16,185,129,0.3)] rounded-2xl" 
+              className="btn-primary h-14 px-8 text-lg rounded-2xl" 
               onClick={() => setRest(null)}
             >
               SARI PAUZA
             </button>
             <button
               type="button"
-              className="btn-quiet h-12 w-16 text-lg text-white bg-white/5 border border-white/10 rounded-xl"
+              className="btn-quiet h-12 w-16 text-lg"
               onClick={() => setRest((r) => (r ? { ...r, endsAt: r.endsAt + 15_000, total: r.total + 15 } : r))}
             >
               +15s

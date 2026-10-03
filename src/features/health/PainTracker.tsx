@@ -6,7 +6,7 @@ import { useApp } from '../../context';
 import { useLive } from '../../hooks/useLive';
 import { db, newId, nowIso, stamp, type RegionId } from '../../lib/db';
 import { formatDateTime, formatDayMonth, localDateStr } from '../../lib/date';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { LineChart } from '../../components/charts';
 import { Notice, Panel, SyncMark } from '../../components/ui';
 import { PainPicker } from './PainPicker';
@@ -111,23 +111,23 @@ export function PainTracker() {
 
       <Panel title={`Evoluția, ${REGION_LABELS[region].toLowerCase()}`}>
         {points.length === 0 ? (
-          <p className="text-steel/70">Nicio notare pentru această zonă încă.</p>
+          <p className="text-muted">Nicio notare pentru această zonă încă.</p>
         ) : (
           <div className="flex flex-col gap-3">
-            <LineChart points={points} color={PLATE.blue} unit="/10" />
-            <ul className="divide-y divide-steel/10">
+            <LineChart points={points} color={tone('health')} unit="/10" />
+            <ul className="divide-y divide-line">
               {[...forRegion].reverse().slice(0, 8).map((l) => (
                 <li key={l.id} className="flex items-center gap-3 py-2">
                   <span className="num w-8 text-2xl">{l.score}</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-steel/60">{formatDateTime(l.logged_at)}</p>
+                    <p className="text-sm text-muted">{formatDateTime(l.logged_at)}</p>
                     {l.note && <p className="truncate text-[15px]">{l.note}</p>}
                   </div>
                   <SyncMark status={l.sync_status} />
                   <button
                     type="button"
                     aria-label="Șterge notarea"
-                    className="-mr-2 flex h-11 w-11 items-center justify-center text-steel/50 active:text-plate-red"
+                    className="-mr-2 flex h-11 w-11 items-center justify-center text-subtle active:text-danger"
                     onClick={() => void db.painLogs.update(l.id, { deleted: true, ...stamp() })}
                   >
                     <Trash2 size={18} />

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pause, Play, RotateCcw, ShieldAlert } from 'lucide-react';
 import { useApp } from '../../context';
 import { db, newId, nowIso, stamp } from '../../lib/db';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { Notice, Panel, Segmented } from '../../components/ui';
 import { PlateTimer } from './PlateTimer';
 
@@ -236,11 +236,11 @@ export function McGillBigThree() {
   const totalHolds = countHolds(plan, plan.length);
   const totalMinutes = Math.ceil(plan.reduce((sum, s) => sum + s.seconds, 0) / 60);
 
-  let plateColor: string = PLATE.blue;
-  if (phase === 'done') plateColor = PLATE.green;
-  else if (phase === 'stopped') plateColor = PLATE.red;
+  let plateColor: string = tone('health');
+  if (phase === 'done') plateColor = tone('success');
+  else if (phase === 'stopped') plateColor = tone('danger');
   else if (active) {
-    plateColor = step.kind === 'hold' ? PLATE.blue : step.kind === 'relax' ? PLATE.gray : PLATE.yellow;
+    plateColor = step.kind === 'hold' ? tone('health') : step.kind === 'relax' ? tone('subtle') : tone('warning');
   }
 
   const progress =
@@ -270,7 +270,7 @@ export function McGillBigThree() {
   }
 
   return (
-    <Panel title="Big 3 McGill" edge={D.edge} aside={<span className="text-steel/60">6-4-2, menținere 10 s</span>}>
+    <Panel title="Big 3 McGill" edge={D.edge} aside={<span className="text-muted">6-4-2, menținere 10 s</span>}>
       <div className="flex flex-col gap-4">
         <div className={active ? 'opacity-50' : ''} inert={active}>
           <Segmented<Big3Exercise>
@@ -283,7 +283,7 @@ export function McGillBigThree() {
           />
         </div>
 
-        <p className="text-[15px] leading-snug text-steel/80">{INSTRUCTIONS[exercise]}</p>
+        <p className="text-[15px] leading-snug text-fg">{INSTRUCTIONS[exercise]}</p>
 
         <div>
           <PlateTimer color={plateColor} progress={progress}>
@@ -294,7 +294,7 @@ export function McGillBigThree() {
                 <span className="num text-7xl leading-none" aria-live="off">
                   {Math.ceil(remainingMs / 1000)}
                 </span>
-                <span className="mt-1 text-sm font-medium text-steel/70">{holeLabel}</span>
+                <span className="mt-1 text-sm font-medium text-muted">{holeLabel}</span>
               </>
             )}
           </PlateTimer>
@@ -304,8 +304,8 @@ export function McGillBigThree() {
             </p>
           )}
           {active && (
-            <div className="mt-3 h-1.5 w-full bg-steel/10" aria-hidden="true">
-              <div className="h-full bg-plate-blue" style={{ width: `${(stepIdx / plan.length) * 100}%` }} />
+            <div className="mt-3 h-1.5 w-full bg-fg/10" aria-hidden="true">
+              <div className="h-full bg-health" style={{ width: `${(stepIdx / plan.length) * 100}%` }} />
             </div>
           )}
         </div>
@@ -327,7 +327,7 @@ export function McGillBigThree() {
             </button>
           )}
           {phase === 'running' && (
-            <button type="button" onClick={pause} className="btn bg-plate-yellow text-steel active:bg-plate-yellow/80">
+            <button type="button" onClick={pause} className="btn bg-warning-solid text-on-brand active:bg-warning-solid/90">
               <Pause size={18} />
               Pauză
             </button>
@@ -339,7 +339,7 @@ export function McGillBigThree() {
             </button>
           )}
           {active && (
-            <button type="button" onClick={stopBecauseOfPain} className="btn-outline border-plate-red text-plate-red">
+            <button type="button" onClick={stopBecauseOfPain} className="btn-danger">
               <ShieldAlert size={18} />
               Am durere
             </button>

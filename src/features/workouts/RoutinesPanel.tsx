@@ -119,21 +119,21 @@ function RoutineEditor({ routine, onClose }: EditorProps) {
                     <ExerciseFigure exerciseId={row.exercise_id} name={findExercise(catalog, row.exercise_id).name} />
                     <p className="min-w-0 truncate font-semibold">
                     {findExercise(catalog, row.exercise_id).name}
-                    {row.linked_to_next && <span className="ml-2 rounded bg-plate-red/10 px-1.5 py-0.5 text-xs font-semibold text-plate-red">superset</span>}
+                    {row.linked_to_next && <span className="ml-2 rounded bg-workouts/10 px-1.5 py-0.5 text-xs font-semibold text-workouts">superset</span>}
                   </p>
                   </div>
                   <div className="flex shrink-0">
-                    <button type="button" aria-label="Mută în sus" onClick={() => move(i, -1)} className="flex h-11 w-11 items-center justify-center text-steel/60">
+                    <button type="button" aria-label="Mută în sus" onClick={() => move(i, -1)} className="flex h-11 w-11 items-center justify-center text-muted">
                       <ArrowUp size={18} />
                     </button>
-                    <button type="button" aria-label="Mută în jos" onClick={() => move(i, 1)} className="flex h-11 w-11 items-center justify-center text-steel/60">
+                    <button type="button" aria-label="Mută în jos" onClick={() => move(i, 1)} className="flex h-11 w-11 items-center justify-center text-muted">
                       <ArrowDown size={18} />
                     </button>
                     <button
                       type="button"
                       aria-label="Scoate exercițiul"
                       onClick={() => setRows((r) => r.filter((_, idx) => idx !== i))}
-                      className="flex h-11 w-11 items-center justify-center text-steel/60 active:text-plate-red"
+                      className="flex h-11 w-11 items-center justify-center text-muted active:text-danger"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -146,7 +146,7 @@ function RoutineEditor({ routine, onClose }: EditorProps) {
                   {numberField('Pauză (s)', row.rest_s, (n) => patchRow(i, { rest_s: n }), 0, 600)}
                 </div>
                 {row.linked_to_next && (
-                  <p className="mt-1 text-xs text-steel/55">Pauza se aplică după exercițiul următor, nu după acesta.</p>
+                  <p className="mt-1 text-xs text-subtle">Pauza se aplică după exercițiul următor, nu după acesta.</p>
                 )}
                 <div className="mt-2">
                   <label className="label" htmlFor={`progression-${i}`}>
@@ -172,7 +172,7 @@ function RoutineEditor({ routine, onClose }: EditorProps) {
                   <button
                     type="button"
                     onClick={() => patchRow(i, { linked_to_next: !row.linked_to_next })}
-                    className={`flex min-h-[32px] items-center gap-1 rounded-b-md px-3 text-xs font-semibold ${row.linked_to_next ? 'bg-plate-red text-white' : 'bg-steel/10 text-steel/60'}`}
+                    className={`flex min-h-[32px] items-center gap-1 rounded-b-md px-3 text-xs font-semibold ${row.linked_to_next ? 'bg-workouts/15 text-workouts' : 'bg-fg/10 text-muted'}`}
                   >
                     {row.linked_to_next ? <Link2Off size={14} /> : <Link2 size={14} />}
                     {row.linked_to_next ? 'Desparte de exercițiul următor' : 'Leagă cu exercițiul următor (superset)'}
@@ -182,7 +182,7 @@ function RoutineEditor({ routine, onClose }: EditorProps) {
             </li>
           ))}
         </ul>
-        <p className="text-sm text-steel/60">
+        <p className="text-sm text-muted">
           Exercițiile legate formează un superset: le faci pe rând, fără pauză între ele, și te odihnești o singură
           dată, după ultimul din grup.
         </p>
@@ -192,9 +192,9 @@ function RoutineEditor({ routine, onClose }: EditorProps) {
           Adaugă exercițiu
         </button>
 
-        <div className="border-t border-steel/10 pt-4">
+        <div className="border-t border-line pt-4">
           <p className="mb-1 font-display text-xl font-bold">Progresie automată</p>
-          <p className="mb-3 text-sm text-steel/60">
+          <p className="mb-3 text-sm text-muted">
             Sugerează greutatea și repetările pentru sesiunea următoare, pe baza celei dinainte. Poți schimba mereu
             valorile sugerate în timpul antrenamentului.
           </p>
@@ -316,32 +316,32 @@ export function RoutinesPanel() {
         title="Rutinele mele"
         edge={D.edge}
         aside={
-          <button type="button" className="min-h-[44px] px-1 font-semibold text-plate-red" onClick={() => setEditing('new')}>
+          <button type="button" className="min-h-[44px] px-1 font-semibold text-brand-fg" onClick={() => setEditing('new')}>
             Rutină nouă
           </button>
         }
       >
         {routines && routines.length === 0 && (
-          <p className="text-steel/70">Încă nu ai rutine. Adaugă un șablon de mai jos sau creează una de la zero.</p>
+          <p className="text-muted">Încă nu ai rutine. Adaugă un șablon de mai jos sau creează una de la zero.</p>
         )}
-        <ul className="divide-y divide-steel/10">
+        <ul className="divide-y divide-line">
           {routines?.map((r) => (
             <li key={r.id} className="py-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="truncate font-semibold">
                     {r.name}
-                    {r.is_deload && <span className="ml-2 rounded bg-plate-yellow/20 px-1.5 py-0.5 text-xs font-semibold text-steel/70">deload</span>}
+                    {r.is_deload && <span className="ml-2 rounded bg-warning/15 px-1.5 py-0.5 text-xs font-semibold text-muted">deload</span>}
                   </p>
-                  <p className="text-sm text-steel/60">
+                  <p className="text-sm text-muted">
                     {r.exercises.map((e) => findExercise(catalog, e.exercise_id).name).join(', ')}
                   </p>
                   {r.default_progression !== 'none' && (
-                    <p className="text-sm text-plate-red">Progresie: {PROGRESSION_LABELS[r.default_progression].toLowerCase()}</p>
+                    <p className="text-sm text-workouts">Progresie: {PROGRESSION_LABELS[r.default_progression].toLowerCase()}</p>
                   )}
                 </div>
                 <div className="flex shrink-0 gap-1">
-                  <button type="button" className="btn-steel min-h-[44px] px-4 font-bold text-neon-mint" onClick={() => void beginRoutine(r)}>
+                  <button type="button" className="btn-primary min-h-[44px] px-4" onClick={() => void beginRoutine(r)}>
                     START
                   </button>
                   <button type="button" className="btn-quiet min-h-[44px] px-3" onClick={() => void duplicate(r)}>
@@ -353,7 +353,7 @@ export function RoutinesPanel() {
                   <button
                     type="button"
                     aria-label={`Șterge ${r.name}`}
-                    className="flex h-11 w-11 items-center justify-center text-steel/50 active:text-plate-red"
+                    className="flex h-11 w-11 items-center justify-center text-subtle active:text-danger"
                     onClick={() => void remove(r)}
                   >
                     <Trash2 size={18} />
@@ -370,19 +370,19 @@ export function RoutinesPanel() {
           {ROUTINE_TEMPLATES.map((t) => (
             <li key={t.id}>
               <p className="font-semibold">{t.name}</p>
-              <p className="text-sm text-steel/60">
+              <p className="text-sm text-muted">
                 {t.level}, {t.daysPerWeek} zile pe săptămână, {t.days.length} {t.days.length === 1 ? 'antrenament' : 'antrenamente'}
               </p>
-              <p className="mt-1 text-[15px] text-steel/80">{t.description}</p>
+              <p className="mt-1 text-[15px] text-fg">{t.description}</p>
               <button type="button" className="btn-quiet mt-2" onClick={() => void importTemplate(t)}>
                 <Plus size={18} />
                 Adaugă în rutinele mele
               </button>
-              {imported === t.id && <p className="mt-1 text-sm text-plate-green">Adăugat.</p>}
+              {imported === t.id && <p className="mt-1 text-sm text-success">Adăugat.</p>}
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-sm text-steel/60">
+        <p className="mt-4 text-sm text-muted">
           Șabloanele sunt puncte de plecare uzuale, nu programe personalizate. Ajustează seriile, repetările și
           greutățile după cum le tolerezi.
         </p>

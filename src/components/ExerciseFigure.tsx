@@ -86,7 +86,7 @@ export function ExerciseFigure({ exerciseId, name, size = 'list' }: Props) {
       className="shrink-0"
     >
       {picture}
-      {paused && <span className="mt-1 block text-center text-xs font-semibold text-steel/70">Oprit</span>}
+      {paused && <span className="mt-1 block text-center text-xs font-semibold text-muted">Oprit</span>}
     </button>
   );
 }

@@ -82,12 +82,12 @@ function RecipeEditor({ recipe, draft, onClose }: EditorProps) {
 
         <div>
           <p className="label">Ingrediente (greutate crudă)</p>
-          <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
+          <ul className="divide-y divide-line border-y border-line bg-fg/5">
             {ingredients.map((ing, i) => (
               <li key={`${ing.name}-${i}`} className="flex items-center gap-2 px-3 py-2">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{ing.name}</p>
-                  <p className="text-sm text-steel/60">{formatNum((ing.kcal100 * ing.grams) / 100, 0)} kcal</p>
+                  <p className="text-sm text-muted">{formatNum((ing.kcal100 * ing.grams) / 100, 0)} kcal</p>
                 </div>
                 <input
                   className="field w-24 px-2 text-center"
@@ -99,18 +99,18 @@ function RecipeEditor({ recipe, draft, onClose }: EditorProps) {
                     setIngredients((list) => list.map((x, idx) => (idx === i ? { ...x, grams: g !== null && g > 0 ? g : 0 } : x)));
                   }}
                 />
-                <span className="text-sm text-steel/60">g</span>
+                <span className="text-sm text-muted">g</span>
                 <button
                   type="button"
                   aria-label={`Scoate ${ing.name}`}
-                  className="-mr-2 flex h-11 w-11 items-center justify-center text-steel/50 active:text-plate-red"
+                  className="-mr-2 flex h-11 w-11 items-center justify-center text-subtle active:text-danger"
                   onClick={() => setIngredients((list) => list.filter((_, idx) => idx !== i))}
                 >
                   <Trash2 size={18} />
                 </button>
               </li>
             ))}
-            {ingredients.length === 0 && <li className="px-3 py-4 text-steel/70">Niciun ingredient încă.</li>}
+            {ingredients.length === 0 && <li className="px-3 py-4 text-muted">Niciun ingredient încă.</li>}
           </ul>
           <button type="button" className="btn-outline mt-2 w-full" onClick={() => setAdding(true)}>
             <Plus size={18} />
@@ -123,7 +123,7 @@ function RecipeEditor({ recipe, draft, onClose }: EditorProps) {
             Greutatea totală după gătit, în grame (opțional)
           </label>
           <input id="recipe-cooked" className="field" inputMode="decimal" value={cooked} onChange={(e) => setCooked(e.target.value)} />
-          <p className="mt-1 text-sm text-steel/60">
+          <p className="mt-1 text-sm text-muted">
             Ingredientele se cântăresc crude, dar la gătit se pierde sau se absoarbe apă. Dacă cântărești preparatul
             gata, poți nota apoi porția în grame, iar caloriile la 100 g vor fi corecte. Acum, ingredientele crude
             cântăresc {formatNum(rawWeight, 0)} g.
@@ -133,23 +133,23 @@ function RecipeEditor({ recipe, draft, onClose }: EditorProps) {
         <Panel title="Valori nutriționale">
           <dl className="grid grid-cols-4 gap-2 text-center">
             <div>
-              <dt className="text-sm text-steel/60">kcal</dt>
+              <dt className="text-sm text-muted">kcal</dt>
               <dd className="num text-2xl">{formatNum(per.kcal, 0)}</dd>
             </div>
             <div>
-              <dt className="text-sm text-steel/60">Proteine</dt>
+              <dt className="text-sm text-muted">Proteine</dt>
               <dd className="num text-2xl">{formatNum(per.protein)}</dd>
             </div>
             <div>
-              <dt className="text-sm text-steel/60">Carbo</dt>
+              <dt className="text-sm text-muted">Carbo</dt>
               <dd className="num text-2xl">{formatNum(per.carbs)}</dd>
             </div>
             <div>
-              <dt className="text-sm text-steel/60">Grăsimi</dt>
+              <dt className="text-sm text-muted">Grăsimi</dt>
               <dd className="num text-2xl">{formatNum(per.fat)}</dd>
             </div>
           </dl>
-          <p className="mt-2 text-sm text-steel/60">Pe o porție.{per100 ? ` La 100 g de preparat: ${formatNum(per100.kcal100, 0)} kcal.` : ''}</p>
+          <p className="mt-2 text-sm text-muted">Pe o porție.{per100 ? ` La 100 g de preparat: ${formatNum(per100.kcal100, 0)} kcal.` : ''}</p>
         </Panel>
 
         <div>
@@ -208,29 +208,29 @@ export function RecipesPanel() {
         edge={D.edge}
         aside={
           <div className="flex gap-1">
-            <button type="button" className="flex h-11 w-11 items-center justify-center text-plate-green" aria-label="Importă rețetă" onClick={() => setImporting(true)}>
+            <button type="button" className="flex h-11 w-11 items-center justify-center text-brand-fg" aria-label="Importă rețetă" onClick={() => setImporting(true)}>
               <Download size={20} />
             </button>
-            <button type="button" className="min-h-[44px] px-1 font-semibold text-plate-green" onClick={() => setEditing('new')}>
+            <button type="button" className="min-h-[44px] px-1 font-semibold text-brand-fg" onClick={() => setEditing('new')}>
               Rețetă nouă
             </button>
           </div>
         }
       >
         {recipes && recipes.length === 0 && (
-          <p className="text-steel/70">
+          <p className="text-muted">
             Adaugi ingredientele cu greutatea lor, iar aplicația calculează caloriile pe porție. Poți porni de la o
             rețetă de mai sus: o copiezi, apoi o notezi în jurnal.
           </p>
         )}
-        <ul className="divide-y divide-steel/10">
+        <ul className="divide-y divide-line">
           {recipes?.map((r) => {
             const per = perServing(recipeTotals(r.ingredients), r.servings);
             return (
               <li key={r.id} className="flex items-start justify-between gap-3 py-3">
                 <div className="min-w-0">
                   <p className="truncate font-semibold">{r.name}</p>
-                  <p className="text-sm text-steel/60">
+                  <p className="text-sm text-muted">
                     {r.servings} {r.servings === 1 ? 'porție' : 'porții'}, {r.ingredients.length} ingrediente
                   </p>
                   <p className="text-[15px]">
@@ -244,7 +244,7 @@ export function RecipesPanel() {
                   <button
                     type="button"
                     aria-label={`Șterge ${r.name}`}
-                    className="flex h-11 w-11 items-center justify-center text-steel/50 active:text-plate-red"
+                    className="flex h-11 w-11 items-center justify-center text-subtle active:text-danger"
                     onClick={() => void remove(r)}
                   >
                     <Trash2 size={18} />

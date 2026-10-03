@@ -59,7 +59,7 @@ export function TodayCard({ onStarted }: Props) {
   if (routines.length === 0) {
     return (
       <Panel title="Azi" edge={D.edge}>
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           Nu ai încă rutine. Alege un șablon din Antrenament, Galerie, apoi pune-l pe zilele săptămânii.
         </p>
       </Panel>
@@ -69,7 +69,7 @@ export function TodayCard({ onStarted }: Props) {
   if (!plan.today) {
     return (
       <Panel title="Azi: zi liberă" edge={D.edge}>
-        <p className="flex items-center gap-2 text-[15px] text-steel/80">
+        <p className="flex items-center gap-2 text-[15px] text-fg">
           <CalendarDays size={18} aria-hidden="true" />
           {plan.next
             ? `Următorul antrenament: ${plan.next.routine.name}, ${formatWeekdayShort(plan.next.date)}, ${formatDayMonth(plan.next.date)}.`
@@ -83,7 +83,7 @@ export function TodayCard({ onStarted }: Props) {
   return (
     <Panel title={`Azi: ${plan.today.name}`} edge={D.edge}>
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           {plan.today.exercises.length} exerciții
           {plan.today.is_deload ? ', săptămână de deload' : ''}.
         </p>
