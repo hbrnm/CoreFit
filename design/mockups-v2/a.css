@@ -130,3 +130,16 @@ table.sets { width: 100%; border-collapse: separate; border-spacing: 0 4px; marg
 .input.ph { color: var(--subtle); }
 .lbl { font-size: 14px; font-weight: 600; color: var(--muted); margin-top: 14px; }
 .danger { color: var(--fg); font-weight: 600; }
+
+/* Decizia 7: bara de jos plutitoare (ca Apple Health, iOS 26) */
+.tabs { position: fixed !important; left: 14px; right: 14px; bottom: 26px; z-index: 10; display: grid; grid-template-columns: repeat(5, 1fr);
+  padding: 6px !important; border-radius: 34px; border: 1px solid rgba(255,255,255,.55) !important;
+  background: rgba(255,255,255,.72) !important; -webkit-backdrop-filter: blur(22px) saturate(1.8); backdrop-filter: blur(22px) saturate(1.8);
+  box-shadow: 0 10px 30px rgba(15,23,42,.16), 0 1px 3px rgba(15,23,42,.08); }
+[data-theme="dark"] .tabs { background: rgba(38,44,56,.72) !important; border-color: rgba(255,255,255,.10) !important; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+.tabs a { height: 54px; justify-content: center; border-radius: 28px; gap: 3px !important; font-size: 10.5px !important; }
+.tabs a svg { width: 22px !important; height: 22px !important; }
+.tabs a.on { background: rgba(15,23,42,.07); }
+[data-theme="dark"] .tabs a.on { background: rgba(255,255,255,.10); }
+.tabs a.on svg { fill: currentColor; fill-opacity: .18; }
+body { padding-bottom: 112px; }

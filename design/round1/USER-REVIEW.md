@@ -24,3 +24,10 @@
    setul curent, tabul selectat). Barele, graficele, etichetele de secțiune, bifele și
    avertismentele trec pe nuanțe de gri și pe culoarea textului (negru / alb). Fără culori pe
    secțiuni.
+
+## Review 3 (cuvânt cu cuvânt)
+
+> Putem să schimbăm stilul barei de jos ? Să o facem poate floating?
+
+7. **Bara de jos plutitoare**, ca în Apple Health (iOS 26): o capsulă desprinsă de margini și
+   de jos, sticlă mată peste conținut, tabul selectat cu o pastilă în spate. 5 taburi.
