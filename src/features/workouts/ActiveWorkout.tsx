@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Check, Plus, Trash2, TrendingUp } from 'lucide-react';
+import { Check, Link2, Play, Plus, Square, Trash2, TrendingUp, Unlink } from 'lucide-react';
 import { EQUIPMENT_LABELS, MUSCLE_LABELS, type Exercise } from '../../data/exercises';
 import { useApp } from '../../context';
 import { useCatalog } from '../../hooks/useCatalog';
@@ -9,7 +9,15 @@ import { saveProfilePatch, type LocalWorkoutSession } from '../../lib/db';
 import { cx } from '../../lib/cx';
 import { DOMAIN } from '../../lib/domains';
 import { formatEffort, parseEffort, RIR_OPTIONS, RPE_OPTIONS } from '../../lib/effort';
+import { formatDateTime } from '../../lib/date';
 import { formatNum, parseDecimal } from '../../lib/numbers';
+import {
+  backfillLoggedAt,
+  heldSeconds,
+  removeExerciseAt,
+  restAfterSet,
+  toggleSupersetWithNext,
+} from '../../lib/sessionEdit';
 import { findExercise, groupLinked } from '../../lib/workoutStats';
 import {
   buildDraftExercise,
@@ -77,6 +85,9 @@ export function ActiveWorkout({ session, onFinished }: Props) {
   const [picker, setPicker] = useState(false);
   const [historyFor, setHistoryFor] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  /** cronometrul de lucru pentru o serie cronometrată (plank, wall sit) */
+  const [work, setWork] = useState<{ exIndex: number; key: string; startedAt: number; cued: boolean } | null>(null);
+  const backfill = draft.backfill ?? null;
 
   useEffect(() => saveDraft(session.id, draft), [session.id, draft]);
 
@@ -133,6 +144,17 @@ export function ActiveWorkout({ session, onFinished }: Props) {
     }
   }, [now, rest]);
 
+  // ținta seriei cronometrate atinsă: un semnal, cronometrul merge mai departe până la Stop
+  useEffect(() => {
+    if (!work || work.cued) return;
+    const set = draft.exercises[work.exIndex]?.sets.find((s) => s.key === work.key);
+    const target = set ? parseDecimal(set.reps) : null;
+    if (target && heldSeconds(work.startedAt, now) >= target) {
+      buzz();
+      setWork((w) => (w ? { ...w, cued: true } : w));
+    }
+  }, [now, work, draft]);
+
   const elapsed = (now - Date.parse(session.started_at)) / 1000;
   const doneCount = useMemo(
     () => draft.exercises.reduce((n, e) => n + e.sets.filter((s) => s.done).length, 0),
@@ -140,7 +162,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
   );
 
   const patchExercise = (index: number, fn: (e: DraftExercise) => DraftExercise) =>
-    setDraft((d) => ({ exercises: d.exercises.map((e, i) => (i === index ? fn(e) : e)) }));
+    setDraft((d) => ({ ...d, exercises: d.exercises.map((e, i) => (i === index ? fn(e) : e)) }));
 
   const patchSet = (exIndex: number, key: string, patch: Partial<DraftSet>) =>
     patchExercise(exIndex, (e) => ({ ...e, sets: e.sets.map((s) => (s.key === key ? { ...s, ...patch } : s)) }));
@@ -174,19 +196,25 @@ export function ActiveWorkout({ session, onFinished }: Props) {
 
     try {
       const order = draftEx.sets.findIndex((s) => s.key === set.key);
-      const logId = await saveSet(userId, session.id, ex, set, order, values.weight, values.reps, {
-        value: parseEffort(set.effort ?? '', scale),
-        scale,
-      });
+      const logId = await saveSet(
+        userId,
+        session.id,
+        ex,
+        set,
+        order,
+        values.weight,
+        values.reps,
+        { value: parseEffort(set.effort ?? '', scale), scale },
+        backfill ? backfillLoggedAt(session.started_at, doneCount) : undefined,
+      );
       patchSet(exIndex, set.key, { done: true, log_id: logId });
       
       // Haptic feedback
       try { navigator.vibrate?.(50); } catch {}
       
-      if (set.kind === 'work' && !draftEx.linkedToNext) {
-        const total = draftEx.rest_s || DEFAULT_REST_S;
-        setRest({ endsAt: Date.now() + total * 1000, total });
-      }
+      // un antrenament notat ulterior nu are pauze de cronometrat
+      const total = set.kind === 'work' && !backfill ? restAfterSet(draft.exercises, exIndex) : null;
+      if (total !== null) setRest({ endsAt: Date.now() + total * 1000, total });
     } catch {
       setError('Seria nu s-a putut salva pe dispozitiv. Verifică spațiul de stocare.');
     }
@@ -205,6 +233,28 @@ export function ActiveWorkout({ session, onFinished }: Props) {
       }
     }
   };
+
+  /** Pornește cronometrul de lucru, sau îl oprește și bifează seria cu timpul ținut. */
+  const toggleWork = (exIndex: number, set: DraftSet) => {
+    if (work && work.exIndex === exIndex && work.key === set.key) {
+      const held = String(heldSeconds(work.startedAt, Date.now()));
+      setWork(null);
+      patchSet(exIndex, set.key, { reps: held });
+      void toggleDone(exIndex, { ...set, reps: held });
+      return;
+    }
+    setError(null);
+    setWork({ exIndex, key: set.key, startedAt: Date.now(), cued: false });
+  };
+
+  const changeRest = (exIndex: number, delta: number) =>
+    patchExercise(exIndex, (e) => ({
+      ...e,
+      rest_s: Math.min(600, Math.max(0, (e.rest_s || DEFAULT_REST_S) + delta)),
+    }));
+
+  const toggleSuperset = (exIndex: number) =>
+    setDraft((d) => ({ ...d, exercises: toggleSupersetWithNext(d.exercises, exIndex) }));
 
   const addSet = (exIndex: number) =>
     patchExercise(exIndex, (e) => {
@@ -225,7 +275,8 @@ export function ActiveWorkout({ session, onFinished }: Props) {
     const ex = draft.exercises[exIndex];
     if (!window.confirm(`Scoți ${exerciseOf(ex).name} din antrenament?`)) return;
     for (const s of ex.sets) if (s.log_id) await removeSet(s.log_id);
-    setDraft((d) => ({ exercises: d.exercises.filter((_, i) => i !== exIndex) }));
+    setDraft((d) => ({ ...d, exercises: removeExerciseAt(d.exercises, exIndex) }));
+    setWork(null);
   };
 
   const addExercise = async (exercise: Exercise) => {
@@ -235,14 +286,14 @@ export function ActiveWorkout({ session, onFinished }: Props) {
       { exercise_id: exercise.id, sets: 3, rep_min: 8, rep_max: 12, rest_s: DEFAULT_REST_S },
       session.id,
     );
-    setDraft((d) => ({ exercises: [...d.exercises, built] }));
+    setDraft((d) => ({ ...d, exercises: [...d.exercises, built] }));
   };
 
   const finish = async () => {
     if (doneCount === 0) return setError('Bifează cel puțin o serie sau renunță la antrenament.');
     if (!window.confirm('Termini antrenamentul?')) return;
-    await finishSession(session.id, notes.trim());
-    const summary = await computeSummary(userId, session, catalog);
+    await finishSession(session.id, notes.trim(), backfill?.endedAt);
+    const summary = await computeSummary(userId, session, catalog, backfill?.endedAt);
     onFinished(summary);
   };
 
@@ -258,7 +309,9 @@ export function ActiveWorkout({ session, onFinished }: Props) {
         <div>
           <h1 className="font-display text-3xl font-bold leading-tight">{session.name}</h1>
           <p className="text-steel/70">
-            {doneCount} serii notate, {formatClock(elapsed)}
+            {backfill
+              ? `Antrenament trecut, ${formatDateTime(session.started_at)}. ${doneCount} serii notate.`
+              : `${doneCount} serii notate, ${formatClock(elapsed)}`}
           </p>
           <button
             type="button"
@@ -345,6 +398,40 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                   {historyFor === exIndex ? 'Ascunde istoricul' : 'Istoric și progres'}
                 </button>
                 {historyFor === exIndex && <ExerciseHistory exercise={ex} />}
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                  {!backfill && (
+                    <span className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        className="h-9 w-11 rounded-md bg-steel/10 font-semibold"
+                        aria-label={`Pauză mai scurtă la ${ex.name}`}
+                        onClick={() => changeRest(exIndex, -15)}
+                      >
+                        -15
+                      </button>
+                      <span className="min-w-[5.5rem] text-center tabular-nums">Pauză {de.rest_s || DEFAULT_REST_S} s</span>
+                      <button
+                        type="button"
+                        className="h-9 w-11 rounded-md bg-steel/10 font-semibold"
+                        aria-label={`Pauză mai lungă la ${ex.name}`}
+                        onClick={() => changeRest(exIndex, 15)}
+                      >
+                        +15
+                      </button>
+                    </span>
+                  )}
+                  {exIndex < draft.exercises.length - 1 && (
+                    <button
+                      type="button"
+                      className="flex h-9 items-center gap-1 rounded-md bg-steel/10 px-3 font-semibold"
+                      aria-pressed={de.linkedToNext}
+                      onClick={() => toggleSuperset(exIndex)}
+                    >
+                      {de.linkedToNext ? <Unlink size={14} aria-hidden="true" /> : <Link2 size={14} aria-hidden="true" />}
+                      {de.linkedToNext ? 'Desface supersetul' : 'Superset cu următorul'}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -381,7 +468,24 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                       {s.kind === 'warmup' ? 'Î' : workNumber}
                     </button>
                     {ex.kind === 'duration' ? (
-                      <span aria-hidden="true" />
+                      (() => {
+                        const running = work?.exIndex === exIndex && work.key === s.key;
+                        return (
+                          <button
+                            type="button"
+                            disabled={s.done || (work !== null && !running)}
+                            onClick={() => toggleWork(exIndex, s)}
+                            aria-label={running ? 'Oprește cronometrul și notează timpul' : 'Pornește cronometrul seriei'}
+                            className={cx(
+                              'flex h-12 items-center justify-center gap-1 rounded-lg font-display text-lg font-bold tabular-nums',
+                              running ? `${D.solid}` : 'bg-steel/10 text-steel disabled:opacity-40',
+                            )}
+                          >
+                            {running ? <Square size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
+                            {running ? `${heldSeconds(work.startedAt, now)} s` : 'Start'}
+                          </button>
+                        );
+                      })()
                     ) : (
                       <input
                         className="field min-w-0 px-2 text-center font-display text-xl font-bold tabular-nums"
