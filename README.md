@@ -63,6 +63,13 @@ Fără configurare, aplicația rulează în **mod local**: fără cont, datele s
 - Trend al greutății și consum estimat din datele tale (calorii notate și mișcarea trendului).
 - Provocarea fără zahăr și făină (seria de zile) și scanerul de etichete.
 
+**Analiză** (Antrenament → Progres)
+- Oboseala pe grupe musculare acum, pe o hartă a corpului (față și spate): seturile de lucru recente, grupa principală întreg și cele ajutătoare pe jumătate, ponderate după RIR/RPE, cu timp de înjumătățire de 24 de ore. E o estimare (`lib/fatigue.ts`), nu o măsurătoare.
+- Echilibrul muscular pe 7, 30, 90 de zile sau tot, pe hartă și pe bare, cu grupele fără activitate.
+- Progres pe exercițiu, cu 1RM estimat doar din seriile de 1-12 repetări și seria din care vine.
+- Calculator 1RM: din greutate și repetări, 1RM-ul și greutatea pentru 1-12 repetări.
+- Activitatea pe an.
+
 **Datele tale** (Profil → Date)
 - Copie de siguranță: toate datele într-un fișier JSON, și restaurare din el (se adaugă la ce ai, câștigă versiunea mai nouă a fiecărui rând).
 - Import din Hevy, Strong și FitNotes (CSV), cu previzualizare, potrivirea exercițiilor cu catalogul și fără dubluri la un import repetat. Detalii în `docs/import-hevy-strong-fitnotes.md`.
@@ -133,3 +140,5 @@ supabase/migrations/   schema, RLS, triggere
 | Sesiuni fără progres până la deload | `lib/progression.ts`, `STALL_SESSIONS` | 3 |
 | Serii maxime la greutatea corpului | `lib/progression.ts`, `BODYWEIGHT_MAX_SETS` | 5 |
 | Superseturi | `lib/workoutStats.ts`, `groupLinked` | grupare pe rutină, fără limită de exerciții |
+| Înjumătățirea oboselii | `lib/fatigue.ts`, `FATIGUE_HALF_LIFE_H` | 24 h |
+| Seturi grele pentru oboseală maximă | `lib/fatigue.ts`, `FATIGUE_FULL_SETS` | 10 |

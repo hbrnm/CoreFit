@@ -10,9 +10,12 @@ export function formatNum(n: number, maxDigits = 1): string {
   return new Intl.NumberFormat('ro-RO', { maximumFractionDigits: maxDigits }).format(n);
 }
 
+/** Repetări pentru care estimarea 1RM e de încredere. */
+export const MAX_1RM_REPS = 12;
+
 /** 1RM estimat cu formula Epley. Doar pentru 1-12 repetări, altfel estimarea nu e de încredere. */
 export function estimate1RM(weightKg: number, reps: number): number | null {
-  if (weightKg <= 0 || reps < 1 || reps > 12) return null;
+  if (weightKg <= 0 || reps < 1 || reps > MAX_1RM_REPS) return null;
   if (reps === 1) return weightKg;
   return weightKg * (1 + reps / 30);
 }
@@ -30,4 +33,14 @@ export function plural(n: number, one: string, many: string): string {
   if (n === 1) return `1 ${one}`;
   const tail = Math.abs(n) % 100;
   return n !== 0 && (tail === 0 || tail >= 20) ? `${n} de ${many}` : `${n} ${many}`;
+}
+
+/**
+ * Greutatea pentru `reps` repetări la un 1RM dat: inversul formulei Epley.
+ * 1 repetare = chiar 1RM-ul. Peste MAX_1RM_REPS nu se estimează.
+ */
+export function weightForReps(oneRm: number, reps: number): number | null {
+  if (oneRm <= 0 || reps < 1 || reps > MAX_1RM_REPS) return null;
+  if (reps === 1) return oneRm;
+  return oneRm / (1 + reps / 30);
 }
