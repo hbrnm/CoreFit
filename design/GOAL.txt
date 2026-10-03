@@ -1,0 +1,23 @@
+Rol: arhitect senior full-stack pentru PWA de fitness. Duci CoreFit (repo hbrnm/CoreFit: React 19, TypeScript, Vite, Tailwind, Dexie offline-first, Supabase) până la o aplicație completă, în română cu diacritice corecte. Pornești de la codul existent: nu rescrii de la zero, extinzi și îmbunătățești.
+
+DESIGN: implementezi designul aprobat din design/ (ramura design-tema, design/round5 și design/round1/USER-REVIEW.md):
+- paletă neutră iOS: deschis #F2F2F7 / carduri albe; închis #000 / carduri #1C1C1E; font de sistem, tabular-nums pentru cifre
+- monocrom; albastru #2563EB doar pentru acțiuni; culoarea categoriei doar în etichete și pe valoarea de azi din grafice
+- Acasă cu carduri în stil Apple Health + Tendințe în propoziții; Antrenament și Nutriție fără carduri (stil C)
+- bară de jos plutitoare; fără antet „Sincronizat” (doar la probleme)
+- mod deschis/închis/automat; WCAG AA; ținte de atingere de minim 44 px
+
+MODULE (fiecare complet, fără TODO-uri sau date false):
+1. Date: completezi schema Dexie + Supabase (migrații noi, RLS cu (select auth.uid())) pentru ce lipsește: tip set (încălzire, normal, drop, eșec), greutate zilnică cu medie mobilă, jurnal coloană pe zone (cervical, toracal, lombar) și checklist zilnic de mobilitate.
+2. Antrenament activ: valori precompletate din sesiunea trecută, sugestie de progresie, superset, „+ Set”, tipuri de set, cronometru de pauză care pornește la bifare (±15 s, sari, vibrație și notificare), „+ Adaugă exercițiu”, rezumat la final.
+3. Nutriție: țintă de calorii, consumate vs. rămase, macro, mese cu gramaj, căutare și adăugare rapidă cu calcul după grame, cod de bare, rețete.
+4. Coloană: checklist zilnic, scală de durere 0–10 pe zone, avertisment când un exercițiu axial greu (genuflexiuni, îndreptări) coincide cu durere mare, bibliotecă de mișcări pe zone, programe ghidate.
+5. Progres: intervale 7Z / 30Z / 90Z / 1 an, greutate cu linie de trend peste punctele zilnice, ritm săptămânal (kg/săpt.), TDEE dinamic din greutate și calorii, 1RM, oboseală pe grupe.
+
+MOD DE LUCRU:
+- câte un PR pe modul, pe ramură proprie
+- logica de antrenament, nutriție și greutate în src/lib, ca funcții pure cu teste vitest
+- înainte de fiecare PR: npm test, tsc și npm run build curate; capturi Playwright în modul deschis și închis, comparate cu machetele din design/
+- îmi arăți capturile și aștepți merge-ul meu; nu atingi datele utilizatorilor existenți fără migrare
+
+GATA când: toate cele 5 module au PR-uri îmbinate în main, CI e verde pe main, fiecare ecran din design/round5 există în aplicație, iar aplicația publicată pe Vercel pornește și se sincronizează cu Supabase.
