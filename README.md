@@ -82,11 +82,12 @@ Fără configurare, aplicația rulează în **mod local**: fără cont, datele s
 
 ## Cont și sincronizare (Supabase)
 
+Pașii completi, de la un cont nou până la verificare, sunt în [`docs/SUPABASE_SETUP.md`](docs/SUPABASE_SETUP.md). Pe scurt:
+
 1. Creează un proiect Supabase.
-2. Rulează, în ordine, `supabase/migrations/20260920000001_create_fitness_schema.sql` și `supabase/migrations/20260921000001_modules_v2.sql` (SQL Editor sau `supabase db push`). Sunt idempotente.
-3. Copiază `.env.example` în `.env.local` și completează `VITE_SUPABASE_URL` și `VITE_SUPABASE_ANON_KEY`.
-4. În Supabase, Authentication, Providers: activează Email.
-5. `npm run dev`.
+2. Rulează [`supabase/setup.sql`](supabase/setup.sql) în SQL Editor: toate migrațiile, într-un singur fișier, idempotent.
+3. Pune `VITE_SUPABASE_URL` și `VITE_SUPABASE_ANON_KEY` în `.env.local` (local) sau în Vercel (publicat).
+4. În Authentication: Email activ, iar Site URL setat la adresa aplicației.
 
 Sincronizarea: scrierile merg întâi în IndexedDB; se trimit la 1,5 s după o modificare, la revenirea online și la 2 minute; se aduc doar modificările mai noi (cursor pe `updated_at`); la conflict câștigă modificarea cu `client_updated_at` mai nou. Ștergerile sunt "soft", ca să ajungă pe toate dispozitivele. Toate tabelele folosesc aceeași logică (`src/lib/sync.ts`, lista `SPECS`).
 
