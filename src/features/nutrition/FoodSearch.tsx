@@ -167,7 +167,7 @@ export function FoodSearch({ onPick }: Props) {
   if (creating) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/80">Valorile sunt la 100 g, cum apar pe etichetă.</p>
+        <p className="text-[15px] text-fg">Valorile sunt la 100 g, cum apar pe etichetă.</p>
         {field('Nume', 'name', 'text')}
         {field('Marcă (opțional)', 'brand', 'text')}
         <div className="grid grid-cols-2 gap-3">
@@ -197,7 +197,7 @@ export function FoodSearch({ onPick }: Props) {
   return (
     <div className="flex flex-col gap-3">
       <div className="relative">
-        <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-steel/40" aria-hidden="true" />
+        <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-subtle" aria-hidden="true" />
         <input
           className="field pl-10"
           type="search"
@@ -233,26 +233,26 @@ export function FoodSearch({ onPick }: Props) {
 
       {message && <Notice tone="warn">{message}</Notice>}
 
-      <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
+      <ul className="divide-y divide-line border-y border-line bg-fg/5">
         {localMatches.map((f, i) => (
           <li key={`${f.source}-${f.name}-${i}`}>
             <button
               type="button"
               onClick={() => onPick(f)}
-              className="flex min-h-[56px] w-full flex-col justify-center px-3 text-left active:bg-steel/5"
+              className="flex min-h-[56px] w-full flex-col justify-center px-3 text-left active:bg-fg/5"
             >
               <span className="font-semibold">
                 {f.name}
-                {f.brand ? <span className="font-normal text-steel/60">, {f.brand}</span> : null}
+                {f.brand ? <span className="font-normal text-muted">, {f.brand}</span> : null}
               </span>
-              <span className="text-sm text-steel/60">
+              <span className="text-sm text-muted">
                 {formatNum(f.per100.kcal100, 0)} kcal la 100 g, proteine {formatNum(f.per100.protein100)} g
                 {f.source === 'custom' ? ', aliment propriu' : ''}
               </span>
             </button>
           </li>
         ))}
-        {localMatches.length === 0 && <li className="px-3 py-4 text-steel/70">Niciun aliment local găsit.</li>}
+        {localMatches.length === 0 && <li className="px-3 py-4 text-muted">Niciun aliment local găsit.</li>}
       </ul>
 
       {query.trim().length >= 2 && (
@@ -262,15 +262,15 @@ export function FoodSearch({ onPick }: Props) {
       )}
 
       {online && online.length > 0 && (
-        <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
+        <ul className="divide-y divide-line border-y border-line bg-fg/5">
           {online.map((p) => (
             <li key={p.barcode || p.name}>
-              <button type="button" onClick={() => pickOff(p)} className="flex min-h-[56px] w-full flex-col justify-center px-3 text-left active:bg-steel/5">
+              <button type="button" onClick={() => pickOff(p)} className="flex min-h-[56px] w-full flex-col justify-center px-3 text-left active:bg-fg/5">
                 <span className="font-semibold">
                   {p.name}
-                  {p.brand ? <span className="font-normal text-steel/60">, {p.brand}</span> : null}
+                  {p.brand ? <span className="font-normal text-muted">, {p.brand}</span> : null}
                 </span>
-                <span className="text-sm text-steel/60">
+                <span className="text-sm text-muted">
                   {formatNum(p.per100.kcal100, 0)} kcal la 100 g, proteine {formatNum(p.per100.protein100)} g
                 </span>
               </button>
@@ -284,7 +284,7 @@ export function FoodSearch({ onPick }: Props) {
         Aliment nou, propriu
       </button>
 
-      <p className="text-xs text-steel/55">
+      <p className="text-xs text-subtle">
         Lista locală are valori medii apropiate de USDA FoodData Central. Rezultatele online vin din Open Food Facts
         (date deschise, completate de utilizatori): verifică-le cu eticheta.
       </p>

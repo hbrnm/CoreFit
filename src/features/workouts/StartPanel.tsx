@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react';
 import { useApp } from '../../context';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { startSession } from '../../lib/workoutOps';
 import { WeeklyGoals } from '../../components/WeeklyGoals';
 import { Panel } from '../../components/ui';
@@ -29,11 +29,11 @@ export function StartPanel() {
         <button type="button" className={`btn w-full ${D.solid}`} onClick={() => void freestyle()}>
           <Plus size={18} aria-hidden="true" /> Antrenament liber
         </button>
-        <p className="mt-2 text-center text-sm text-steel/60">Îți alegi exercițiile pe parcurs.</p>
+        <p className="mt-2 text-center text-sm text-muted">Îți alegi exercițiile pe parcurs.</p>
       </Panel>
 
       <WeekPlan />
-      <WeeklyGoals color={PLATE.red} />
+      <WeeklyGoals color={tone('workouts')} />
       <PlateCalculator />
     </div>
   );

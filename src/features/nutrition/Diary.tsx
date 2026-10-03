@@ -6,7 +6,7 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db, stamp, type Meal, type MealPlan } from '../../lib/db';
 import { addDays, formatDateLong } from '../../lib/date';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { cx } from '../../lib/cx';
 import { formatNum } from '../../lib/numbers';
 import {
@@ -95,7 +95,7 @@ export function Diary() {
         </button>
         <button type="button" className="min-h-[44px] px-3 text-center" onClick={() => setDate(today)}>
           <span className="block font-display text-xl font-bold capitalize">{isToday ? 'Azi' : formatDateLong(`${date}T12:00:00`)}</span>
-          {!isToday && <span className="block text-sm text-plate-green">Înapoi la azi</span>}
+          {!isToday && <span className="block text-sm text-brand-fg">Înapoi la azi</span>}
         </button>
         <button
           type="button"
@@ -133,7 +133,7 @@ export function Diary() {
                 <button type="button" className="btn-quiet w-full justify-between px-3 text-left" onClick={() => void repeat(item)}>
                   <span className="min-w-0">
                     <span className="block truncate font-semibold">{item.name}</span>
-                    <span className="block text-sm font-normal text-steel/60">
+                    <span className="block text-sm font-normal text-muted">
                       {item.amountText} · {MEALS.find((m) => m.id === item.meal)?.label}
                       {item.yesterday ? ' · ieri' : item.times > 1 ? ` · de ${item.times} ori` : ''}
                     </span>
@@ -167,7 +167,7 @@ export function Diary() {
             );
           })}
         </div>
-        <p className="mt-2 text-sm text-steel/60">{MEAL_PLANS[plan].hint} Alimentele nu se mută singure.</p>
+        <p className="mt-2 text-sm text-muted">{MEAL_PLANS[plan].hint} Alimentele nu se mută singure.</p>
       </Panel>
 
       {MEALS.map((m) => {
@@ -180,7 +180,7 @@ export function Diary() {
             key={m.id}
             title={m.label}
             aside={
-              <span className="num text-lg text-steel/70">
+              <span className="num text-lg text-muted">
                 {formatNum(sum.kcal, 0)}
                 {mealTarget ? ` / ${formatNum(mealTarget, 0)}` : ''} kcal
               </span>
@@ -188,19 +188,19 @@ export function Diary() {
           >
             {mealTarget ? (
               <div className="mb-2">
-                <Bar value={sum.kcal} target={mealTarget} color={sum.kcal > mealTarget ? PLATE.yellow : PLATE.green} />
+                <Bar value={sum.kcal} target={mealTarget} color={sum.kcal > mealTarget ? tone('warning') : tone('nutrition')} />
               </div>
             ) : (
               share === 0 && (
-                <p className="mb-2 text-sm text-steel/60">Nu intră în plan. Poți nota aici sau muta alimentul la o masă din plan.</p>
+                <p className="mb-2 text-sm text-muted">Nu intră în plan. Poți nota aici sau muta alimentul la o masă din plan.</p>
               )
             )}
-            <ul className="divide-y divide-white/10">
+            <ul className="divide-y divide-line">
               {items.map((e) => (
                 <li key={e.id} className="flex items-center gap-2 py-2">
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{e.name}</p>
-                    <p className="text-sm text-steel/60">
+                    <p className="text-sm text-muted">
                       {e.amount_text}, {formatNum(e.kcal, 0)} kcal, P {formatNum(e.protein, 0)} C {formatNum(e.carbs, 0)} G{' '}
                       {formatNum(e.fat, 0)}
                     </p>
@@ -208,7 +208,7 @@ export function Diary() {
                   <SyncMark status={e.sync_status} />
                   <select
                     aria-label={`Mută ${e.name} la altă masă`}
-                    className="h-11 max-w-[6.5rem] shrink-0 rounded-lg border border-white/10 bg-white/5 px-1 text-sm text-steel"
+                    className="h-11 max-w-[6.5rem] shrink-0 rounded-lg border border-line bg-fg/5 px-1 text-sm text-fg"
                     value={e.meal}
                     onChange={(ev) => void moveEntry(e.id, ev.target.value as Meal)}
                   >
@@ -221,7 +221,7 @@ export function Diary() {
                   <button
                     type="button"
                     aria-label={`Șterge ${e.name}`}
-                    className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center text-steel/50 active:text-plate-red"
+                    className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center text-subtle active:text-danger"
                     onClick={() => void deleteEntry(e.id)}
                   >
                     <Trash2 size={18} />
@@ -237,9 +237,9 @@ export function Diary() {
         );
       })}
 
-      <Panel title="Apă" aside={<span className="num text-lg text-steel/70">{formatNum(water, 0)} / {waterGoal} ml</span>}>
-        <Bar value={water} target={waterGoal} color={PLATE.blue} />
-        <p className="mt-2 text-sm text-steel/60">Țintă de apă de băut, fără lichidul din mâncare.</p>
+      <Panel title="Apă" aside={<span className="num text-lg text-muted">{formatNum(water, 0)} / {waterGoal} ml</span>}>
+        <Bar value={water} target={waterGoal} color={tone('brand')} />
+        <p className="mt-2 text-sm text-muted">Țintă de apă de băut, fără lichidul din mâncare.</p>
         <div className="mt-3 grid grid-cols-2 gap-3">
           <button
             type="button"

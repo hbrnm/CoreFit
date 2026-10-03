@@ -50,11 +50,11 @@ export function PlateCalculator() {
               </>
             )}
             {result.leftover > 0 && (
-              <span className="text-steel/70"> Rămân {formatNum(result.leftover, 2)} kg care nu se pot încărca.</span>
+              <span className="text-muted"> Rămân {formatNum(result.leftover, 2)} kg care nu se pot încărca.</span>
             )}
           </p>
         ) : (
-          <p className="text-[15px] text-steel/70">Greutatea totală trebuie să fie cel puțin cât bara.</p>
+          <p className="text-[15px] text-muted">Greutatea totală trebuie să fie cel puțin cât bara.</p>
         )}
       </div>
     </Panel>

@@ -39,7 +39,7 @@ export function WeekPlan() {
 
   return (
     <Panel title="Planul săptămânii" edge={D.edge}>
-      <p className="mb-3 text-sm text-steel/60">Rutina fixă se repetă. O mutare ține doar săptămâna aceasta.</p>
+      <p className="mb-3 text-sm text-muted">Rutina fixă se repetă. O mutare ține doar săptămâna aceasta.</p>
       <ul className="flex flex-col gap-2">
         {days.map((day) => {
           const fixed = nameOf(day.permanentId);
@@ -49,7 +49,7 @@ export function WeekPlan() {
               <button type="button" className="btn-quiet w-full justify-between px-3 text-left" onClick={() => setOpen(day)}>
                 <span>
                   <span className="block font-semibold capitalize">{formatWeekdayShort(day.date)}</span>
-                  <span className="block text-sm font-normal text-steel/60">
+                  <span className="block text-sm font-normal text-muted">
                     {moved ? `${moved}, doar săptămâna aceasta` : fixed || 'Nicio rutină'}
                     {day.movedTo ? `. Mutată pe ${formatWeekdayShort(day.movedTo)}` : ''}
                   </span>
@@ -63,7 +63,7 @@ export function WeekPlan() {
       {open && (
         <Sheet title={formatWeekdayShort(open.date)} onClose={() => setOpen(null)}>
           <div className="flex flex-col gap-3">
-            <p className="text-[15px] text-steel/70">Rutina care rămâne în fiecare săptămână, în această zi.</p>
+            <p className="text-[15px] text-muted">Rutina care rămâne în fiecare săptămână, în această zi.</p>
             <button type="button" className="btn-quiet" onClick={() => void choosePermanent(open, null)}>
               Nicio rutină fixă
             </button>
@@ -72,9 +72,9 @@ export function WeekPlan() {
                 {routine.name}
               </button>
             ))}
-            {(routines ?? []).length === 0 && <p className="text-steel/70">Creează întâi o rutină.</p>}
+            {(routines ?? []).length === 0 && <p className="text-muted">Creează întâi o rutină.</p>}
             {(open.permanentId || open.movedId) && (
-              <div className="border-t border-steel/10 pt-3">
+              <div className="border-t border-line pt-3">
                 <p className="mb-2 text-[15px]">Mută doar săptămâna aceasta</p>
                 {days
                   .filter((d) => d.date !== open.date)

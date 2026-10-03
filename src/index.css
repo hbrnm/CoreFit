@@ -2,13 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Tema: token-uri semantice, cu o valoare pentru modul deschis și una pentru cel închis.
+ * Modul urmează setarea telefonului; din Profil se poate fixa pe deschis sau închis
+ * (atributul data-theme de pe <html>, vezi src/lib/theme.ts).
+ * Valorile sunt canale RGB, ca Tailwind să poată adăuga opacitate (bg-fg/5).
+ * Contrastul fiecărei perechi text/fundal e verificat în src/lib/theme.test.ts: schimbă o culoare
+ * aici și testul îți spune dacă mai trece WCAG AA.
+ */
 @layer base {
+  :root {
+    color-scheme: light;
+    --canvas: 242 244 247; /* #F2F4F7 */
+    --surface: 255 255 255; /* #FFFFFF */
+    --raised: 238 241 245; /* #EEF1F5 */
+    --fg: 15 23 42; /* #0F172A */
+    --muted: 71 85 105; /* #475569 */
+    --subtle: 86 100 121; /* #566479 */
+    --line: 226 232 240; /* #E2E8F0 */
+    --line-strong: 131 145 165; /* #8391A5 */
+    --brand: 37 99 235; /* #2563EB */
+    --brand-fg: 29 78 216; /* #1D4ED8 */
+    --on-brand: 255 255 255; /* #FFFFFF */
+    --danger: 185 28 28; /* #B91C1C */
+    --danger-solid: 220 38 38; /* #DC2626 */
+    --success: 22 101 52; /* #166534 */
+    --success-solid: 21 128 61; /* #15803D */
+    --warning: 146 64 14; /* #92400E */
+    --warning-solid: 180 83 9; /* #B45309 */
+    --workouts: 194 65 12; /* #C2410C */
+    --health: 14 116 144; /* #0E7490 */
+    --nutrition: 22 101 52; /* #166534 */
+    --shadow: 15 23 42; /* #0F172A */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      color-scheme: dark;
+      --canvas: 11 18 32; /* #0B1220 */
+      --surface: 21 30 46; /* #151E2E */
+      --raised: 31 42 61; /* #1F2A3D */
+      --fg: 241 245 249; /* #F1F5F9 */
+      --muted: 180 192 208; /* #B4C0D0 */
+      --subtle: 139 152 172; /* #8B98AC */
+      --line: 38 50 70; /* #263246 */
+      --line-strong: 102 117 140; /* #66758C */
+      --brand: 37 99 235; /* #2563EB */
+      --brand-fg: 96 165 250; /* #60A5FA */
+      --on-brand: 255 255 255; /* #FFFFFF */
+      --danger: 248 113 113; /* #F87171 */
+      --danger-solid: 220 38 38; /* #DC2626 */
+      --success: 74 222 128; /* #4ADE80 */
+      --success-solid: 21 128 61; /* #15803D */
+      --warning: 251 191 36; /* #FBBF24 */
+      --warning-solid: 180 83 9; /* #B45309 */
+      --workouts: 251 146 60; /* #FB923C */
+      --health: 34 211 238; /* #22D3EE */
+      --nutrition: 74 222 128; /* #4ADE80 */
+      --shadow: 0 0 0; /* #000000 */
+    }
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --canvas: 11 18 32; /* #0B1220 */
+    --surface: 21 30 46; /* #151E2E */
+    --raised: 31 42 61; /* #1F2A3D */
+    --fg: 241 245 249; /* #F1F5F9 */
+    --muted: 180 192 208; /* #B4C0D0 */
+    --subtle: 139 152 172; /* #8B98AC */
+    --line: 38 50 70; /* #263246 */
+    --line-strong: 102 117 140; /* #66758C */
+    --brand: 37 99 235; /* #2563EB */
+    --brand-fg: 96 165 250; /* #60A5FA */
+    --on-brand: 255 255 255; /* #FFFFFF */
+    --danger: 248 113 113; /* #F87171 */
+    --danger-solid: 220 38 38; /* #DC2626 */
+    --success: 74 222 128; /* #4ADE80 */
+    --success-solid: 21 128 61; /* #15803D */
+    --warning: 251 191 36; /* #FBBF24 */
+    --warning-solid: 180 83 9; /* #B45309 */
+    --workouts: 251 146 60; /* #FB923C */
+    --health: 34 211 238; /* #22D3EE */
+    --nutrition: 74 222 128; /* #4ADE80 */
+    --shadow: 0 0 0; /* #000000 */
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-chalk font-sans text-base text-steel antialiased;
+    @apply bg-canvas font-sans text-base text-fg antialiased;
     margin: 0;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
@@ -20,7 +105,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid #10B981;
+    outline: 2px solid rgb(var(--brand-fg));
     outline-offset: 2px;
   }
 
@@ -35,41 +120,45 @@
 }
 
 @layer components {
-  /* Glassmorphism Panel cu colturi rotunjite premium */
   .panel {
-    @apply bg-panel/70 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg;
+    @apply rounded-2xl border border-line bg-surface shadow-card;
   }
 
   .label {
-    @apply block text-sm font-medium text-steel/70 mb-1.5 tracking-wide;
+    @apply mb-1.5 block text-sm font-medium text-muted;
   }
 
   .field {
-    @apply w-full min-h-[48px] px-3 bg-white/5 border border-white/10 rounded-xl text-base text-steel placeholder:text-steel/40 focus:border-neon-mint focus:ring-1 focus:ring-neon-mint transition-all;
+    @apply min-h-[48px] w-full rounded-xl border border-line bg-raised px-3 text-base text-fg outline-none transition-colors placeholder:text-subtle focus:border-brand focus:ring-2 focus:ring-brand/30;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 min-h-[48px] px-4 rounded-xl font-semibold text-[15px] transition-all disabled:opacity-40 disabled:pointer-events-none active:scale-[0.98];
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl px-4 text-[15px] font-semibold transition-colors active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40;
+  }
+
+  /* acțiunea principală a ecranului */
+  .btn-primary {
+    @apply btn bg-brand text-on-brand shadow-card active:bg-brand/90;
   }
 
   .btn-quiet {
-    @apply btn bg-white/5 text-steel hover:bg-white/10 active:bg-white/15;
+    @apply btn bg-raised text-fg active:bg-fg/10;
   }
 
   .btn-outline {
-    @apply btn border border-white/10 text-steel hover:bg-white/5 active:bg-white/10;
+    @apply btn border border-line-strong/60 text-fg active:bg-fg/5;
   }
 
-  /* Primary AI Action Button (fostul btn-steel) */
-  .btn-steel {
-    @apply btn bg-neon-mint text-chalk hover:brightness-110 active:brightness-90 shadow-[0_0_15px_rgba(16,185,129,0.3)];
+  /* ștergere, oprire: acțiuni de evitat din greșeală */
+  .btn-danger {
+    @apply btn border border-danger/40 text-danger active:bg-danger/10;
   }
 
   .stepper-btn {
-    @apply inline-flex items-center justify-center w-12 min-h-[48px] shrink-0 bg-white/5 text-steel hover:bg-white/10 active:bg-white/15 rounded-xl transition-all;
+    @apply inline-flex min-h-[48px] w-12 shrink-0 items-center justify-center rounded-xl bg-raised text-fg transition-colors active:bg-fg/10;
   }
 
-  /* Cifre mari (greutăți, cronometre): condensate, cu lățime fixă. */
+  /* Cifre mari (greutăți, cronometre): lățime fixă, ca să nu sară la fiecare secundă. */
   .num {
     @apply font-display font-bold tabular-nums tracking-tight;
   }

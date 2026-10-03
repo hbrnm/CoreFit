@@ -5,7 +5,7 @@ import { useCatalog } from '../../hooks/useCatalog';
 import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { muscleBalance, type MuscleWindow } from '../../lib/muscles';
 import { BodyMap, shade } from '../../components/BodyMap';
 import { formatNum } from '../../lib/numbers';
@@ -47,12 +47,12 @@ export function MuscleBalance() {
   return (
     <Panel title="Echilibru muscular" edge={D.edge}>
       <div className="flex flex-col gap-4">
-        <p className="text-[15px] text-steel/70">
+        <p className="text-[15px] text-muted">
           Seturi de lucru. Grupa principală contează 1, o grupă ajutătoare 0,5. Încălzirea nu intră.
         </p>
         <Segmented<MuscleWindow> label="Perioadă" options={WINDOWS} value={window} onChange={setWindow} activeClass={D.solid} />
         <BodyMap
-          fill={(m) => shade(PLATE.red, (setsOf.get(m) ?? 0) / max)}
+          fill={(m) => shade('workouts', (setsOf.get(m) ?? 0) / max)}
           describe={(m) => `${formatNum(setsOf.get(m) ?? 0, 1)} seturi`}
         />
         <ul className="flex flex-col gap-2">
@@ -63,12 +63,12 @@ export function MuscleBalance() {
                   <span>{MUSCLE_LABELS[row.muscle]}</span>
                   <span className="tabular-nums">{formatNum(row.sets, 1)}</span>
                 </span>
-                <span className="block h-2.5 bg-steel/10">
-                  <span className="block h-full" style={{ width: `${(row.sets / max) * 100}%`, backgroundColor: PLATE.red }} />
+                <span className="block h-2.5 bg-fg/10">
+                  <span className="block h-full" style={{ width: `${(row.sets / max) * 100}%`, backgroundColor: tone('workouts') }} />
                 </span>
               </button>
               {open === row.muscle && (
-                <ul className="mt-1 text-sm text-steel/70">
+                <ul className="mt-1 text-sm text-muted">
                   {row.exercises.length === 0 && <li>Niciun exercițiu în perioada asta.</li>}
                   {row.exercises.map((ex) => (
                     <li key={ex.id}>

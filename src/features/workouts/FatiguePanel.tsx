@@ -5,17 +5,17 @@ import { useCatalog } from '../../hooks/useCatalog';
 import { useLive } from '../../hooks/useLive';
 import { useNow } from '../../hooks/useNow';
 import { db } from '../../lib/db';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone, type Tone } from '../../lib/domains';
 import { FATIGUE_HALF_LIFE_H, FATIGUE_LABELS, muscleFatigue, type FatigueLevel } from '../../lib/fatigue';
 import { BodyMap, shade } from '../../components/BodyMap';
 import { Panel } from '../../components/ui';
 
 const D = DOMAIN.workouts;
 
-const LEVEL_COLOR: Record<FatigueLevel, string> = {
-  fresh: PLATE.green,
-  partial: PLATE.yellow,
-  tired: PLATE.red,
+const LEVEL_TONE: Record<FatigueLevel, Tone> = {
+  fresh: 'success',
+  partial: 'warning',
+  tired: 'danger',
 };
 
 function inHours(h: number): string {
@@ -51,17 +51,17 @@ export function FatiguePanel() {
         <BodyMap
           fill={(m: Muscle) => {
             const r = byMuscle.get(m);
-            return r && r.level !== 'fresh' ? shade(LEVEL_COLOR[r.level], r.value) : shade(PLATE.green, 0);
+            return r && r.level !== 'fresh' ? shade(LEVEL_TONE[r.level], r.value) : shade('success', 0);
           }}
           describe={(m: Muscle) => {
             const r = byMuscle.get(m);
             return r ? `${FATIGUE_LABELS[r.level]}, ${Math.round(r.value * 100)}%` : '';
           }}
         />
-        <ul className="flex flex-wrap justify-center gap-3 text-sm text-steel/70" aria-hidden="true">
+        <ul className="flex flex-wrap justify-center gap-3 text-sm text-muted" aria-hidden="true">
           {(['fresh', 'partial', 'tired'] as const).map((level) => (
             <li key={level} className="flex items-center gap-1">
-              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: level === 'fresh' ? shade(PLATE.green, 0) : LEVEL_COLOR[level] }} />
+              <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: level === 'fresh' ? shade('success', 0) : tone(LEVEL_TONE[level]) }} />
               {FATIGUE_LABELS[level]}
             </li>
           ))}
@@ -73,17 +73,17 @@ export function FatiguePanel() {
             {busy.map((r) => (
               <li key={r.muscle} className="flex justify-between gap-2">
                 <span>
-                  <span className="font-semibold" style={{ color: LEVEL_COLOR[r.level] }}>
+                  <span className="font-semibold" style={{ color: tone(LEVEL_TONE[r.level]) }}>
                     {r.label}
                   </span>{' '}
-                  <span className="text-steel/60">{FATIGUE_LABELS[r.level].toLowerCase()}</span>
+                  <span className="text-muted">{FATIGUE_LABELS[r.level].toLowerCase()}</span>
                 </span>
-                <span className="text-steel/70">odihnit {inHours(r.hoursToFresh)}</span>
+                <span className="text-muted">odihnit {inHours(r.hoursToFresh)}</span>
               </li>
             ))}
           </ul>
         )}
-        <p className="text-sm text-steel/60">
+        <p className="text-sm text-muted">
           Estimare din seturile de lucru: grupa principală contează întreg, cele ajutătoare pe jumătate, iar seturile duse
           aproape de eșec (RIR/RPE notat) contează mai mult. Oboseala scade la jumătate la fiecare {FATIGUE_HALF_LIFE_H} de ore.
           Nu e o măsurătoare: cum te simți contează mai mult.

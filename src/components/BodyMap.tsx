@@ -1,4 +1,5 @@
 import { MUSCLE_LABELS, type Muscle } from '../data/exercises';
+import { tone, type Tone } from '../lib/domains';
 
 /*
  * Corpul văzut din față și din spate, cu cele 10 grupe CoreFit colorate.
@@ -52,14 +53,14 @@ function Figure({ title, shapes, fill, describe }: FigureProps) {
   return (
     <figure className="flex flex-1 flex-col items-center gap-1">
       <svg viewBox="0 0 100 220" className="h-56 w-auto" role="img" aria-label={title}>
-        <path d={SILHOUETTE} fill="rgba(248,250,252,0.06)" stroke="rgba(248,250,252,0.25)" strokeWidth="0.8" />
+        <path d={SILHOUETTE} className="fill-fg/5 stroke-fg/25" strokeWidth="0.8" />
         {shapes.map((s, i) => (
-          <path key={i} d={s.d} fill={fill(s.muscle)} stroke="rgba(15,23,42,0.6)" strokeWidth="0.6">
+          <path key={i} d={s.d} style={{ fill: fill(s.muscle) }} className="stroke-surface" strokeWidth="0.6">
             <title>{`${MUSCLE_LABELS[s.muscle]}: ${describe(s.muscle)}`}</title>
           </path>
         ))}
       </svg>
-      <figcaption className="text-sm text-steel/60">{title}</figcaption>
+      <figcaption className="text-sm text-muted">{title}</figcaption>
     </figure>
   );
 }
@@ -81,9 +82,8 @@ export function BodyMap({ fill, describe }: Props) {
 }
 
 /** Culoare cu intensitate proporțională cu `t` (0..1), peste griul de bază. */
-export function shade(hex: string, t: number): string {
+export function shade(color: Tone, t: number): string {
   const v = Math.max(0, Math.min(1, t));
-  if (v === 0) return 'rgba(248,250,252,0.10)';
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${(0.25 + 0.75 * v).toFixed(2)})`;
+  if (v === 0) return tone('fg', 0.1);
+  return tone(color, Number((0.25 + 0.75 * v).toFixed(2)));
 }

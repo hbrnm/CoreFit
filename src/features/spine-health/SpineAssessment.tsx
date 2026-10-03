@@ -95,7 +95,7 @@ export function SpineAssessment() {
   return (
     <Panel title="Evaluare rapidă a coloanei" edge={D.edge}>
       <div className="flex flex-col gap-3">
-        <p className="text-[15px] text-steel/80">Bifează ce îți provoacă disconfort acum.</p>
+        <p className="text-[15px] text-fg">Bifează ce îți provoacă disconfort acum.</p>
 
         <div>
           <CheckRow checked={flags.flexion} onChange={toggle('flexion')} accent={D.accent}>
@@ -114,7 +114,7 @@ export function SpineAssessment() {
 
         <Notice tone="info" title="Recomandare orientativă">
           <p className="whitespace-pre-line">{recommendation}</p>
-          <p className="mt-2 text-sm text-steel/70">
+          <p className="mt-2 text-sm text-muted">
             Nu înlocuiește evaluarea unui medic sau a unui kinetoterapeut.
           </p>
         </Notice>
@@ -127,14 +127,14 @@ export function SpineAssessment() {
         </button>
 
         {history && history.length > 0 && (
-          <div className="mt-2 border-t border-steel/10 pt-3">
+          <div className="mt-2 border-t border-line pt-3">
             <h3 className="mb-1 font-display text-lg font-bold">Ultimele evaluări</h3>
-            <ul className="divide-y divide-steel/10">
+            <ul className="divide-y divide-line">
               {history.map((a) => (
                 <li key={a.id} className="flex items-center justify-between gap-3 py-2">
                   <div>
                     <p className="text-[15px]">{summarize(a)}</p>
-                    <p className="text-sm text-steel/55">{formatDateTime(a.assessed_at)}</p>
+                    <p className="text-sm text-subtle">{formatDateTime(a.assessed_at)}</p>
                   </div>
                   <SyncMark status={a.sync_status} />
                 </li>

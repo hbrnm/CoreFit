@@ -31,7 +31,7 @@ export function AmountStep({ food, confirmLabel, onConfirm, onBack }: Props) {
     <div className="flex flex-col gap-4">
       <div>
         <p className="font-display text-2xl font-bold leading-tight">{food.name}</p>
-        {food.brand && <p className="text-steel/70">{food.brand}</p>}
+        {food.brand && <p className="text-muted">{food.brand}</p>}
       </div>
 
       <Stepper label="Cantitate (grame)" value={grams} onChange={setGrams} step={10} min={0} max={5000} />
@@ -53,23 +53,23 @@ export function AmountStep({ food, confirmLabel, onConfirm, onBack }: Props) {
 
       <dl className="grid grid-cols-4 gap-2 text-center">
         <div>
-          <dt className="text-sm text-steel/60">kcal</dt>
+          <dt className="text-sm text-muted">kcal</dt>
           <dd className="num text-2xl">{formatNum(t.kcal, 0)}</dd>
         </div>
         <div>
-          <dt className="text-sm text-steel/60">Proteine</dt>
+          <dt className="text-sm text-muted">Proteine</dt>
           <dd className="num text-2xl">{formatNum(t.protein)}</dd>
         </div>
         <div>
-          <dt className="text-sm text-steel/60">Carbo</dt>
+          <dt className="text-sm text-muted">Carbo</dt>
           <dd className="num text-2xl">{formatNum(t.carbs)}</dd>
         </div>
         <div>
-          <dt className="text-sm text-steel/60">Grăsimi</dt>
+          <dt className="text-sm text-muted">Grăsimi</dt>
           <dd className="num text-2xl">{formatNum(t.fat)}</dd>
         </div>
       </dl>
-      {t.sodium > 0 && <p className="text-sm text-steel/70">Sodiu {formatNum(t.sodium, 0)} mg</p>}
+      {t.sodium > 0 && <p className="text-sm text-muted">Sodiu {formatNum(t.sodium, 0)} mg</p>}
 
       {error && <Notice tone="error">{error}</Notice>}
 

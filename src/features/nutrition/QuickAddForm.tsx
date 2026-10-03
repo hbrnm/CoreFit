@@ -46,14 +46,14 @@ export function QuickAddForm({ onAdd }: Props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-      <p className="text-[15px] text-steel/80">Pentru mâncarea la care știi doar aproximativ valorile.</p>
+      <p className="text-[15px] text-fg">Pentru mâncarea la care știi doar aproximativ valorile.</p>
       
       <div>
         <label className="label" htmlFor="q-name">
           Nume (opțional)
         </label>
         <input id="q-name" className="field" {...register('name')} />
-        {errors.name && <p className="text-sm text-plate-red mt-1">{errors.name.message}</p>}
+        {errors.name && <p className="text-sm text-danger mt-1">{errors.name.message}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -76,7 +76,7 @@ export function QuickAddForm({ onAdd }: Props) {
               inputMode="decimal"
               {...register(key)}
             />
-            {errors[key] && <p className="text-sm text-plate-red mt-1">{errors[key]?.message as string}</p>}
+            {errors[key] && <p className="text-sm text-danger mt-1">{errors[key]?.message as string}</p>}
           </div>
         ))}
       </div>

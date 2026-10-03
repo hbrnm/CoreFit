@@ -29,7 +29,7 @@ export function NutritionTab() {
     <div className="flex flex-col gap-4">
       <div>
         <h1 className="font-display text-3xl font-bold leading-tight">Nutriție</h1>
-        {profile && <p className="text-steel/70">Faza: {PHASE_LABELS[profile.nutrition_phase]}</p>}
+        {profile && <p className="text-muted">Faza: {PHASE_LABELS[profile.nutrition_phase]}</p>}
       </div>
       <Segmented<Sub> label="Secțiuni nutriție" options={SUBS} value={sub} onChange={setSub} activeClass={D.solid} columns={5} />
       {sub === 'diary' && <Diary />}

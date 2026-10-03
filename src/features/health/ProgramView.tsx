@@ -16,15 +16,15 @@ interface Props {
 export function ProgramView({ program, onBack, onStart }: Props) {
   return (
     <div className="flex flex-col gap-4">
-      <button type="button" className="-ml-1 flex min-h-[44px] items-center gap-1 self-start font-semibold text-plate-blue" onClick={onBack}>
+      <button type="button" className="-ml-1 flex min-h-[44px] items-center gap-1 self-start font-semibold text-health" onClick={onBack}>
         <ChevronLeft size={20} />
         Programe
       </button>
 
       <div>
         <h1 className="font-display text-3xl font-bold leading-tight">{program.title}</h1>
-        <p className="mt-1 text-[15px] text-steel/80">{program.forWhom}</p>
-        <p className="mt-2 inline-block rounded bg-plate-blue/10 px-2 py-0.5 text-sm font-semibold text-plate-blue">
+        <p className="mt-1 text-[15px] text-fg">{program.forWhom}</p>
+        <p className="mt-2 inline-block rounded bg-health/10 px-2 py-0.5 text-sm font-semibold text-health">
           {EVIDENCE_LABELS[program.evidence]}
         </p>
       </div>
@@ -64,17 +64,17 @@ export function ProgramView({ program, onBack, onStart }: Props) {
             </p>
             <ol className="mt-4 flex flex-col gap-4">
               {program.exercises.map((ex, i) => (
-                <li key={ex.id} className="border-t border-steel/10 pt-3">
+                <li key={ex.id} className="border-t border-line pt-3">
                   <p className="font-semibold">
                     {i + 1}. {ex.name}
                   </p>
-                  <p className="text-sm text-steel/70">
+                  <p className="text-sm text-muted">
                     {ex.sets} {ex.sets === 1 ? 'serie' : 'serii'} x{' '}
                     {ex.kind === 'hold' ? `${ex.holdS} secunde` : `${ex.reps} repetări`}
                     {ex.perSide ? ', pe fiecare parte' : ''}
                   </p>
                   <p className="mt-1 text-[15px] leading-snug">{ex.how}</p>
-                  {ex.progress && <p className="mt-1 text-sm text-steel/60">{ex.progress}</p>}
+                  {ex.progress && <p className="mt-1 text-sm text-muted">{ex.progress}</p>}
                 </li>
               ))}
             </ol>
@@ -99,9 +99,9 @@ export function ProgramView({ program, onBack, onStart }: Props) {
           {program.sources.map((s) => (
             <li key={s.label}>
               <p className="font-semibold">{s.label}</p>
-              <p className="text-steel/70">{s.detail}</p>
+              <p className="text-muted">{s.detail}</p>
               {s.url && (
-                <a className="text-plate-blue underline" href={s.url} target="_blank" rel="noreferrer">
+                <a className="text-health underline" href={s.url} target="_blank" rel="noreferrer">
                   Deschide sursa
                 </a>
               )}
@@ -110,7 +110,7 @@ export function ProgramView({ program, onBack, onStart }: Props) {
         </ul>
       </Panel>
 
-      <p className="text-sm text-steel/60">{GENERAL_DISCLAIMER}</p>
+      <p className="text-sm text-muted">{GENERAL_DISCLAIMER}</p>
     </div>
   );
 }

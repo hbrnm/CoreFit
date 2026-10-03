@@ -70,7 +70,7 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
   return (
     <AppContext.Provider value={ctx}>
       <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
-        <header className="sticky top-0 z-10 border-b border-white/10 bg-panel pt-[env(safe-area-inset-top)] text-white">
+        <header className="sticky top-0 z-10 border-b border-line bg-surface/85 pt-[env(safe-area-inset-top)] text-fg backdrop-blur-xl">
           <div className="flex items-center justify-between px-4 py-2.5">
             <span className="font-display text-2xl font-bold leading-none">CoreFit</span>
             <SyncStatus />
@@ -99,7 +99,7 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
 
         <nav
           aria-label="Secțiuni"
-          className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-md border-t border-white/10 bg-panel/70 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
+          className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-md border-t border-line bg-surface/85 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
         >
           <ul className="grid grid-cols-5">
             {TABS.map(({ id, icon: Icon }) => {
@@ -112,7 +112,7 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
                     aria-current={active ? 'page' : undefined}
                     className={cx(
                       'relative flex min-h-[60px] w-full flex-col items-center justify-center gap-1 text-[13px] font-semibold',
-                      active ? DOMAIN[id].text : 'text-steel/55',
+                      active ? DOMAIN[id].text : 'text-subtle',
                     )}
                   >
                     {active && <span className={cx('absolute inset-x-4 top-0 h-1', DOMAIN[id].bar)} aria-hidden="true" />}
@@ -133,7 +133,7 @@ function SyncStatus() {
   const { cloud, sync } = useApp();
 
   if (!cloud) {
-    return <span className="text-sm text-white/70">Datele rămân pe acest dispozitiv</span>;
+    return <span className="text-sm text-muted">Datele rămân pe acest dispozitiv</span>;
   }
 
   let text: string;
@@ -149,14 +149,14 @@ function SyncStatus() {
 
   return (
     <div className="flex items-center gap-1 text-sm">
-      {!sync.isOnline && <WifiOff size={16} className="text-plate-yellow" aria-hidden="true" />}
-      <span className={cx(sync.lastError && sync.isOnline ? 'text-plate-yellow' : 'text-white/80')}>{text}</span>
+      {!sync.isOnline && <WifiOff size={16} className="text-warning" aria-hidden="true" />}
+      <span className={cx(sync.lastError && sync.isOnline ? 'text-warning' : 'text-muted')}>{text}</span>
       <button
         type="button"
         onClick={() => void sync.syncNow()}
         disabled={sync.isSyncing || !sync.isOnline}
         aria-label="Sincronizează acum"
-        className="-mr-2 flex h-11 w-11 items-center justify-center text-white/80 disabled:opacity-40"
+        className="-mr-2 flex h-11 w-11 items-center justify-center text-muted disabled:opacity-40"
       >
         <RefreshCw size={16} className={sync.isSyncing ? 'animate-spin' : ''} />
       </button>

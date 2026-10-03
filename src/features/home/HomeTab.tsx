@@ -4,7 +4,7 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
 import { addDays, formatDayMonth } from '../../lib/date';
-import { DOMAIN, PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { computeTargets, sumEntries, waterGoalMl, weightTrend } from '../../lib/nutrition';
 import { entriesForDate, upsertDay } from '../../lib/nutritionOps';
 import { formatNum } from '../../lib/numbers';
@@ -51,9 +51,9 @@ function TodayNutrition() {
             </span>
           </span>
           {targets ? (
-            <Bar value={data.eaten} target={targets.kcal} color={PLATE.yellow} />
+            <Bar value={data.eaten} target={targets.kcal} color={tone('nutrition')} />
           ) : (
-            <span className="text-sm text-steel/60">Pentru o țintă, completează profilul și notează greutatea.</span>
+            <span className="text-sm text-muted">Pentru o țintă, completează profilul și notează greutatea.</span>
           )}
         </button>
         <div className="flex flex-col gap-1">
@@ -65,7 +65,7 @@ function TodayNutrition() {
               {formatNum(data.water, 0)} din {formatNum(waterGoal, 0)} ml
             </span>
           </span>
-          <Bar value={data.water} target={waterGoal} color={PLATE.blue} />
+          <Bar value={data.water} target={waterGoal} color={tone('brand')} />
           <button
             type="button"
             className="btn-quiet mt-1 self-start px-3"
@@ -91,16 +91,16 @@ function WeightTrend() {
   return (
     <Panel title="Greutate, 30 de zile">
       {points.length < 2 ? (
-        <p className="text-[15px] text-steel/70">Notează greutatea în Nutriție, Jurnal, în cel puțin două zile ca să vezi evoluția.</p>
+        <p className="text-[15px] text-muted">Notează greutatea în Nutriție, Jurnal, în cel puțin două zile ca să vezi evoluția.</p>
       ) : (
         <>
           <LineChart
             points={points.map((p) => ({ label: formatDayMonth(p.date), y: Math.round(p.trend * 10) / 10 }))}
             secondary={points.map((p) => ({ label: formatDayMonth(p.date), y: p.kg }))}
-            color={PLATE.green}
+            color={tone('brand')}
             unit="kg"
           />
-          <p className="mt-2 text-sm text-steel/60">Linia groasă e trendul; cea subțire, ce ai notat zilnic.</p>
+          <p className="mt-2 text-sm text-muted">Linia groasă e trendul; cea subțire, ce ai notat zilnic.</p>
         </>
       )}
     </Panel>
@@ -116,7 +116,7 @@ export function HomeTab() {
       </h1>
       <TodayCard onStarted={() => goTo('workouts')} />
       <TodayNutrition />
-      <WeeklyGoals color={PLATE.green} />
+      <WeeklyGoals color={tone('brand')} />
       <WeightTrend />
     </div>
   );

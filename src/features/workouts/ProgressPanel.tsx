@@ -6,7 +6,7 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
 import { addDays, formatDayMonth, localDateStr } from '../../lib/date';
-import { PLATE } from '../../lib/domains';
+import { DOMAIN, tone } from '../../lib/domains';
 import { formatNum } from '../../lib/numbers';
 import { bestEstimated1RM, findExercise, setScore, setVolume } from '../../lib/workoutStats';
 import { LineChart } from '../../components/charts';
@@ -92,7 +92,7 @@ export function ProgressPanel() {
         <FatiguePanel />
         <MuscleBalance />
         <Panel>
-          <p className="text-steel/70">Progresul pe exercițiu apare după primele serii notate.</p>
+          <p className="text-muted">Progresul pe exercițiu apare după primele serii notate.</p>
         </Panel>
         <OneRmCalculator />
         <ActivityHeatmap />
@@ -122,7 +122,7 @@ export function ProgressPanel() {
           </div>
 
           <div>
-            <p className="mb-1 text-sm text-steel/70">
+            <p className="mb-1 text-sm text-muted">
               {exercise?.kind === 'reps'
                 ? '1RM estimat, cea mai bună serie de 1-12 repetări din fiecare zi'
                 : 'Cea mai bună serie din fiecare zi'}
@@ -136,17 +136,17 @@ export function ProgressPanel() {
               ]}
               value={span}
               onChange={setSpan}
-              activeClass="bg-plate-red text-white"
+              activeClass={DOMAIN.workouts.solid}
             />
             <div className="mt-3">
-              <LineChart points={perDay} color={PLATE.red} unit={unit} />
+              <LineChart points={perDay} color={tone('workouts')} unit={unit} />
             </div>
           </div>
 
           {records?.oneRm && (
             <p className="text-[15px]">
               1RM estimat: <span className="num text-2xl">{formatNum(records.oneRm.value, 1)} kg</span>{' '}
-              <span className="text-steel/60">
+              <span className="text-muted">
                 din seria de {formatNum(records.oneRm.weightKg, 2)} kg x {records.oneRm.reps}
               </span>
             </p>
@@ -155,7 +155,7 @@ export function ProgressPanel() {
           {records && (
             <dl className="grid grid-cols-3 gap-3 text-[15px]">
               <div>
-                <dt className="text-sm text-steel/60">Cea mai bună serie</dt>
+                <dt className="text-sm text-muted">Cea mai bună serie</dt>
                 <dd className="num text-xl">
                   {records.bestSet
                     ? exercise?.kind === 'duration'
@@ -165,11 +165,11 @@ export function ProgressPanel() {
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-steel/60">Cea mai mare greutate</dt>
+                <dt className="text-sm text-muted">Cea mai mare greutate</dt>
                 <dd className="num text-xl">{records.heaviest > 0 ? `${formatNum(records.heaviest, 2)} kg` : '-'}</dd>
               </div>
               <div>
-                <dt className="text-sm text-steel/60">Volum total</dt>
+                <dt className="text-sm text-muted">Volum total</dt>
                 <dd className="num text-xl">{formatNum(records.volume, 0)} kg</dd>
               </div>
             </dl>

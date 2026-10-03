@@ -82,11 +82,11 @@ export function WeekPlanPanel() {
   return (
     <div className="flex flex-col gap-4">
       <Panel title="Plan pe 7 zile" edge={D.edge}>
-        <p className="text-[15px] text-steel/80">
+        <p className="text-[15px] text-fg">
           O porție este rețeta împărțită la câte porții iese. 1,5 porții înseamnă o porție și jumătate din oală. Gramele
           includ apa de gătit. La cuptor se pierde apă, deci farfuria cântărește mai puțin. Nu e un plan medical.
         </p>
-        {!loaded && <p className="mt-3 text-steel/70">Se încarcă.</p>}
+        {!loaded && <p className="mt-3 text-muted">Se încarcă.</p>}
         {loaded && !targets && (
           <div className="mt-3">
             <Notice
@@ -113,7 +113,7 @@ export function WeekPlanPanel() {
         <Panel
           title={day.date === today ? 'Azi' : formatDayMonth(day.date)}
           edge={D.edge}
-          aside={<span className="text-sm capitalize text-steel/60">{formatWeekdayShort(day.date)}</span>}
+          aside={<span className="text-sm capitalize text-muted">{formatWeekdayShort(day.date)}</span>}
         >
           <div className="grid grid-cols-7 gap-1" role="tablist" aria-label="Zilele săptămânii">
             {days.map((item) => {
@@ -124,7 +124,7 @@ export function WeekPlanPanel() {
                   type="button"
                   role="tab"
                   aria-selected={on}
-                  className={`flex min-h-[52px] flex-col items-center justify-center px-0.5 text-sm capitalize ${on ? D.solid : 'border border-white/10 bg-white/5'}`}
+                  className={`flex min-h-[52px] flex-col items-center justify-center px-0.5 text-sm capitalize ${on ? D.solid : 'border border-line bg-fg/5'}`}
                   onClick={() => {
                     setSelected(item.date);
                     setNote(null);
@@ -140,13 +140,13 @@ export function WeekPlanPanel() {
           <ul className="mt-4 flex flex-col gap-3">
             {day.slots.map((slot) => (
               <li key={slot.meal}>
-                <p className="text-sm text-steel/60">{MEAL_LABEL.get(slot.meal)}</p>
+                <p className="text-sm text-muted">{MEAL_LABEL.get(slot.meal)}</p>
                 <p className="font-semibold">{slot.recipe.name}</p>
                 <p className="text-[15px]">{amountText(slot)}</p>
                 <p className="text-[15px]">
                   {formatNum(slot.totals.kcal, 0)} kcal, {formatNum(slot.totals.protein, 0)} g proteine, {formatNum(slot.totals.fiber, 0)} g fibre
                 </p>
-                <ul className="mt-1 text-[15px] text-steel/80">
+                <ul className="mt-1 text-[15px] text-fg">
                   {portionLines(slot).map((line) => (
                     <li key={`${slot.meal}-${line.name}`}>
                       {line.name}, {formatNum(line.grams, 0)} g
@@ -162,7 +162,7 @@ export function WeekPlanPanel() {
             {targets ? `, din ${formatNum(targets.kcal, 0)} kcal și ${formatNum(targets.protein, 0)} g.` : '.'}
           </p>
           {targets && targets.kcal - snackKcal - day.totals.kcal > 300 && (
-            <p className="mt-1 text-[15px] text-steel/70">
+            <p className="mt-1 text-[15px] text-muted">
               Mai rămân circa {formatNum(targets.kcal - snackKcal - day.totals.kcal, 0)} kcal. Le poți acoperi cu pâine, iaurt sau fructe.
             </p>
           )}
@@ -182,7 +182,7 @@ export function WeekPlanPanel() {
 
       {loaded && (
         <Panel title="Cumpărături" edge={D.edge}>
-          <p className="text-[15px] text-steel/80">Pentru toată săptămâna, la porțiile de mai sus. Bifele rămân pe acest ecran.</p>
+          <p className="text-[15px] text-fg">Pentru toată săptămâna, la porțiile de mai sus. Bifele rămân pe acest ecran.</p>
           {groups.map((group) => (
             <div key={group.category} className="mt-3">
               <h3 className="font-semibold">{group.category}</h3>

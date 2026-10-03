@@ -12,7 +12,7 @@ const STRENGTH_DAYS = 2;
 function Bar({ value, target, color }: { value: number; target: number; color: string }) {
   const pct = Math.min(100, (value / target) * 100);
   return (
-    <div className="h-2.5 w-full bg-steel/10" role="presentation">
+    <div className="h-2.5 w-full bg-fg/10" role="presentation">
       <div className="h-full" style={{ width: `${pct}%`, backgroundColor: color }} />
     </div>
   );
@@ -56,7 +56,7 @@ export function WeeklyGoals({ color }: { color: string }) {
           </div>
           <Bar value={week.strengthDays} target={STRENGTH_DAYS} color={color} />
         </div>
-        <p className="text-sm text-steel/60">
+        <p className="text-sm text-muted">
           Săptămâna începe {starts === 'sunday' ? 'duminică' : 'luni'}. O schimbi din Profil. Recomandarea OMS 2020:
           150-300 de minute de efort moderat (intensul se numără dublu) și forță în cel puțin 2 zile. Orice cantitate
           e mai bună decât deloc.

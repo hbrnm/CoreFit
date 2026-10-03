@@ -169,7 +169,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               activeClass={D.solid}
               columns={3}
             />
-            <p className="mt-2 text-sm text-steel/70">
+            <p className="mt-2 text-sm text-muted">
               Greutate: kg și repetări. Corp: repetări, cu greutate adăugată opțional. Durată: secunde.
               {editing && ' Schimbarea tipului nu modifică seriile notate deja.'}
             </p>
@@ -184,7 +184,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
             </button>
           </div>
           {editing && (
-            <button type="button" className="btn-outline border-plate-red text-plate-red" onClick={() => void deleteExercise()}>
+            <button type="button" className="btn-danger" onClick={() => void deleteExercise()}>
               Șterge exercițiul
             </button>
           )}
@@ -213,7 +213,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               aria-pressed={muscle === m}
               className={cx(
                 'btn min-h-[40px] shrink-0 px-3 text-sm',
-                muscle === m ? D.solid : 'border border-white/10 bg-white/5 text-steel',
+                muscle === m ? D.solid : 'border border-line bg-fg/5 text-fg',
               )}
             >
               {m === 'all' ? 'Toate' : MUSCLE_LABELS[m]}
@@ -229,7 +229,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               aria-pressed={gear === g}
               className={cx(
                 'btn min-h-[40px] shrink-0 px-3 text-sm',
-                gear === g ? D.solid : 'border border-white/10 bg-white/5 text-steel',
+                gear === g ? D.solid : 'border border-line bg-fg/5 text-fg',
               )}
             >
               {g === 'all' ? 'Orice echipament' : EQUIPMENT_LABELS[g]}
@@ -239,21 +239,21 @@ export function ExercisePicker({ onPick, onClose }: Props) {
         <button
           type="button"
           aria-pressed={onlyFavorites}
-          className={cx('btn min-h-[44px]', onlyFavorites ? D.solid : 'border border-white/10 bg-white/5 text-steel')}
+          className={cx('btn min-h-[44px]', onlyFavorites ? D.solid : 'border border-line bg-fg/5 text-fg')}
           onClick={() => setOnlyFavorites((v) => !v)}
         >
           <Star size={16} />
           {onlyFavorites ? 'Doar favorite' : 'Arată favoritele primele'}
         </button>
 
-        <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
+        <ul className="divide-y divide-line border-y border-line bg-fg/5">
           {shown.map((e) => (
             <li key={e.id} className="flex items-stretch">
               <button
                 type="button"
                 aria-label={favorites.has(e.id) ? `Scoate ${e.name} de la favorite` : `Marchează ${e.name} ca favorit`}
                 aria-pressed={favorites.has(e.id)}
-                className="flex w-12 items-center justify-center text-plate-red"
+                className={`flex w-12 items-center justify-center ${favorites.has(e.id) ? 'text-warning' : 'text-subtle'}`}
                 onClick={() => toggleFavorite(e.id)}
               >
                 <Star size={18} fill={favorites.has(e.id) ? 'currentColor' : 'none'} />
@@ -261,12 +261,12 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               <button
                 type="button"
                 onClick={() => onPick(e)}
-                className="flex min-h-[56px] flex-1 items-center gap-3 pr-3 text-left active:bg-steel/5"
+                className="flex min-h-[56px] flex-1 items-center gap-3 pr-3 text-left active:bg-fg/5"
               >
                 <ExerciseFigure exerciseId={e.id} name={e.name} />
                 <span className="flex min-w-0 flex-col justify-center">
                   <span className="font-semibold">{e.name}</span>
-                  <span className="text-sm text-steel/60">
+                  <span className="text-sm text-muted">
                     {MUSCLE_LABELS[e.muscle]}, {EQUIPMENT_LABELS[e.equipment]}
                     {e.custom ? ', al tău' : ''}
                   </span>
@@ -276,7 +276,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
                 <button
                   type="button"
                   aria-label={`Editează ${e.name}`}
-                  className="flex w-12 items-center justify-center text-steel/60"
+                  className="flex w-12 items-center justify-center text-muted"
                   onClick={() => openForm(e)}
                 >
                   <Pencil size={16} />
@@ -284,7 +284,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               )}
             </li>
           ))}
-          {shown.length === 0 && <li className="px-3 py-4 text-steel/70">Niciun exercițiu găsit.</li>}
+          {shown.length === 0 && <li className="px-3 py-4 text-muted">Niciun exercițiu găsit.</li>}
         </ul>
 
         <button type="button" className="btn-outline" onClick={() => openForm(null)}>

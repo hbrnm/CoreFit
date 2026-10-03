@@ -69,15 +69,15 @@ export function WorkoutsTab() {
               <p className="font-display text-2xl font-bold">{summary.name}</p>
               <dl className="mt-3 grid grid-cols-3 gap-3">
                 <div>
-                  <dt className="text-sm text-steel/60">Durată</dt>
+                  <dt className="text-sm text-muted">Durată</dt>
                   <dd className="num text-2xl">{summary.minutes} min</dd>
                 </div>
                 <div>
-                  <dt className="text-sm text-steel/60">Serii</dt>
+                  <dt className="text-sm text-muted">Serii</dt>
                   <dd className="num text-2xl">{summary.workSets}</dd>
                 </div>
                 <div>
-                  <dt className="text-sm text-steel/60">Volum</dt>
+                  <dt className="text-sm text-muted">Volum</dt>
                   <dd className="num text-2xl">{formatNum(summary.volumeKg, 0)} kg</dd>
                 </div>
               </dl>
@@ -94,7 +94,7 @@ export function WorkoutsTab() {
                 </ul>
               </Notice>
             ) : (
-              <p className="text-[15px] text-steel/70">
+              <p className="text-[15px] text-muted">
                 Fără recorduri noi de data asta. Recordurile se compară cu tot ce ai notat înainte.
               </p>
             )}

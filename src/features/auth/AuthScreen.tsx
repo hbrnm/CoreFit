@@ -42,7 +42,7 @@ export function AuthScreen({ onSignIn, onSignUp }: Props) {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-5 py-10 pt-[max(2.5rem,env(safe-area-inset-top))]">
       <h1 className="font-display text-6xl font-bold leading-none">CoreFit</h1>
-      <p className="mt-3 max-w-[30ch] text-lg leading-snug text-steel/80">
+      <p className="mt-3 max-w-[30ch] text-lg leading-snug text-fg">
         Antrenament, coloană și nutriție fără zahăr. Notezi și fără internet, se sincronizează după.
       </p>
 
@@ -51,7 +51,7 @@ export function AuthScreen({ onSignIn, onSignUp }: Props) {
           label="Tip de acces"
           value={mode}
           onChange={setMode}
-          activeClass="bg-steel text-chalk"
+          activeClass="bg-brand text-on-brand"
           options={[
             { value: 'signin', label: 'Conectare' },
             { value: 'signup', label: 'Cont nou' },
@@ -108,7 +108,7 @@ export function AuthScreen({ onSignIn, onSignUp }: Props) {
         {error && <Notice tone="error">{error}</Notice>}
         {info && <Notice tone="info">{info}</Notice>}
 
-        <button type="submit" className="btn-steel" disabled={busy}>
+        <button type="submit" className="btn-primary" disabled={busy}>
           {busy ? 'Se încarcă...' : mode === 'signin' ? 'Conectează-te' : 'Creează contul'}
         </button>
       </form>

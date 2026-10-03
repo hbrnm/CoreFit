@@ -69,7 +69,7 @@ export function ToolsPanel() {
       <Panel title="Provocarea fără zahăr și făină" edge={D.edge}>
         <p className="font-display text-5xl font-bold leading-none">
           Ziua {streak}
-          <span className="ml-2 text-xl font-semibold text-steel/50">din {PROMISE_DAYS}</span>
+          <span className="ml-2 text-xl font-semibold text-subtle">din {PROMISE_DAYS}</span>
         </p>
 
         <ul className="mt-4 grid grid-cols-7 gap-1.5" aria-label="Ultimele 7 zile">
@@ -80,14 +80,14 @@ export function ToolsPanel() {
                 <span
                   className={cx(
                     'h-8 w-full rounded-sm',
-                    state === 'clean' && 'bg-plate-green',
-                    state === 'slip' && 'bg-plate-red',
-                    state === 'none' && 'border border-dashed border-steel/30',
+                    state === 'clean' && 'bg-success-solid',
+                    state === 'slip' && 'bg-danger-solid',
+                    state === 'none' && 'border border-dashed border-line-strong',
                   )}
                   role="img"
                   aria-label={`${formatDayShort(date)}: ${state === 'clean' ? 'zi curată' : state === 'slip' ? 'abatere' : 'nenotată'}`}
                 />
-                <span className="text-xs text-steel/60">{formatDayShort(date)}</span>
+                <span className="text-xs text-muted">{formatDayShort(date)}</span>
               </li>
             );
           })}
@@ -105,7 +105,7 @@ export function ToolsPanel() {
             onChange={(v) => void upsertDay(userId, today, { sugar_free_respected: v === 'clean', flour_free_respected: v === 'clean' })}
             activeClass={D.solid}
           />
-          <p className="mt-2 text-sm text-steel/60">Ziua nu se numără până nu o marchezi. Seria se resetează la o zi cu abatere.</p>
+          <p className="mt-2 text-sm text-muted">Ziua nu se numără până nu o marchezi. Seria se resetează la o zi cu abatere.</p>
         </div>
       </Panel>
 
@@ -127,7 +127,7 @@ export function ToolsPanel() {
               }}
             />
           </div>
-          <button type="button" onClick={() => setVerdict(checkIngredients(labelText))} disabled={labelText.trim() === ''} className="btn-steel">
+          <button type="button" onClick={() => setVerdict(checkIngredients(labelText))} disabled={labelText.trim() === ''} className="btn-primary">
             Verifică eticheta
           </button>
 

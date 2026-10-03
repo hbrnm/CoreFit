@@ -5,7 +5,7 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
 import { addDays, formatDateLong, localDateStr, startOfWeek } from '../../lib/date';
-import { PLATE } from '../../lib/domains';
+import { tone } from '../../lib/domains';
 import { weekStartOf } from '../../lib/schedule';
 import { sessionMinutes } from '../../lib/workoutStats';
 import { Panel } from '../../components/ui';
@@ -51,7 +51,7 @@ export function ActivityHeatmap() {
 
   return (
     <Panel title={`Activitate în ${year}`}>
-      <p className="mb-3 text-sm text-steel/60">Culoarea arată minutele de antrenament încheiat, nu un scor.</p>
+      <p className="mb-3 text-sm text-muted">Culoarea arată minutele de antrenament încheiat, nu un scor.</p>
       <div className="overflow-x-auto pb-1">
         <div className="flex gap-1" style={{ width: 'max-content' }}>
           {grid.columns.map((col) => (
@@ -59,7 +59,7 @@ export function ActivityHeatmap() {
               {col.map((date) => {
                 const inYear = date.startsWith(year) && date <= today;
                 const minutes = grid.byDate.get(date)?.minutes ?? 0;
-                const tone = !inYear ? 'transparent' : minutes === 0 ? 'rgba(29,39,51,0.08)' : PLATE.red;
+                const cell = !inYear ? 'transparent' : minutes === 0 ? tone('fg', 0.08) : tone('workouts');
                 const opacity = minutes === 0 ? 1 : 0.35 + 0.65 * (minutes / max);
                 return (
                   <button
@@ -69,7 +69,7 @@ export function ActivityHeatmap() {
                     aria-label={inYear ? `${date}, ${minutes} minute` : undefined}
                     onClick={() => setPicked(date)}
                     className="h-3.5 w-3.5"
-                    style={{ backgroundColor: tone, opacity: inYear ? opacity : 0 }}
+                    style={{ backgroundColor: cell, opacity: inYear ? opacity : 0 }}
                   />
                 );
               })}
@@ -85,10 +85,10 @@ export function ActivityHeatmap() {
               {chosen.names.map((name, i) => (
                 <li key={`${name}-${i}`}>{name}</li>
               ))}
-              <li className="text-steel/60">{chosen.minutes} minute</li>
+              <li className="text-muted">{chosen.minutes} minute</li>
             </ul>
           ) : (
-            <p className="text-steel/70">Nicio sesiune încheiată.</p>
+            <p className="text-muted">Nicio sesiune încheiată.</p>
           )}
         </div>
       )}

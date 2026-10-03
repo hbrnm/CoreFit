@@ -8,6 +8,7 @@ export interface ChartPoint {
 
 interface LineChartProps {
   points: ChartPoint[];
+  /** culoare CSS, de obicei tone(...) din lib/domains */
   color: string;
   height?: number;
   unit?: string;
@@ -42,20 +43,20 @@ export function LineChart({ points, color, height = 140, unit = '', secondary }:
 
   return (
     <svg viewBox={`0 0 ${W} ${height}`} className="h-auto w-full" role="img" aria-label={summary}>
-      <line x1={padX} x2={W - padX} y1={yAt(min)} y2={yAt(min)} stroke="#1D2733" strokeOpacity="0.12" />
-      <line x1={padX} x2={W - padX} y1={yAt(max)} y2={yAt(max)} stroke="#1D2733" strokeOpacity="0.12" />
+      <line x1={padX} x2={W - padX} y1={yAt(min)} y2={yAt(min)} className="stroke-line" />
+      <line x1={padX} x2={W - padX} y1={yAt(max)} y2={yAt(max)} className="stroke-line" />
       {secondary && secondary.length > 1 && (
-        <polyline points={path(secondary)} fill="none" stroke={color} strokeOpacity="0.35" strokeWidth="1.5" />
+        <polyline points={path(secondary)} fill="none" style={{ stroke: color }} strokeOpacity="0.35" strokeWidth="1.5" />
       )}
-      {points.length > 1 && <polyline points={path(points)} fill="none" stroke={color} strokeWidth="2.5" strokeLinejoin="round" />}
-      <circle cx={xAt(points.length - 1, points.length)} cy={yAt(last.y)} r="4" fill={color} />
-      <text x={padX} y={padTop - 3} fontSize="10" fill="#1D2733" fillOpacity="0.6">
+      {points.length > 1 && <polyline points={path(points)} fill="none" style={{ stroke: color }} strokeWidth="2.5" strokeLinejoin="round" />}
+      <circle cx={xAt(points.length - 1, points.length)} cy={yAt(last.y)} r="4" style={{ fill: color }} />
+      <text x={padX} y={padTop - 3} fontSize="10" className="fill-subtle">
         {formatNum(max)} {unit}
       </text>
-      <text x={padX} y={height - 5} fontSize="10" fill="#1D2733" fillOpacity="0.6">
+      <text x={padX} y={height - 5} fontSize="10" className="fill-subtle">
         {points[0].label}
       </text>
-      <text x={W - padX} y={height - 5} fontSize="10" textAnchor="end" fill="#1D2733" fillOpacity="0.6">
+      <text x={W - padX} y={height - 5} fontSize="10" textAnchor="end" className="fill-subtle">
         {last.label}
       </text>
     </svg>
@@ -75,8 +76,8 @@ export function BarList({ items, color, unit = '' }: BarListProps) {
     <ul className="flex flex-col gap-2">
       {items.map((i) => (
         <li key={i.label} className="grid grid-cols-[7rem_1fr_3rem] items-center gap-2 text-[15px]">
-          <span className="truncate text-steel/80">{i.label}</span>
-          <span className="h-2.5 bg-steel/10" aria-hidden="true">
+          <span className="truncate text-fg">{i.label}</span>
+          <span className="h-2.5 bg-fg/10" aria-hidden="true">
             <span className="block h-full" style={{ width: `${(i.value / max) * 100}%`, backgroundColor: color }} />
           </span>
           <span className="text-right tabular-nums">

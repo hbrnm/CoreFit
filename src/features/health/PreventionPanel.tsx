@@ -52,7 +52,7 @@ export function PreventionPanel() {
         return (
           <Panel key={item.id} title={item.title} edge={D.edge}>
             <p className="text-[15px] leading-snug">{item.body}</p>
-            <p className="mt-2 text-sm text-steel/70">
+            <p className="mt-2 text-sm text-muted">
               {EVIDENCE_LABELS[item.evidence]}.{' '}
               <a className="underline" href={item.sourceUrl} target="_blank" rel="noreferrer">
                 {item.sourceLabel}

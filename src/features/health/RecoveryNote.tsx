@@ -17,7 +17,7 @@ export function RecoveryNote() {
     <Panel title="Recuperare">
       <p className="text-[15px] leading-snug">{body}</p>
       {picture.painNotes.length === 0 && (
-        <p className="mt-2 text-sm text-steel/60">Durerea se citește doar din ce ai notat tu. Lipsa notelor nu înseamnă că nu există o problemă.</p>
+        <p className="mt-2 text-sm text-muted">Durerea se citește doar din ce ai notat tu. Lipsa notelor nu înseamnă că nu există o problemă.</p>
       )}
       {picture.painNotes.length > 0 && (
         <div className="mt-3">

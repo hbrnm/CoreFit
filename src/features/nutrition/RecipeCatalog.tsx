@@ -48,7 +48,7 @@ export function RecipeCatalog({ savedIds }: { savedIds: ReadonlySet<string> }) {
 
   return (
     <Panel title="Rețete gata" edge={D.edge}>
-      <p className="text-[15px] text-steel/80">
+      <p className="text-[15px] text-fg">
         Rețete cunoscute. „Meniu” sunt variante de casă din meniul Tastemotions, doar felurile care se pot număra din alimentele aplicației. Nu sunt porțiile de catering și nu includ aluat, trufe, pancetta sau înghețată. Caloriile se adună din ingrediente.
       </p>
       <div className="mt-3">
@@ -67,9 +67,9 @@ export function RecipeCatalog({ savedIds }: { savedIds: ReadonlySet<string> }) {
           const saved = savedIds.has(catalogRecipeKey(recipe.id));
           const open = openId === recipe.id;
           return (
-            <li key={recipe.id} className="border-t border-steel/10 pt-3">
+            <li key={recipe.id} className="border-t border-line pt-3">
               <p className="font-semibold">{recipe.name}</p>
-              <p className="text-sm text-steel/70">{recipe.summary}</p>
+              <p className="text-sm text-muted">{recipe.summary}</p>
               <p className="mt-1 text-[15px]">
                 {formatNum(per.kcal, 0)} kcal, {formatNum(per.protein, 0)} g proteine, {formatNum(per.fiber, 0)} g fibre,
                 pe porție. {recipe.servings} {recipe.servings === 1 ? 'porție' : 'porții'}, circa {recipe.minutes} min.
@@ -85,7 +85,7 @@ export function RecipeCatalog({ savedIds }: { savedIds: ReadonlySet<string> }) {
                 </button>
                 <button
                   type="button"
-                  className={`btn min-h-[44px] flex-1 ${saved ? 'border border-white/10 bg-white/5 text-steel' : D.solid}`}
+                  className={`btn min-h-[44px] flex-1 ${saved ? 'border border-line bg-fg/5 text-fg' : D.solid}`}
                   disabled={saved}
                   onClick={() => void add(recipe.id)}
                 >

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DataPanel } from './DataPanel';
+import { ThemePanel } from './ThemePanel';
 import { useApp } from '../../context';
 import {
   db,
@@ -123,22 +124,22 @@ export function ProfileTab() {
     <div className="flex flex-col gap-5 animate-in fade-in duration-300">
       
       <div className="flex justify-between items-center">
-        <h1 className="font-display text-3xl font-bold text-white leading-tight">Profil</h1>
+        <h1 className="font-display text-3xl font-bold text-fg leading-tight">Profil</h1>
         <div className="flex items-center gap-2">
           {cloud && (
-            <button type="button" onClick={() => void handleSignOut()} className="text-xs font-semibold text-white/40 hover:text-white mr-2">
+            <button type="button" onClick={() => void handleSignOut()} className="text-xs font-semibold text-subtle hover:text-fg mr-2">
               Deconectare
             </button>
           )}
-          <div className="bg-panel rounded-lg p-1 flex border border-white/10">
+          <div className="flex rounded-lg bg-raised p-1">
           <button 
-            className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${view === 'wizard' ? 'bg-neon-mint text-chalk' : 'text-white/60 hover:text-white'}`}
+            className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${view === 'wizard' ? 'bg-surface text-fg shadow-card' : 'text-muted hover:text-fg'}`}
             onClick={() => setView('wizard')}
           >
             Setări
           </button>
           <button
-            className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${view === 'data' ? 'bg-neon-cyan text-chalk' : 'text-white/60 hover:text-white'}`}
+            className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${view === 'data' ? 'bg-surface text-fg shadow-card' : 'text-muted hover:text-fg'}`}
             onClick={() => setView('data')}
           >
             Date
@@ -147,18 +148,20 @@ export function ProfileTab() {
         </div>
       </div>
 
+      <ThemePanel />
+
       {view === 'data' ? (
         <DataPanel />
       ) : (
         <Panel className="relative overflow-hidden">
           {/* Progress Bar Top */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-white/10">
-             <div className="h-full bg-neon-mint transition-all duration-300" style={{ width: `${(step / 4) * 100}%` }} />
+          <div className="absolute top-0 left-0 w-full h-1 bg-fg/10">
+             <div className="h-full bg-brand transition-all duration-300" style={{ width: `${(step / 4) * 100}%` }} />
           </div>
 
           <div className="mt-2 mb-6 text-center">
-             <h2 className="text-neon-mint uppercase tracking-wider text-sm font-bold">Pasul {step} din 4</h2>
-             <p className="text-white/60 text-sm mt-1">
+             <h2 className="text-brand-fg uppercase tracking-wider text-sm font-bold">Pasul {step} din 4</h2>
+             <p className="text-muted text-sm mt-1">
                {step === 1 && 'Date personale'}
                {step === 2 && 'Nutriție & Activitate'}
                {step === 3 && 'Antrenament & Efort'}
@@ -195,7 +198,7 @@ export function ProfileTab() {
                 <div>
                   <label className="label">Faza nutrițională</label>
                   <Segmented<NutritionPhase> label="Faza nutrițională" options={PHASE_OPTIONS} value={phase} onChange={touched(setPhase)} activeClass={D.solid} />
-                  <p className="mt-1 text-xs text-white/50">Definirea scade ținta, masa musculară o crește.</p>
+                  <p className="mt-1 text-xs text-subtle">Definirea scade ținta, masa musculară o crește.</p>
                 </div>
                 <div>
                   <label className="label">Nivel de activitate</label>
@@ -232,10 +235,10 @@ export function ProfileTab() {
             {step === 4 && (
               <div className="animate-in slide-in-from-right-4 duration-300 flex flex-col gap-4">
                 <div>
-                  <label className="label font-bold text-neon-orange">Focus Principal</label>
+                  <label className="label">Focus Principal</label>
                   <div className="grid gap-2 mt-2">
                     {FOCUS_OPTIONS.map((opt) => (
-                      <button key={opt.id} className={`p-3 rounded-xl border text-left text-sm transition-all ${focus === opt.id ? 'bg-neon-orange/20 border-neon-orange text-white font-bold' : 'bg-white/5 border-white/10 text-white/70'}`} onClick={() => touched(setFocus)(opt.id)}>
+                      <button key={opt.id} className={`p-3 rounded-xl border text-left text-sm transition-all ${focus === opt.id ? 'border-brand bg-brand/10 font-semibold text-fg' : 'border-line bg-raised text-muted'}`} onClick={() => touched(setFocus)(opt.id)}>
                         {opt.label}
                       </button>
                     ))}
@@ -247,15 +250,15 @@ export function ProfileTab() {
             {error && <Notice tone="error">{error}</Notice>}
             {saved && <Notice tone="ok">Profil salvat cu succes!</Notice>}
 
-            <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/10">
+            <div className="flex justify-between items-center mt-4 pt-4 border-t border-line">
                {step > 1 ? (
-                 <button className="btn-quiet text-white/70 px-4" onClick={prevStep}>Înapoi</button>
+                 <button className="btn-quiet text-muted px-4" onClick={prevStep}>Înapoi</button>
                ) : <div />}
                
                {step < 4 ? (
-                 <button className="btn-steel px-6 h-11" onClick={nextStep}>Următorul</button>
+                 <button className="btn-primary px-6 h-11" onClick={nextStep}>Următorul</button>
                ) : (
-                 <button className="btn-steel px-8 h-11 shadow-[0_0_15px_rgba(16,185,129,0.3)]" onClick={() => void save()}>Finalizează</button>
+                 <button className="btn-primary px-8 h-11" onClick={() => void save()}>Finalizează</button>
                )}
             </div>
           </div>
