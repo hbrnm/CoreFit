@@ -51,7 +51,7 @@ export function AuthScreen({ onSignIn, onSignUp }: Props) {
           label="Tip de acces"
           value={mode}
           onChange={setMode}
-          activeClass="bg-steel text-white"
+          activeClass="bg-steel text-chalk"
           options={[
             { value: 'signin', label: 'Conectare' },
             { value: 'signup', label: 'Cont nou' },

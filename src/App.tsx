@@ -70,7 +70,7 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
   return (
     <AppContext.Provider value={ctx}>
       <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
-        <header className="sticky top-0 z-10 bg-steel pt-[env(safe-area-inset-top)] text-white">
+        <header className="sticky top-0 z-10 border-b border-white/10 bg-panel pt-[env(safe-area-inset-top)] text-white">
           <div className="flex items-center justify-between px-4 py-2.5">
             <span className="font-display text-2xl font-bold leading-none">CoreFit</span>
             <SyncStatus />
