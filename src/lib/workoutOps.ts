@@ -45,6 +45,8 @@ export interface DraftExercise {
 
 export interface Draft {
   exercises: DraftExercise[];
+  /** antrenament notat ulterior: se încheie la această oră, nu la apăsarea "Termină" */
+  backfill?: { endedAt: string };
 }
 
 const draftKey = (sessionId: string): string => `corefit_draft_${sessionId}`;
@@ -224,6 +226,8 @@ export async function startSession(
   userId: string,
   name: string,
   routine: LocalRoutine | null,
+  /** pentru un antrenament notat ulterior: începutul și sfârșitul lui real */
+  past?: { startedAt: string; endedAt: string },
 ): Promise<string> {
   const id = newId();
   await db.workoutSessions.put({
@@ -234,7 +238,7 @@ export async function startSession(
     routine_id: routine?.id ?? null,
     activity: null,
     intensity: null,
-    started_at: nowIso(),
+    started_at: past?.startedAt ?? nowIso(),
     ended_at: null,
     notes: '',
     is_deload: routine?.is_deload ?? false,
@@ -246,7 +250,7 @@ export async function startSession(
   for (const spec of routine?.exercises ?? []) {
     exercises.push(await buildDraftExercise(userId, spec, id, resolveProgression(routine, spec)));
   }
-  saveDraft(id, { exercises });
+  saveDraft(id, past ? { exercises, backfill: { endedAt: past.endedAt } } : { exercises });
   return id;
 }
 
@@ -259,6 +263,8 @@ export async function saveSet(
   weightKg: number,
   reps: number,
   effort: { value: number | null; scale: EffortScale | null } = { value: null, scale: null },
+  /** implicit acum; un antrenament notat ulterior își dă propriile momente, în trecut */
+  loggedAt: string = nowIso(),
 ): Promise<string> {
   const id = set.log_id ?? newId();
   await db.workoutLogs.put({
@@ -274,7 +280,7 @@ export async function saveSet(
     rpe: effort.value,
     effort_scale: effort.value === null ? null : effort.scale,
     pain_detected: false,
-    logged_at: nowIso(),
+    logged_at: loggedAt,
     deleted: false,
     ...stamp(),
   });
@@ -299,8 +305,8 @@ export async function editSetValues(
   });
 }
 
-export async function finishSession(sessionId: string, notes: string): Promise<void> {
-  await db.workoutSessions.update(sessionId, { ended_at: nowIso(), notes, ...stamp() });
+export async function finishSession(sessionId: string, notes: string, endedAt: string = nowIso()): Promise<void> {
+  await db.workoutSessions.update(sessionId, { ended_at: endedAt, notes, ...stamp() });
   clearDraft(sessionId);
 }
 
@@ -359,16 +365,19 @@ export async function computeSummary(
   userId: string,
   session: LocalWorkoutSession,
   catalog: Map<string, Exercise>,
+  endedAt: string = nowIso(),
 ): Promise<SessionSummary> {
   const sets = await db.workoutLogs
     .where('session_id')
     .equals(session.id)
     .filter((l) => !l.deleted)
     .toArray();
+  // Toate celelalte serii, nu doar cele de dinainte: un antrenament notat ulterior nu e record
+  // dacă un antrenament făcut după el l-a depășit deja.
   const earlier = await db.workoutLogs
     .where('[user_id+logged_at]')
-    .between([userId, Dexie.minKey], [userId, session.started_at])
-    .filter((l) => !l.deleted)
+    .between([userId, Dexie.minKey], [userId, Dexie.maxKey])
+    .filter((l) => !l.deleted && l.session_id !== session.id)
     .toArray();
 
   const work = sets.filter((l) => l.set_type === 'work');
@@ -376,7 +385,7 @@ export async function computeSummary(
     (sum, l) => sum + setVolume(findExercise(catalog, l.exercise_id, l.exercise_name).kind, l.weight_kg, l.reps),
     0,
   );
-  const finished = { ...session, ended_at: nowIso() };
+  const finished = { ...session, ended_at: endedAt };
   return {
     name: session.name,
     minutes: sessionMinutes(finished),
