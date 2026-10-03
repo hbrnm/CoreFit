@@ -13,7 +13,7 @@
 # run chroma_key.py on the result.
 import argparse, base64, fcntl, json, mimetypes, os, subprocess, tempfile, time
 
-DEFAULT_MODEL = "gemini-3-pro-image-preview"
+DEFAULT_MODEL = "gemini-3-pro-image"
 API = os.environ.get("GEMINI_API_BASE", "https://generativelanguage.googleapis.com/v1beta")
 DESIGN = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG = os.path.join(DESIGN, "log.jsonl")
@@ -24,7 +24,9 @@ ASPECTS = {"1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:
 # $ per million tokens. Image output is billed as tokens: a 1K/2K image is about 1120 tokens,
 # a 4K one about 2000. Check the current prices on the first run and correct this table.
 PRICE = {
+    "gemini-3-pro-image": dict(input=2.0, output_image=120.0, output_text=12.0),
     "gemini-3-pro-image-preview": dict(input=2.0, output_image=120.0, output_text=12.0),
+    "gemini-3.1-flash-image": dict(input=0.5, output_image=60.0, output_text=3.0),
     "gemini-3.1-flash-image-preview": dict(input=0.5, output_image=60.0, output_text=3.0),
 }
 FALLBACK_PRICE = PRICE[DEFAULT_MODEL]  # unknown model: assume the dearest, so the cap holds
