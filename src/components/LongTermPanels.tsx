@@ -4,7 +4,6 @@ import { useToday } from '../hooks/useToday';
 import { PREVENTION_ITEMS } from '../data/prevention';
 import { db, type LocalFoodEntry, type LocalHealthSession, type LocalPainLog, type LocalWorkoutSession } from '../lib/db';
 import { localDateStr, addDays } from '../lib/date';
-import { DOMAIN } from '../lib/domains';
 import {
   AEROBIC_MIN_TARGET,
   entriesHaveProduce,
@@ -113,7 +112,7 @@ export function TodayMission() {
   if (!picture) return null;
   const mission = missionFor(picture);
   return (
-    <Panel title="Misiunea de azi" edge={DOMAIN.profile.edge}>
+    <Panel title="Misiunea de azi">
       <p className="text-lg leading-snug">{mission.text}</p>
       <p className="mt-2 text-sm text-muted">O singură acțiune, din ce ai notat. Nu se pierde nimic dacă o sari.</p>
     </Panel>
@@ -142,7 +141,7 @@ export function MyPlan() {
   const also = (profile?.long_term_also ?? []).filter((id) => id !== profile?.long_term_focus);
 
   return (
-    <Panel title="Planul meu" edge={DOMAIN.profile.edge}>
+    <Panel title="Planul meu">
       <div className="flex flex-col gap-4 text-[15px] leading-snug">
         <p>
           {profile?.long_term_focus

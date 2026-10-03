@@ -24,10 +24,12 @@ export default {
         danger: { DEFAULT: token('danger'), solid: token('danger-solid') },
         success: { DEFAULT: token('success'), solid: token('success-solid') },
         warning: { DEFAULT: token('warning'), solid: token('warning-solid') },
-        // accentele secțiunilor: iconițe, etichete, grafice, nu butoane
+        // culorile categoriilor: doar etichete, iconițe și valoarea evidențiată din grafice (ca Apple Health)
         workouts: token('workouts'),
         health: token('health'),
         nutrition: token('nutrition'),
+        water: token('water'),
+        body: token('body'), // greutate și măsurători, ca „Body Measurements” în Apple Health
       },
       fontFamily: {
         sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],

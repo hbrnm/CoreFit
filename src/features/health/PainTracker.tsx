@@ -62,7 +62,7 @@ export function PainTracker() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel title="Notează durerea" edge={D.edge}>
+      <Panel title="Notează durerea">
         <div className="flex flex-col gap-4">
           <div>
             <label htmlFor="pain-region" className="label">

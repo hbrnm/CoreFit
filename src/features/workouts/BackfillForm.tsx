@@ -62,7 +62,7 @@ export function BackfillForm({ sessions }: Props) {
   }
 
   return (
-    <Panel title="Antrenament trecut" edge={D.edge}>
+    <Panel title="Antrenament trecut">
       <div className="flex flex-col gap-3">
         <p className="text-[15px] text-muted">
           Pentru un antrenament făcut fără telefon. După ce alegi datele, îl completezi ca pe oricare altul.

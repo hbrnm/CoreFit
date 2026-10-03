@@ -66,7 +66,7 @@ export function ToolsPanel() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel title="Provocarea fără zahăr și făină" edge={D.edge}>
+      <Panel title="Provocarea fără zahăr și făină">
         <p className="font-display text-5xl font-bold leading-none">
           Ziua {streak}
           <span className="ml-2 text-xl font-semibold text-subtle">din {PROMISE_DAYS}</span>

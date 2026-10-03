@@ -38,7 +38,7 @@ export function WeekPlan() {
   };
 
   return (
-    <Panel title="Planul săptămânii" edge={D.edge}>
+    <Panel title="Planul săptămânii">
       <p className="mb-3 text-sm text-muted">Rutina fixă se repetă. O mutare ține doar săptămâna aceasta.</p>
       <ul className="flex flex-col gap-2">
         {days.map((day) => {

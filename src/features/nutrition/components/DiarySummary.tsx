@@ -1,4 +1,4 @@
-import { DOMAIN, tone } from '../../../lib/domains';
+import { tone } from '../../../lib/domains';
 import { formatNum } from '../../../lib/numbers';
 import { SODIUM_LIMIT_MG } from '../../../lib/nutrition';
 import { Notice, Panel } from '../../../components/ui';
@@ -13,9 +13,8 @@ interface Props {
 }
 
 export function DiarySummary({ totals, targets, fiberTarget, sugarCap, goTo }: Props) {
-  const D = DOMAIN.nutrition;
   return (
-    <Panel edge={D.edge}>
+    <Panel>
       <div className="flex items-end justify-between">
         <div>
           <p className="text-sm text-muted">Calorii</p>

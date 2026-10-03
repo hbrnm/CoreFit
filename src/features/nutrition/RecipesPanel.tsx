@@ -205,7 +205,7 @@ export function RecipesPanel() {
       />
       <Panel
         title="Rețetele mele"
-        edge={D.edge}
+       
         aside={
           <div className="flex gap-1">
             <button type="button" className="flex h-11 w-11 items-center justify-center text-brand-fg" aria-label="Importă rețetă" onClick={() => setImporting(true)}>

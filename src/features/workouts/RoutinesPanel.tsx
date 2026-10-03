@@ -314,7 +314,7 @@ export function RoutinesPanel() {
     <div className="flex flex-col gap-4">
       <Panel
         title="Rutinele mele"
-        edge={D.edge}
+       
         aside={
           <button type="button" className="min-h-[44px] px-1 font-semibold text-brand-fg" onClick={() => setEditing('new')}>
             Rutină nouă

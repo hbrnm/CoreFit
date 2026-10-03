@@ -29,7 +29,7 @@ export function ProgramView({ program, onBack, onStart }: Props) {
         </p>
       </div>
 
-      <Panel title="Ce spune dovada" edge={D.edge}>
+      <Panel title="Ce spune dovada">
         <ul className="flex list-disc flex-col gap-2 pl-5 text-[15px] leading-snug">
           {program.summary.map((line) => (
             <li key={line}>{line}</li>

@@ -4,6 +4,9 @@
 
 /*
  * Tema: token-uri semantice, cu o valoare pentru modul deschis și una pentru cel închis.
+ * Paleta urmează iOS (Apple Health): gri de sistem și carduri albe; negru și carduri grafit.
+ * Culorile categoriilor (workouts, nutrition, health, water, body) apar doar în etichete,
+ * iconițe și valoarea evidențiată din grafice; restul interfeței e monocrom.
  * Modul urmează setarea telefonului; din Profil se poate fixa pe deschis sau închis
  * (atributul data-theme de pe <html>, vezi src/lib/theme.ts).
  * Valorile sunt canale RGB, ca Tailwind să poată adăuga opacitate (bg-fg/5).
@@ -13,14 +16,14 @@
 @layer base {
   :root {
     color-scheme: light;
-    --canvas: 242 244 247; /* #F2F4F7 */
+    --canvas: 242 242 247; /* #F2F2F7 */
     --surface: 255 255 255; /* #FFFFFF */
-    --raised: 238 241 245; /* #EEF1F5 */
-    --fg: 15 23 42; /* #0F172A */
-    --muted: 71 85 105; /* #475569 */
-    --subtle: 86 100 121; /* #566479 */
-    --line: 226 232 240; /* #E2E8F0 */
-    --line-strong: 131 145 165; /* #8391A5 */
+    --raised: 239 239 244; /* #EFEFF4 */
+    --fg: 17 17 17; /* #111111 */
+    --muted: 72 72 74; /* #48484A */
+    --subtle: 108 108 112; /* #6C6C70 */
+    --line: 229 229 234; /* #E5E5EA */
+    --line-strong: 138 138 142; /* #8A8A8E */
     --brand: 37 99 235; /* #2563EB */
     --brand-fg: 29 78 216; /* #1D4ED8 */
     --on-brand: 255 255 255; /* #FFFFFF */
@@ -33,58 +36,64 @@
     --workouts: 194 65 12; /* #C2410C */
     --health: 14 116 144; /* #0E7490 */
     --nutrition: 22 101 52; /* #166534 */
-    --shadow: 15 23 42; /* #0F172A */
+    --water: 26 95 191; /* #1A5FBF */
+    --body: 124 58 237; /* #7C3AED */
+    --shadow: 0 0 0; /* #000000 */
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
       color-scheme: dark;
-      --canvas: 11 18 32; /* #0B1220 */
-      --surface: 21 30 46; /* #151E2E */
-      --raised: 31 42 61; /* #1F2A3D */
-      --fg: 241 245 249; /* #F1F5F9 */
-      --muted: 180 192 208; /* #B4C0D0 */
-      --subtle: 139 152 172; /* #8B98AC */
-      --line: 38 50 70; /* #263246 */
-      --line-strong: 102 117 140; /* #66758C */
+      --canvas: 0 0 0; /* #000000 */
+      --surface: 28 28 30; /* #1C1C1E */
+      --raised: 44 44 46; /* #2C2C2E */
+      --fg: 255 255 255; /* #FFFFFF */
+      --muted: 174 174 178; /* #AEAEB2 */
+      --subtle: 152 152 157; /* #98989D */
+      --line: 56 56 58; /* #38383A */
+      --line-strong: 104 104 110; /* #68686E */
       --brand: 37 99 235; /* #2563EB */
-      --brand-fg: 96 165 250; /* #60A5FA */
+      --brand-fg: 100 168 255; /* #64A8FF */
       --on-brand: 255 255 255; /* #FFFFFF */
-      --danger: 248 113 113; /* #F87171 */
+      --danger: 255 107 107; /* #FF6B6B */
       --danger-solid: 220 38 38; /* #DC2626 */
-      --success: 74 222 128; /* #4ADE80 */
+      --success: 48 209 88; /* #30D158 */
       --success-solid: 21 128 61; /* #15803D */
-      --warning: 251 191 36; /* #FBBF24 */
+      --warning: 255 214 10; /* #FFD60A */
       --warning-solid: 180 83 9; /* #B45309 */
-      --workouts: 251 146 60; /* #FB923C */
-      --health: 34 211 238; /* #22D3EE */
-      --nutrition: 74 222 128; /* #4ADE80 */
+      --workouts: 255 159 10; /* #FF9F0A */
+      --health: 99 230 226; /* #63E6E2 */
+      --nutrition: 48 209 88; /* #30D158 */
+      --water: 100 210 255; /* #64D2FF */
+      --body: 204 133 245; /* #CC85F5 */
       --shadow: 0 0 0; /* #000000 */
     }
   }
 
   :root[data-theme='dark'] {
     color-scheme: dark;
-    --canvas: 11 18 32; /* #0B1220 */
-    --surface: 21 30 46; /* #151E2E */
-    --raised: 31 42 61; /* #1F2A3D */
-    --fg: 241 245 249; /* #F1F5F9 */
-    --muted: 180 192 208; /* #B4C0D0 */
-    --subtle: 139 152 172; /* #8B98AC */
-    --line: 38 50 70; /* #263246 */
-    --line-strong: 102 117 140; /* #66758C */
+    --canvas: 0 0 0; /* #000000 */
+    --surface: 28 28 30; /* #1C1C1E */
+    --raised: 44 44 46; /* #2C2C2E */
+    --fg: 255 255 255; /* #FFFFFF */
+    --muted: 174 174 178; /* #AEAEB2 */
+    --subtle: 152 152 157; /* #98989D */
+    --line: 56 56 58; /* #38383A */
+    --line-strong: 104 104 110; /* #68686E */
     --brand: 37 99 235; /* #2563EB */
-    --brand-fg: 96 165 250; /* #60A5FA */
+    --brand-fg: 100 168 255; /* #64A8FF */
     --on-brand: 255 255 255; /* #FFFFFF */
-    --danger: 248 113 113; /* #F87171 */
+    --danger: 255 107 107; /* #FF6B6B */
     --danger-solid: 220 38 38; /* #DC2626 */
-    --success: 74 222 128; /* #4ADE80 */
+    --success: 48 209 88; /* #30D158 */
     --success-solid: 21 128 61; /* #15803D */
-    --warning: 251 191 36; /* #FBBF24 */
+    --warning: 255 214 10; /* #FFD60A */
     --warning-solid: 180 83 9; /* #B45309 */
-    --workouts: 251 146 60; /* #FB923C */
-    --health: 34 211 238; /* #22D3EE */
-    --nutrition: 74 222 128; /* #4ADE80 */
+    --workouts: 255 159 10; /* #FF9F0A */
+    --health: 99 230 226; /* #63E6E2 */
+    --nutrition: 48 209 88; /* #30D158 */
+    --water: 100 210 255; /* #64D2FF */
+    --body: 204 133 245; /* #CC85F5 */
     --shadow: 0 0 0; /* #000000 */
   }
 
@@ -121,7 +130,7 @@
 
 @layer components {
   .panel {
-    @apply rounded-2xl border border-line bg-surface shadow-card;
+    @apply rounded-[22px] bg-surface;
   }
 
   .label {
@@ -138,7 +147,7 @@
 
   /* acțiunea principală a ecranului */
   .btn-primary {
-    @apply btn bg-brand text-on-brand shadow-card active:bg-brand/90;
+    @apply btn bg-brand text-on-brand active:bg-brand/90;
   }
 
   .btn-quiet {
@@ -156,6 +165,21 @@
 
   .stepper-btn {
     @apply inline-flex min-h-[48px] w-12 shrink-0 items-center justify-center rounded-xl bg-raised text-fg transition-colors active:bg-fg/10;
+  }
+
+  /* Bara de jos plutitoare: sticlă mată, ca Apple Health pe iOS 26 */
+  .tabbar {
+    @apply rounded-[34px] border border-white/60 bg-white/70 shadow-[0_10px_30px_rgb(0_0_0/0.14),0_1px_3px_rgb(0_0_0/0.08)];
+    -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    backdrop-filter: blur(22px) saturate(1.8);
+  }
+  :root[data-theme='dark'] .tabbar {
+    @apply border-white/10 bg-[rgb(44_44_46/0.72)] shadow-[0_10px_30px_rgb(0_0_0/0.5)];
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .tabbar {
+      @apply border-white/10 bg-[rgb(44_44_46/0.72)] shadow-[0_10px_30px_rgb(0_0_0/0.5)];
+    }
   }
 
   /* Cifre mari (greutăți, cronometre): lățime fixă, ca să nu sară la fiecare secundă. */

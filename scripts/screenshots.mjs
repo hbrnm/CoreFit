@@ -1,0 +1,50 @@
+// Capturi de ecran ale aplicației reale, în modul local, cu datele demo din src/dev/seedDemo.ts.
+// Folosire: pornește `npx vite --port 5199` (fără VITE_SUPABASE_* în mediu), apoi
+//   node scripts/screenshots.mjs <folder> [scenariu...]
+// Scenariile sunt funcțiile din SCENES de mai jos; implicit toate. Fiecare iese în modul
+// deschis și închis, la 390 × 844 (iPhone), 2x. Playwright nu e dependență a proiectului:
+// scriptul folosește Chromium-ul și pachetul instalate pe mașina care face capturile.
+import { mkdirSync } from 'node:fs';
+import { chromium } from 'playwright';
+
+const BASE = process.env.SCREENS_URL ?? 'http://127.0.0.1:5199/';
+const [out = 'screens', ...only] = process.argv.slice(2);
+mkdirSync(out, { recursive: true });
+
+const tab = (name) => async (p) => {
+  await p.getByRole('navigation', { name: 'Secțiuni' }).getByRole('button', { name }).click();
+  await p.waitForTimeout(500);
+};
+
+export const SCENES = {
+  '01-home': { seed: 'full', go: tab('Acasă') },
+  '01b-home-empty': { seed: 'empty', go: tab('Acasă') },
+  '03-nutrition': { seed: 'full', go: tab('Nutriție') },
+  '05-start': { seed: 'full', go: tab('Antrenament') },
+  '07-health': { seed: 'full', go: tab('Sănătate') },
+  '08-profile': { seed: 'full', go: tab('Profil') },
+};
+
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium' });
+for (const [name, scene] of Object.entries(SCENES)) {
+  if (only.length && !only.includes(name)) continue;
+  for (const scheme of ['light', 'dark']) {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, colorScheme: scheme });
+    const p = await ctx.newPage();
+    await p.goto(BASE);
+    await p.evaluate(() => localStorage.setItem('corefit_local_user_id', 'demo-user'));
+    await p.evaluate(async (seed) => {
+      const { seedDemo } = await import('/src/dev/seedDemo.ts');
+      await seedDemo('demo-user', seed);
+    }, scene.seed);
+    await p.reload();
+    await p.waitForTimeout(800);
+    await scene.go(p);
+    await p.screenshot({ path: `${out}/${name}-${scheme}.png` });
+    await p.addStyleTag({ content: 'nav.tabbar{position:absolute!important} body{position:relative}' });
+    await p.screenshot({ path: `${out}/${name}-${scheme}-full.png`, fullPage: true });
+    await ctx.close();
+  }
+}
+await browser.close();
+console.log('capturi în', out);

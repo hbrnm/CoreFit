@@ -108,7 +108,7 @@ function CsvImport() {
   const p = preview;
   const fresh = p ? p.plan.sessions.length - p.already : 0;
   return (
-    <Panel title="Import din altă aplicație" edge={D.edge}>
+    <Panel title="Import din altă aplicație">
       <div className="flex flex-col gap-3">
         <p className="text-[15px] text-muted">
           Exportul CSV din Hevy, Strong sau FitNotes. Fișierul se citește pe telefon și nu pleacă nicăieri. Un import
@@ -249,7 +249,7 @@ function PlanShare() {
   };
 
   return (
-    <Panel title="Planul tău" edge={D.edge}>
+    <Panel title="Planul tău">
       <div className="flex flex-col gap-3">
         <p className="text-[15px] text-muted">
           Rutinele și zilele lor, într-un fișier mic, fără antrenamente sau date personale. Un plan primit se adaugă lângă al
@@ -290,7 +290,7 @@ function Backup() {
   };
 
   return (
-    <Panel title="Copie de siguranță" edge={D.edge}>
+    <Panel title="Copie de siguranță">
       <div className="flex flex-col gap-3">
         <p className="text-[15px] text-muted">
           Toate datele tale, într-un fișier JSON. Păstrează-l în iCloud Drive sau Google Drive, mai ales dacă folosești

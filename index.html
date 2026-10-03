@@ -6,8 +6,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#151E2E" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F2F7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
     <!-- modul fixat din Profil (src/lib/theme.ts), aplicat înainte de prima afișare -->
     <script>
       try {
@@ -15,7 +15,7 @@
         if (t === 'light' || t === 'dark') {
           document.documentElement.setAttribute('data-theme', t);
           document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
-            m.content = t === 'dark' ? '#151E2E' : '#FFFFFF';
+            m.content = t === 'dark' ? '#000000' : '#F2F2F7';
           });
         }
       } catch (e) {}

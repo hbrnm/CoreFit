@@ -65,7 +65,7 @@ export function WorkoutsTab() {
       {summary && (
         <Sheet title="Antrenament încheiat" onClose={() => setSummary(null)}>
           <div className="flex flex-col gap-4">
-            <Panel edge={D.edge}>
+            <Panel>
               <p className="font-display text-2xl font-bold">{summary.name}</p>
               <dl className="mt-3 grid grid-cols-3 gap-3">
                 <div>

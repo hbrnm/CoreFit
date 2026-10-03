@@ -33,7 +33,7 @@ function contrast(a, b) {
 const THEMES = { deschis: palette(':root {'), închis: palette(":root[data-theme='dark'] {") };
 const BACKGROUNDS = ['canvas', 'surface', 'raised'];
 /** text pe fundalurile neutre: WCAG AA pentru text normal */
-const TEXT = ['fg', 'muted', 'subtle', 'brand-fg', 'danger', 'success', 'warning', 'workouts', 'health', 'nutrition'];
+const TEXT = ['fg', 'muted', 'subtle', 'brand-fg', 'danger', 'success', 'warning', 'workouts', 'health', 'nutrition', 'water', 'body'];
 /** fundaluri pline cu text on-brand (butoane, bife, insigne) */
 const SOLIDS = ['brand', 'danger-solid', 'success-solid', 'warning-solid'];
 
@@ -59,8 +59,8 @@ it('modul închis e același și din setarea telefonului, și fixat din Profil',
   expect(palette(":root:not([data-theme='light']) {")).toEqual(THEMES.închis);
 });
 
-it('bara de sistem are culoarea antetului', () => {
+it('bara de sistem are culoarea fundalului paginii', () => {
   const hex = (c) => `#${c.map((v) => v.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
-  expect(THEME_COLOR.light).toBe(hex(THEMES.deschis.surface));
-  expect(THEME_COLOR.dark).toBe(hex(THEMES.închis.surface));
+  expect(THEME_COLOR.light).toBe(hex(THEMES.deschis.canvas));
+  expect(THEME_COLOR.dark).toBe(hex(THEMES.închis.canvas));
 });

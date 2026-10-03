@@ -5,19 +5,24 @@ import type { Tab } from '../context';
  * `rgb(var(--workouts))` e portocaliu închis în modul deschis și portocaliu deschis în cel închis.
  * Se folosesc în `style`, nu în atributele SVG, unde var() nu merge peste tot.
  */
-export type Tone = 'brand' | 'workouts' | 'health' | 'nutrition' | 'success' | 'warning' | 'danger' | 'fg' | 'subtle' | 'surface';
+export type Tone =
+  | 'brand' | 'workouts' | 'health' | 'nutrition' | 'water' | 'body'
+  | 'success' | 'warning' | 'danger' | 'fg' | 'subtle' | 'surface' | 'line';
 
 const VAR: Record<Tone, string> = {
   brand: 'brand-fg',
   workouts: 'workouts',
   health: 'health',
   nutrition: 'nutrition',
+  water: 'water',
+  body: 'body',
   success: 'success',
   warning: 'warning',
   danger: 'danger',
   fg: 'fg',
   subtle: 'subtle',
   surface: 'surface',
+  line: 'line',
 };
 
 /** Culoarea unui ton, opțional transparentă (0..1). */

@@ -50,7 +50,7 @@ export function PreventionPanel() {
       {PREVENTION_ITEMS.map((item) => {
         const mark = byItem.get(item.id);
         return (
-          <Panel key={item.id} title={item.title} edge={D.edge}>
+          <Panel key={item.id} title={item.title}>
             <p className="text-[15px] leading-snug">{item.body}</p>
             <p className="mt-2 text-sm text-muted">
               {EVIDENCE_LABELS[item.evidence]}.{' '}

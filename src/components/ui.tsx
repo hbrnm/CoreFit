@@ -20,16 +20,14 @@ export function SyncMark({ status }: { status: SyncStatus }) {
 
 interface PanelProps {
   title?: string;
-  /** clasă de margine stângă colorată, din DOMAIN[...].edge */
-  edge?: string;
   aside?: ReactNode;
   className?: string;
   children: ReactNode;
 }
 
-export function Panel({ title, edge, aside, className, children }: PanelProps) {
+export function Panel({ title, aside, className, children }: PanelProps) {
   return (
-    <section className={cx('panel p-4', edge && `border-l-4 ${edge}`, className)}>
+    <section className={cx('panel p-4', className)}>
       {(title || aside) && (
         <div className="mb-3 flex items-baseline justify-between gap-3">
           {title && <h2 className="font-display text-xl font-bold leading-tight">{title}</h2>}

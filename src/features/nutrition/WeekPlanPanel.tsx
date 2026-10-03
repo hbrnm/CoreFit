@@ -81,7 +81,7 @@ export function WeekPlanPanel() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel title="Plan pe 7 zile" edge={D.edge}>
+      <Panel title="Plan pe 7 zile">
         <p className="text-[15px] text-fg">
           O porție este rețeta împărțită la câte porții iese. 1,5 porții înseamnă o porție și jumătate din oală. Gramele
           includ apa de gătit. La cuptor se pierde apă, deci farfuria cântărește mai puțin. Nu e un plan medical.
@@ -112,7 +112,7 @@ export function WeekPlanPanel() {
       {loaded && day && (
         <Panel
           title={day.date === today ? 'Azi' : formatDayMonth(day.date)}
-          edge={D.edge}
+         
           aside={<span className="text-sm capitalize text-muted">{formatWeekdayShort(day.date)}</span>}
         >
           <div className="grid grid-cols-7 gap-1" role="tablist" aria-label="Zilele săptămânii">
@@ -181,7 +181,7 @@ export function WeekPlanPanel() {
       )}
 
       {loaded && (
-        <Panel title="Cumpărături" edge={D.edge}>
+        <Panel title="Cumpărături">
           <p className="text-[15px] text-fg">Pentru toată săptămâna, la porțiile de mai sus. Bifele rămân pe acest ecran.</p>
           {groups.map((group) => (
             <div key={group.category} className="mt-3">
