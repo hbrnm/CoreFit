@@ -63,6 +63,11 @@ Fără configurare, aplicația rulează în **mod local**: fără cont, datele s
 - Trend al greutății și consum estimat din datele tale (calorii notate și mișcarea trendului).
 - Provocarea fără zahăr și făină (seria de zile) și scanerul de etichete.
 
+**Datele tale** (Profil → Date)
+- Copie de siguranță: toate datele într-un fișier JSON, și restaurare din el (se adaugă la ce ai, câștigă versiunea mai nouă a fiecărui rând).
+- Import din Hevy, Strong și FitNotes (CSV), cu previzualizare, potrivirea exercițiilor cu catalogul și fără dubluri la un import repetat. Detalii în `docs/import-hevy-strong-fitnotes.md`.
+- Planul ca fișier: rutinele și zilele lor, fără antrenamente sau date personale. Un plan primit se adaugă lângă al tău, fără să înlocuiască rutine sau zile ocupate.
+
 ## Cont și sincronizare (Supabase)
 
 1. Creează un proiect Supabase.
