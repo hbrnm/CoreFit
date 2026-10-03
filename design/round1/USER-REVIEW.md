@@ -44,3 +44,17 @@
      (ca Health); restul rămâne monocrom (decizia 6 nuanțată);
    - secțiunea „Tendințe”: propoziții simple + bare gri cu linia de medie colorată;
    - pe Progres, graficul 1RM ca bare gri pe săptămâni, ultima evidențiată.
+
+## Review 5 (cuvânt cu cuvânt)
+
+> Tu ai mai schimba ceva ?  →  (propunerile lui Claude)  →  Implementează tot
+
+9. Progres: 1RM ca linie (nu bare care pornesc de la 80 kg), săptămâna curentă evidențiată.
+10. Antrenament activ: bife de 44 px, cifrele seturilor făcute rămân negre/albe, „+ Set” sub
+    fiecare exercițiu.
+11. Fără antetul „CoreFit · Sincronizat”; fiecare tab are doar titlul mare. Sincronizarea
+    apare doar la probleme („Fără internet”). Sumarul din Nutriție are anatomia cardurilor
+    de pe Acasă; lista meselor rămâne în stilul C.
+12. Acasă: card „Mișcare” (Sănătate, turcoaz) cu pauza de 3 minute.
+13. Acasă pentru prima zi (cont nou, fără date): „Primii pași”.
+14. Tendințe → Calorii: puncte față de țintă, nu bare de la zero.

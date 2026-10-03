@@ -174,3 +174,12 @@ body { padding-bottom: 112px; }
 .tl { display: flex; justify-content: space-between; font-size: 13px; color: var(--subtle); margin-top: 8px; }
 .tl span:last-child { color: var(--cc); }
 .avatar { width: 38px; height: 38px; border-radius: 99px; background: var(--raised); display: flex; align-items: center; justify-content: center; font-weight: 750; color: var(--muted); }
+
+/* Deciziile 11–14 */
+.header { display: none; }
+.step { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); }
+.step:first-of-type { border-top: 0; }
+.step .nr { width: 30px; height: 30px; border-radius: 99px; border: 1.5px solid var(--line); display: flex; align-items: center; justify-content: center; font-weight: 750; font-size: 14px; color: var(--muted); flex: none; }
+.step .nr.ok { background: var(--fg); border-color: var(--fg); color: var(--surface); }
+.step .t { font-weight: 650; } .step .d { font-size: 14px; color: var(--muted); margin-top: 2px; }
+.empty { color: var(--subtle); font-size: 15px; margin-top: 14px; }
