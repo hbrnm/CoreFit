@@ -19,7 +19,7 @@ The running example is **Sprouty**, a fictional plant-care app: users add housep
 their species, read care instructions, follow a watering schedule, and are cheered on by a
 pixel-art mascot, a terracotta pot with two seedling leaves and a face. In that example the
 whole design took 25 minutes from the reference notes to the final screens (11 of them the
-user's two reviews) and $2.01 for 28 images (round 1 and round 2).
+user's two reviews) and 2.01 USD for 28 images (round 1 and round 2).
 
 ## Image provider: Gemini or OpenAI
 
@@ -205,8 +205,8 @@ in a short message; they do not need to read the prompts.
 
 Pick the two or three screens that carry the most design decisions (usually the home
 screen, the signature or focus screen, and one text-heavy screen). Ask for approval:
-"Round 1: 3 screens at 1024×1536 with the 3 references attached, about $0.08–0.09 each,
-about $0.25 in total, cap $0.35 (one spare). About 35 s, run in parallel. OK?"
+"Round 1: 3 screens at 1024×1536 with the 3 references attached, about 0.08–0.09 USD each,
+about 0.25 USD in total, cap 0.35 USD (one spare). About 35 s, run in parallel. OK?"
 
 Generate them in parallel with the generator script, all references attached in the order
 the preamble describes. Then write `round1/REVIEW.md`: a cost/time table and **your own
@@ -241,7 +241,7 @@ image; with them the model is strongly consistent. Build them from what the user
 3. Look at each result against the decisions. Redo what fails (in Sprouty the first hero
    lost its arms and legs; the redo prompt said it MUST have them and attached the sheet).
 
-Ask for budget first: "Anchors: 4 images, $0.03–0.06 each, about $0.25, cap $0.35."
+Ask for budget first: "Anchors: 4 images, 0.03–0.06 USD each, about 0.25 USD, cap 0.35 USD."
 
 ## Step 7: assets, cleanup and the contact sheet
 
@@ -249,7 +249,7 @@ Generate **one asset per image** on a transparent background, 816×816: each ico
 plant or item illustration, any extra mascot pose. Attach the character sheet and the
 approved round-1 screen that shows the style, and use **one prompt template for the whole
 set** (same style sentence, same "readable at 28 px", same palette), so the set is
-consistent. Expect about $0.07 each with two references.
+consistent. Expect about 0.07 USD each with two references.
 
 Then, locally and unbilled:
 
@@ -280,7 +280,7 @@ imperative words ("Plant pots NEVER have faces, eyes or mouths, anywhere on the 
 
 Generate the remaining light screens, then regenerate the round-1 screens the decisions
 changed, then the dark variants with the light version of the same screen attached as the
-last reference. Ask for budget first: "N screens, about $0.07–0.09 each with 3–4 references,
+last reference. Ask for budget first: "N screens, about 0.07–0.09 USD each with 3–4 references,
 about $X, cap $Y." Critique every result against the brief and the decisions in
 `round2/REVIEW.md`, redo what misses a decision, list what remains soft, and present the set
 to the user for a final review.
@@ -337,8 +337,8 @@ project, so only with the user's explicit go-ahead.
   assets: 816×816. Sheets and scenes: 1536×816, 1536×640.
 - The response has `data[0].b64_json` (the PNG) and a `usage` object: `input_tokens_details`
   with `text_tokens` and `image_tokens`, and `output_tokens`. **Compute cost from usage**;
-  at the list prices used in the example, text input $5/M, image input $8/M, image output
-  $30/M tokens. Check the current prices once at the start.
+  at the list prices used in the example, text input 5 USD/M, image input 8 USD/M, image output
+  30 USD/M tokens. Check the current prices once at the start.
 - Each request takes **30–40 s** and returns synchronously; there is no batch queue to wait
   on. **Requests can run in parallel**: a round of eight screens takes about as long as one.
 - Every request is billed, including one whose prompt was silently cut short.
@@ -347,13 +347,13 @@ project, so only with the user's explicit go-ahead.
 
 | Request | Typical cost |
 |---|---|
-| Screen 1024×1536, one reference (or none) | about $0.055 |
-| Screen 1024×1536, three or four references | $0.08–0.09 |
-| Screen 1024×1536 with three anchor references (sheet, scene, icon sheet) | $0.07–0.075 |
-| Asset 816×816 transparent, two to three references | $0.05–0.07 |
-| Wide sheet or scene (1536×816, 1536×640), two to three references | $0.03–0.04 |
-| First round of three screens | about $0.25 |
-| Whole Sprouty design, 28 images incl. 3 redos | $2.01 |
+| Screen 1024×1536, one reference (or none) | about 0.055 USD |
+| Screen 1024×1536, three or four references | 0.08–0.09 USD |
+| Screen 1024×1536 with three anchor references (sheet, scene, icon sheet) | 0.07–0.075 USD |
+| Asset 816×816 transparent, two to three references | 0.05–0.07 USD |
+| Wide sheet or scene (1536×816, 1536×640), two to three references | 0.03–0.04 USD |
+| First round of three screens | about 0.25 USD |
+| Whole Sprouty design, 28 images incl. 3 redos | 2.01 USD |
 
 Budget one spare request per round for a redo.
 
@@ -377,15 +377,15 @@ Budget one spare request per round for a redo.
 
 | Request (Gemini) | Typical cost |
 |---|---|
-| Screen 2:3 at 2K, Gemini 3 Pro Image, with references | about $0.14 |
-| Asset or sheet at 1K, Gemini 3 Pro Image | about $0.14 |
-| Asset at 1K, a Flash image model | about $0.04–0.07 |
-| First round of three screens (3 Pro) | about $0.42 |
-| A whole design of about 28 images (3 Pro screens, Flash assets) | about $2.5–3.5 |
+| Screen 2:3 at 2K, Gemini 3 Pro Image, with references | about 0.14 USD |
+| Asset or sheet at 1K, Gemini 3 Pro Image | about 0.14 USD |
+| Asset at 1K, a Flash image model | about 0.04–0.07 USD |
+| First round of three screens (3 Pro) | about 0.42 USD |
+| A whole design of about 28 images (3 Pro screens, Flash assets) | about 2.5–3.5 USD |
 
 These are list prices in October 2026; check them on the first run (the `PRICE` table in
-`gen_gemini.py`). The script reserves $0.25 per in-flight request against the cap, so a
-round of three needs a cap of at least $0.75 to run all three in parallel.
+`gen_gemini.py`). The script reserves 0.25 USD per in-flight request against the cap, so a
+round of three needs a cap of at least 0.75 USD to run all three in parallel.
 
 ## Request pattern: curl
 
