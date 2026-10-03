@@ -1,4 +1,4 @@
-import { db, newId, nowIso, stamp, type FoodSource, type LocalFoodEntry, type LocalNutritionLog, type Meal } from './db';
+import { db, gramsFromAmountText, newId, nowIso, stamp, type FoodSource, type LocalFoodEntry, type LocalNutritionLog, type Meal } from './db';
 import { addDays } from './date';
 import type { Totals } from './nutrition';
 
@@ -17,6 +17,8 @@ export async function addEntry(
   amountText: string,
   totals: Totals,
   source: FoodSource,
+  /** gramajul numeric; implicit citit din text („150 g”), null la porții */
+  grams: number | null = gramsFromAmountText(amountText),
 ): Promise<void> {
   const round = (n: number) => Math.round(n * 10) / 10;
   await db.foodEntries.put({
@@ -26,6 +28,7 @@ export async function addEntry(
     meal,
     name,
     amount_text: amountText,
+    grams: grams === null ? null : Math.round(grams * 10) / 10,
     kcal: round(totals.kcal),
     protein: round(totals.protein),
     carbs: round(totals.carbs),

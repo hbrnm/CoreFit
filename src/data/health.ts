@@ -17,14 +17,18 @@ export const EVIDENCE_LABELS: Record<EvidenceLevel, string> = {
 };
 
 export const REGIONS: ReadonlyArray<{ id: RegionId; label: string }> = [
-  { id: 'lower_back', label: 'Zona lombară' },
-  { id: 'neck', label: 'Gât' },
+  { id: 'neck', label: 'Cervical (gât)' },
+  { id: 'thoracic', label: 'Toracal (mijlocul spatelui)' },
+  { id: 'lower_back', label: 'Lombar (zona de jos a spatelui)' },
   { id: 'shoulder', label: 'Umăr' },
   { id: 'hip', label: 'Șold' },
   { id: 'knee', label: 'Genunchi' },
   { id: 'ankle_foot', label: 'Gleznă și picior' },
   { id: 'other', label: 'General' },
 ];
+
+/** Cele trei zone ale coloanei, de sus în jos. */
+export const SPINE_ZONES: readonly RegionId[] = ['neck', 'thoracic', 'lower_back'];
 
 export const REGION_LABELS = Object.fromEntries(REGIONS.map((r) => [r.id, r.label])) as Record<RegionId, string>;
 

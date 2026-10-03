@@ -5,6 +5,7 @@ import { useCatalog } from '../../hooks/useCatalog';
 import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
+import { isWorkingSet } from '../../lib/setTypes';
 import { addDays, formatDayMonth, localDateStr } from '../../lib/date';
 import { DOMAIN, tone } from '../../lib/domains';
 import { formatNum } from '../../lib/numbers';
@@ -28,7 +29,7 @@ export function ProgressPanel() {
       db.workoutLogs
         .where('[user_id+logged_at]')
         .between([userId, Dexie.minKey], [userId, Dexie.maxKey])
-        .filter((l) => !l.deleted && l.set_type === 'work')
+        .filter((l) => !l.deleted && isWorkingSet(l.set_type))
         .toArray(),
     [userId],
   );

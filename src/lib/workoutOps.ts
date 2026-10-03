@@ -1,3 +1,4 @@
+import { countsForProgression, isWorkingSet, type SetType } from './setTypes';
 import Dexie from 'dexie';
 import { builtinExercise, type Exercise, type ExerciseKind } from '../data/exercises';
 import {
@@ -24,7 +25,7 @@ import {
 
 export interface DraftSet {
   key: string;
-  kind: 'work' | 'warmup';
+  kind: SetType;
   weight: string;
   reps: string;
   /** gol = efortul nu e notat */
@@ -93,7 +94,7 @@ export async function previousSets(
       (l) =>
         !l.deleted &&
         l.exercise_id === exerciseId &&
-        l.set_type === 'work' &&
+        countsForProgression(l.set_type) &&
         l.session_id !== excludeSessionId,
     )
     .limit(40)
@@ -130,7 +131,7 @@ export async function recentNonDeloadSessions(
       (l) =>
         !l.deleted &&
         l.exercise_id === exerciseId &&
-        l.set_type === 'work' &&
+        countsForProgression(l.set_type) &&
         l.session_id !== excludeSessionId,
     )
     .limit(200)
@@ -380,7 +381,7 @@ export async function computeSummary(
     .filter((l) => !l.deleted && l.session_id !== session.id)
     .toArray();
 
-  const work = sets.filter((l) => l.set_type === 'work');
+  const work = sets.filter((l) => isWorkingSet(l.set_type));
   const volumeKg = work.reduce(
     (sum, l) => sum + setVolume(findExercise(catalog, l.exercise_id, l.exercise_name).kind, l.weight_kg, l.reps),
     0,

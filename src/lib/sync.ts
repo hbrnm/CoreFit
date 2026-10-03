@@ -103,6 +103,14 @@ const SPECS: SyncSpec[] = [
     keyOf: (r) => [r.user_id as string, r.log_date as string],
     dropRemoteId: true,
   },
+  {
+    remote: 'spine_checklists',
+    table: db.spineChecklists,
+    onConflict: 'user_id,log_date',
+    keyPath: '[user_id+log_date]',
+    keyOf: (r) => [r.user_id as string, r.log_date as string],
+    dropRemoteId: true,
+  },
 ];
 
 // ------------------------------------------------------------------ trimitere
