@@ -1,6 +1,6 @@
 ---
 name: design-workflow
-description: Design an app or web UI with the gpt-image-2.5-sunburst image model from the project plan and 2-4 reference screenshots with notes, then build the UI from the images. Use when the user wants to design or redesign screens, icons, a logo or a mascot.
+description: Design an app or web UI with an image model (Google Gemini image models, or OpenAI's gpt-image-2.5-sunburst) from the project plan and 2-4 reference screenshots with notes, then build the UI from the images. Use when the user wants to design or redesign screens, icons, a logo or a mascot.
 ---
 
 # Design workflow: UI design with an image model (instructions for Claude Code)
@@ -21,6 +21,25 @@ pixel-art mascot, a terracotta pot with two seedling leaves and a face. In that 
 whole design took 25 minutes from the reference notes to the final screens (11 of them the
 user's two reviews) and $2.01 for 28 images (round 1 and round 2).
 
+## Image provider: Gemini or OpenAI
+
+The method works with either provider; the steps below use OpenAI's terms (pixel sizes,
+`background=transparent`, `gen.py`). **Ask the user which one they have a key for**, and if
+it is Gemini, translate as you go:
+
+| In the steps | OpenAI | Gemini |
+|---|---|---|
+| Key | `OPENAI_API_KEY` | `GEMINI_API_KEY` (in a cloud session: the environment's settings, as an environment variable; picked up by new sessions) |
+| Generator | `tools/gen.py` | `tools/gen_gemini.py` |
+| Screen 1024×1536 | `--size 1024x1536` | `--aspect 2:3 --image-size 2K` |
+| Asset 816×816 | `--size 816x816` | `--aspect 1:1 --image-size 1K` |
+| Sheet 1536×816 / scene 1536×640 | `--size 1536x816` / `1536x640` | `--aspect 16:9` / `--aspect 21:9`, `--image-size 1K` |
+| Transparent background | `--background transparent` | not supported: ask for a flat key colour in the prompt, then `tools/chroma_key.py` before `harden_alpha.py` (see "Gemini" in the reference) |
+| Model | `gpt-image-2.5-sunburst` | `gemini-3-pro-image-preview` for screens and anchors; a Flash image model for cheap assets if the user prefers (check with `gen_gemini.py --list-models`) |
+
+Everything else (the brief, prompts in files, budget caps, the log, anchors, reviews,
+building and verifying) is the same. Quote costs from the provider's own table.
+
 ## Ground rules
 
 - **Leave the project untouched.** Everything you create lives under the `design/` folder
@@ -33,7 +52,7 @@ user's two reviews) and $2.01 for 28 images (round 1 and round 2).
   budget, each review, which image is authoritative. Between those, work without asking.
   When you ask, ask everything you need for that step in one message.
 - **Never print the API key**, never echo it, never put it in a command line that is shown,
-  a log, a prompt file or a commit. Scripts read it from `design/.env` or the environment.
+  a log, a prompt file or a commit. Scripts read it from the environment or `design/.env`.
 - **Ask for budget approval before every round**, with the number of images and the
   expected cost (see "Costs" below). Enforce the approved amount as a hard cap in the
   generator script. If a redo would exceed it, stop and ask.
@@ -68,7 +87,8 @@ design/
   assets/clean/         hardened versions; ICONS.png contact sheet
   round2/               remaining screens, light and dark, REVIEW.md
   final/                the authoritative image per screen (copies), AUTHORITATIVE.md
-  tools/                gen.py, harden_alpha.py, contact_sheet.py, crop.py, flatten.py
+  tools/                gen.py or gen_gemini.py, chroma_key.py (Gemini), harden_alpha.py,
+                        contact_sheet.py, crop.py, flatten.py
   log.jsonl             one line per billed request
   timeline.txt          step start/end timestamps
   COSTS.md              per-request and per-step table, written at the end
@@ -93,6 +113,13 @@ file and the user would rather use that, ask before reading from it, and never e
 `.gitignore` without their permission. Then make one cheap call to confirm access (for example list models
 with curl, printing only the HTTP status). If it fails, show the user the error message
 from the response body (never the key) and let them sort out access on the OpenAI side.
+
+**With Gemini**, the key is `GEMINI_API_KEY`. In a cloud session the user adds it in the
+environment's settings (the cloud environment menu in the session's title bar, then Edit) as
+an environment variable; only sessions started after that see it. Locally it can go in
+`design/.env` as above. Check access with `python3 design/tools/gen_gemini.py --list-models`,
+which prints the image models the key can use and never the key; pick the model from that
+list and correct the price table in the script if the current prices differ.
 
 ## Step 2: the project plan
 
@@ -322,6 +349,36 @@ project, so only with the user's explicit go-ahead.
 
 Budget one spare request per round for a redo.
 
+## Gemini: API facts and costs
+
+- Endpoint: `POST https://generativelanguage.googleapis.com/v1beta/models/<model>:generateContent`,
+  JSON body, key in the `x-goog-api-key` header. The prompt is the first part, then each
+  reference as an `inline_data` part (`mime_type`, base64 `data`), in the order the prompt
+  describes them.
+- `generationConfig`: `responseModalities: ["IMAGE"]`, `imageConfig.aspectRatio` (`1:1`,
+  `2:3`, `3:2`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, `21:9`) and `imageConfig.imageSize`
+  (`1K`, `2K`, `4K`, capital K). Sizes are chosen by ratio, not pixels.
+- The image comes back as `candidates[0].content.parts[].inlineData` (base64, with its
+  `mimeType`); `usageMetadata` has `promptTokenCount`, `candidatesTokenCount` and the split
+  by modality. The image output is billed as tokens: about 1120 for 1K/2K, 2000 for 4K.
+- **No transparent background.** See `chroma_key.py` below.
+- Reference limits (Gemini 3 Pro Image): up to 6 object images, 5 character images, 3 style
+  images, 14 in total. Attach fewer and sharper rather than more.
+- Every image carries an invisible SynthID watermark; it does not affect the design use.
+- Requests are synchronous and can run in parallel, as with OpenAI.
+
+| Request (Gemini) | Typical cost |
+|---|---|
+| Screen 2:3 at 2K, Gemini 3 Pro Image, with references | about $0.14 |
+| Asset or sheet at 1K, Gemini 3 Pro Image | about $0.14 |
+| Asset at 1K, a Flash image model | about $0.04–0.07 |
+| First round of three screens (3 Pro) | about $0.42 |
+| A whole design of about 28 images (3 Pro screens, Flash assets) | about $2.5–3.5 |
+
+These are list prices in October 2026; check them on the first run (the `PRICE` table in
+`gen_gemini.py`). The script reserves $0.25 per in-flight request against the cap, so a
+round of three needs a cap of at least $0.75 to run all three in parallel.
+
 ## Request pattern: curl
 
 ```bash
@@ -368,6 +425,36 @@ for s in 01-home 02-today 03-plant-detail; do
     --prompt design/prompts/r1-$s-light.txt --ref design/refs/ref-1.png \
     --ref design/refs/ref-2.png --ref design/refs/ref-3.png &
 done; wait
+```
+
+## The Gemini generator: `design/tools/gen_gemini.py`
+
+Script: [`tools/gen_gemini.py`](tools/gen_gemini.py). Same log, cap and rules as `gen.py`;
+the key is read from `GEMINI_API_KEY` and sent on curl's stdin; the request body is a JSON
+file, so the prompt cannot be truncated the way curl `-F` truncates it.
+
+```bash
+python3 design/tools/gen_gemini.py --list-models
+for s in 01-home 02-today 03-plant-detail; do
+  python3 design/tools/gen_gemini.py --step round1 --cap 0.80 --out design/round1/$s-light.png \
+    --prompt design/prompts/r1-$s-light.txt --aspect 2:3 --image-size 2K \
+    --ref design/refs/ref-1.png --ref design/refs/ref-2.png --ref design/refs/ref-3.png &
+done; wait
+```
+
+## `design/tools/chroma_key.py` (Gemini)
+
+Script: [`tools/chroma_key.py`](tools/chroma_key.py). Gemini cannot draw transparency, so
+every asset and anchor that should be transparent is drawn on **one flat key colour that
+appears nowhere in the art**: magenta `#FF00FF` by default (use another if the palette has
+pink or purple, never green or blue if the product uses them). The script flood-fills the
+key colour from the border, so a key-coloured area inside the sprite survives, and removes
+the key-tinted fringe on the outline. Then run `harden_alpha.py` and the contact sheet as
+usual.
+
+```bash
+uv run --with pillow python3 design/tools/chroma_key.py design/assets/*.png --out design/assets/keyed
+uv run --with pillow python3 design/tools/harden_alpha.py design/assets/keyed/*.png --out design/assets/clean
 ```
 
 ## `design/tools/harden_alpha.py`
@@ -492,6 +579,10 @@ A single small <kind> icon for <product>: <subject, described concretely>. Crisp
 
 Swap the style sentence for the project's style if it is not pixel art; keep everything else.
 
+With Gemini, replace the last sentence with: "Background: one flat solid magenta #FF00FF
+filling the whole canvas, edge to edge, no gradient, no shadow, no ground patch, no frame;
+magenta appears nowhere in the subject itself." Then key it out with `chroma_key.py`.
+
 ## Pitfalls
 
 - **Unrequested chrome.** The model adds headers, search bars, notification bells, badges,
@@ -528,6 +619,12 @@ Swap the style sentence for the project's style if it is not pixel art; keep eve
 - **No batch waiting, but no refunds.** Requests are synchronous and parallel, which makes
   it tempting to fire many; the cap in `gen.py` is what keeps the round within the approved
   budget.
+- **Gemini: the key colour leaks into the art.** If the prompt does not forbid it, the model
+  tints outlines or highlights with the background colour and they are keyed out as holes.
+  Say that the key colour appears nowhere in the subject, and check the dark half of the
+  contact sheet for holes as well as halos.
+- **Gemini: ratios, not pixels.** Ask for `2:3` and `2K` for screens; when measuring layout
+  in step 10, use the returned image's real width as the device width.
 
 ## At the end
 
