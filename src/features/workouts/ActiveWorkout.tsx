@@ -290,7 +290,8 @@ export function ActiveWorkout({ session, onFinished }: Props) {
         const de = draft.exercises[exIndex];
         const ex = exerciseOf(de);
         const previous = previousByExercise?.get(de.exercise_id) ?? [];
-        const unit = ex.kind === 'duration' ? 'sec' : 'rep';
+        const unit = `${ex.kind === 'duration' ? 'sec' : 'rep'}${ex.perSide ? ' / parte' : ''}`;
+        const side = ex.perSide ? ' pe parte' : '';
         const posInGroup = idxs.indexOf(exIndex);
         return (
           <section
@@ -326,8 +327,8 @@ export function ActiveWorkout({ session, onFinished }: Props) {
                       .map((p) => {
                         const load =
                           ex.kind === 'duration'
-                            ? `${p.reps} s`
-                            : `${p.weight_kg > 0 ? formatNum(p.weight_kg, 2) : 'corp'} x ${p.reps}`;
+                            ? `${p.reps} s${side}`
+                            : `${p.weight_kg > 0 ? formatNum(p.weight_kg, 2) : 'corp'} x ${p.reps}${side}`;
                         const effort = formatEffort(p.rpe, p.effort_scale);
                         return effort ? `${load} ${effort}` : load;
                       })

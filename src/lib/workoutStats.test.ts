@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { builtinExercise } from '../data/exercises';
 import type { LocalWorkoutLog } from './db';
 import { estimate1RM } from './numbers';
 import { platesPerSide } from './plates';
@@ -103,5 +104,13 @@ describe('discuri pe parte', () => {
 
   it('sub greutatea barei nu pune nimic', () => {
     expect(platesPerSide(15, 20)).toEqual({ plates: [], leftover: 0 });
+  });
+});
+
+describe('exerciții pe o parte', () => {
+  it('sunt marcate în catalog doar cele unilaterale', () => {
+    expect(builtinExercise('db-row')?.perSide).toBe(true);
+    expect(builtinExercise('side-plank')?.perSide).toBe(true);
+    expect(builtinExercise('bench-press')?.perSide).toBeUndefined();
   });
 });
