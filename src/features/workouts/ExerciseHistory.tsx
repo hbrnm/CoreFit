@@ -1,3 +1,4 @@
+import { isWorkingSet } from '../../lib/setTypes';
 import Dexie from 'dexie';
 import { useApp } from '../../context';
 import { useLive } from '../../hooks/useLive';
@@ -22,7 +23,7 @@ export function ExerciseHistory({ exercise }: Props) {
       db.workoutLogs
         .where('[user_id+logged_at]')
         .between([userId, Dexie.minKey], [userId, Dexie.maxKey])
-        .filter((l) => !l.deleted && l.set_type === 'work' && l.exercise_id === exercise.id)
+        .filter((l) => !l.deleted && isWorkingSet(l.set_type) && l.exercise_id === exercise.id)
         .toArray(),
     [userId, exercise.id],
   );

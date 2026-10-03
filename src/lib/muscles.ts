@@ -1,3 +1,4 @@
+import { isWorkingSet } from './setTypes';
 import { MUSCLE_LABELS, type Muscle } from '../data/exercises';
 import type { LocalWorkoutLog } from './db';
 import { addDays, localDateStr } from './date';
@@ -35,7 +36,7 @@ export function muscleBalance(
   for (const muscle of MUSCLE_ORDER) totals.set(muscle, { sets: 0, exercises: new Map() });
 
   for (const log of logs) {
-    if (log.deleted || log.set_type !== 'work') continue;
+    if (log.deleted || !isWorkingSet(log.set_type)) continue;
     const date = localDateStr(new Date(log.logged_at));
     if (from && (date < from || date > today)) continue;
     const exercise = findExercise(catalog, log.exercise_id, log.exercise_name);

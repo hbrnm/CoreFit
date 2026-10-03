@@ -1,3 +1,4 @@
+import { isWorkingSet } from './setTypes';
 import { MUSCLE_LABELS, type Exercise, type Muscle } from '../data/exercises';
 import type { LocalWorkoutLog } from './db';
 import { MUSCLE_ORDER } from './muscles';
@@ -73,7 +74,7 @@ export function muscleFatigue(
   const nowMs = now.getTime();
 
   for (const log of logs) {
-    if (log.deleted || log.set_type !== 'work') continue;
+    if (log.deleted || !isWorkingSet(log.set_type)) continue;
     const hours = (nowMs - Date.parse(log.logged_at)) / 3_600_000;
     if (hours < 0 || hours > FATIGUE_HALF_LIFE_H * 10) continue;
     const exercise = findExercise(catalog, log.exercise_id, log.exercise_name);

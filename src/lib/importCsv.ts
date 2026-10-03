@@ -1,3 +1,4 @@
+import { parseSetType, type SetType } from './setTypes';
 /*
  * Import de antrenamente din exporturile CSV ale altor aplicații: Hevy, Strong, FitNotes.
  * Totul e pur (fără Dexie, fără React): fișierul se citește pe dispozitiv și nu pleacă nicăieri.
@@ -21,7 +22,7 @@ const LB_TO_KG = 0.45359237;
 
 export interface ImportedSet {
   exerciseName: string;
-  setType: 'work' | 'warmup';
+  setType: SetType;
   weightKg: number;
   /** repetări, sau secunde când seria e cronometrată */
   reps: number;
@@ -278,7 +279,7 @@ export function parseImport(text: string, unit: WeightUnit = 'kg'): ParsedImport
     const typeRaw = norm((source === 'hevy' ? r.get(row, 'set_type') : source === 'strong' ? r.get(row, 'set order') : '') ?? '');
     draft.sets.push({
       exerciseName: name,
-      setType: typeRaw === 'warmup' || typeRaw === 'w' ? 'warmup' : 'work',
+      setType: parseSetType(typeRaw),
       weightKg: weightRaw !== null && weightRaw > 0 ? toKg(weightRaw, rowUnit) : 0,
       reps: value,
       timed,

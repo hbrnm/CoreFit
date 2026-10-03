@@ -5,6 +5,7 @@ import { useCatalog } from '../../hooks/useCatalog';
 import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
+import { isWorkingSet } from '../../lib/setTypes';
 import { formatDayMonth, formatWeekdayShort } from '../../lib/date';
 import { DOMAIN } from '../../lib/domains';
 import { FATIGUE_HALF_LIFE_H, muscleFatigue } from '../../lib/fatigue';
@@ -39,7 +40,7 @@ export function TodayCard({ onStarted }: Props) {
     return db.workoutLogs
       .where('[user_id+logged_at]')
       .between([userId, since], [userId, Dexie.maxKey])
-      .filter((l) => !l.deleted && l.set_type === 'work')
+      .filter((l) => !l.deleted && isWorkingSet(l.set_type))
       .toArray();
   }, [userId]);
 
