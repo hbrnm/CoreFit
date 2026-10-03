@@ -39,10 +39,15 @@ Fără configurare, aplicația rulează în **mod local**: fără cont, datele s
 
 ## Ce conține
 
+**Acasă și Start**
+- Antrenamentul de azi din planul săptămânii (cu mutările din săptămâna curentă), pornit direct, și un avertisment când rutina lucrează grupe încă obosite. Într-o zi liberă: următorul antrenament.
+- Pe Acasă: calorii și apă azi față de ținte (+250 ml dintr-o atingere), săptămâna față de recomandarea OMS și greutatea pe 30 de zile, cu trend. Doar date notate în aplicație: fără somn, puls sau pași, pe care aplicația nu are de unde să-i știe.
+- Pe Start: antrenament liber, planul săptămânii, obiectivele OMS și calculatorul de discuri.
+
 **Antrenament**
 - Antrenament gol sau din rutină, cu seriile precompletate din ultima sesiune, bifare pe serie, serii de încălzire, cronometru de pauză (-15, +15, sari), note.
 - Rutine proprii (editor cu serii, repetări, pauză, reordonare) și șabloane: Full body, Upper/Lower, Push/Pull/Legs, acasă fără echipament.
-- Bibliotecă de exerciții pe grupe musculare, cu exerciții proprii.
+- Bibliotecă de 118 exerciții, filtrabilă pe grupă musculară și pe echipament, cu favorite și exerciții proprii (se pot edita și șterge; seriile notate rămân în istoric).
 - Progresie automată, pe rutină: liniară (5x5 clasic), dublă (interval de repetări, apoi +greutate), Greyskull (ultima serie AMRAP, cu salt dublu sau reset la eșec) sau fără sugestie. Override pe exercițiu, rutini de deload care nu trag progresia în jos.
 - Superseturi: legi două sau mai multe exerciții consecutive dintr-o rutină, ca să le faci pe rând, fără pauză între ele, cu o singură pauză după ultimul din grup, marcate vizual în antrenamentul activ.
 - Istoric pe sesiuni, progres pe exercițiu (1RM estimat), recorduri detectate la finalul antrenamentului, serii pe grupă musculară.

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { CommunityPanel } from './CommunityPanel';
 import { DataPanel } from './DataPanel';
 import { useApp } from '../../context';
 import {
@@ -44,7 +43,7 @@ export function ProfileTab() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [view, setView] = useState<'wizard' | 'community' | 'data'>('wizard');
+  const [view, setView] = useState<'wizard' | 'data'>('wizard');
   const [step, setStep] = useState(1);
 
   // Completăm formularul o singură dată
@@ -136,13 +135,7 @@ export function ProfileTab() {
             className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${view === 'wizard' ? 'bg-neon-mint text-chalk' : 'text-white/60 hover:text-white'}`}
             onClick={() => setView('wizard')}
           >
-            Wizard
-          </button>
-          <button 
-            className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${view === 'community' ? 'bg-neon-orange text-white' : 'text-white/60 hover:text-white'}`}
-            onClick={() => setView('community')}
-          >
-            Community
+            Setări
           </button>
           <button
             className={`px-3 py-1 text-sm font-semibold rounded-md transition-all ${view === 'data' ? 'bg-neon-cyan text-chalk' : 'text-white/60 hover:text-white'}`}
@@ -156,8 +149,6 @@ export function ProfileTab() {
 
       {view === 'data' ? (
         <DataPanel />
-      ) : view === 'community' ? (
-        <CommunityPanel />
       ) : (
         <Panel className="relative overflow-hidden">
           {/* Progress Bar Top */}

@@ -92,7 +92,7 @@ export function WeekPlanPanel() {
             <Notice
               tone="info"
               action={
-                <button type="button" className="btn-outline bg-white" onClick={() => goTo('profile')}>
+                <button type="button" className="btn-outline" onClick={() => goTo('profile')}>
                   Completează în Profil
                 </button>
               }
@@ -124,7 +124,7 @@ export function WeekPlanPanel() {
                   type="button"
                   role="tab"
                   aria-selected={on}
-                  className={`flex min-h-[52px] flex-col items-center justify-center px-0.5 text-sm capitalize ${on ? D.solid : 'border border-steel/20 bg-white'}`}
+                  className={`flex min-h-[52px] flex-col items-center justify-center px-0.5 text-sm capitalize ${on ? D.solid : 'border border-white/10 bg-white/5'}`}
                   onClick={() => {
                     setSelected(item.date);
                     setNote(null);

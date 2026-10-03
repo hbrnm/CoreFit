@@ -85,7 +85,7 @@ export function RecipeCatalog({ savedIds }: { savedIds: ReadonlySet<string> }) {
                 </button>
                 <button
                   type="button"
-                  className={`btn min-h-[44px] flex-1 ${saved ? 'border border-steel/30 bg-white text-steel' : D.solid}`}
+                  className={`btn min-h-[44px] flex-1 ${saved ? 'border border-white/10 bg-white/5 text-steel' : D.solid}`}
                   disabled={saved}
                   onClick={() => void add(recipe.id)}
                 >

@@ -82,7 +82,7 @@ function RecipeEditor({ recipe, draft, onClose }: EditorProps) {
 
         <div>
           <p className="label">Ingrediente (greutate crudă)</p>
-          <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white">
+          <ul className="divide-y divide-steel/10 border-y border-steel/10 bg-white/5">
             {ingredients.map((ing, i) => (
               <li key={`${ing.name}-${i}`} className="flex items-center gap-2 px-3 py-2">
                 <div className="min-w-0 flex-1">
