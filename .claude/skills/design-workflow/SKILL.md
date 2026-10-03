@@ -29,7 +29,7 @@ it is Gemini, translate as you go:
 
 | In the steps | OpenAI | Gemini |
 |---|---|---|
-| Key | `OPENAI_API_KEY` | `GEMINI_API_KEY` (in a cloud session: the environment's settings, as an environment variable; picked up by new sessions) |
+| Key | `OPENAI_API_KEY` | `GEMINI_API_KEY`, or in a cloud session an API credential on the environment (see step 1) |
 | Generator | `tools/gen.py` | `tools/gen_gemini.py` |
 | Screen 1024×1536 | `--size 1024x1536` | `--aspect 2:3 --image-size 2K` |
 | Asset 816×816 | `--size 816x816` | `--aspect 1:1 --image-size 1K` |
@@ -114,9 +114,17 @@ file and the user would rather use that, ask before reading from it, and never e
 with curl, printing only the HTTP status). If it fails, show the user the error message
 from the response body (never the key) and let them sort out access on the OpenAI side.
 
-**With Gemini**, the key is `GEMINI_API_KEY`. In a cloud session the user adds it in the
-environment's settings (the cloud environment menu in the session's title bar, then Edit) as
-an environment variable; only sessions started after that see it. Locally it can go in
+**With Gemini**, the key is `GEMINI_API_KEY`. In a cloud session the user sets it up at
+claude.ai/code in a browser (not the mobile app): the cloud icon with the environment's name
+above the message box, then the settings icon next to the environment, then either
+- **API credentials** (Pro and Max plans, preferred): Add credential, allowed website
+  `generativelanguage.googleapis.com`, custom header name `x-goog-api-key` with the prefix
+  cleared, the key as the value, Connect. The proxy adds the key outside the session, so
+  there is no variable and `gen_gemini.py` sends no key itself; or
+- **Environment variables**: a line `GEMINI_API_KEY=...`, Save changes. Anyone who uses the
+  environment can read it.
+
+A running session picks up a new variable only after its VM restarts; a new session has it. Locally it can go in
 `design/.env` as above. Check access with `python3 design/tools/gen_gemini.py --list-models`,
 which prints the image models the key can use and never the key; pick the model from that
 list and correct the price table in the script if the current prices differ.

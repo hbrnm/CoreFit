@@ -5,8 +5,10 @@
 #       --prompt design/prompts/r1-01-home-light.txt --aspect 2:3 --image-size 2K \
 #       --ref design/refs/ref-1.png --ref design/refs/ref-2.png --cap 0.50
 #   python3 design/tools/gen_gemini.py --list-models    # image models this key can use
-# The key comes from the GEMINI_API_KEY environment variable (set in the cloud environment's
-# settings), or from design/.env. It is sent on curl's stdin, never on the command line.
+# The key comes from the GEMINI_API_KEY environment variable or design/.env, and is sent on
+# curl's stdin, never on the command line. In a cloud environment it can instead be an API
+# credential (header x-goog-api-key, host generativelanguage.googleapis.com) that the proxy
+# adds outside the session; then there is no variable and the script sends no key itself.
 # Gemini cannot draw a transparent background: ask for a flat key colour in the prompt and
 # run chroma_key.py on the result.
 import argparse, base64, fcntl, json, mimetypes, os, subprocess, tempfile, time
@@ -44,9 +46,13 @@ if not key and os.path.exists(a.secrets):
     for line in open(a.secrets):
         if line.startswith("GEMINI_API_KEY="):
             key = line.split("=", 1)[1].strip().strip('"').strip("'")
-if not key:
-    raise SystemExit("no GEMINI_API_KEY in the environment or the secrets file")
-cfg = f'header = "x-goog-api-key: {key}"\n'  # via stdin, so the key is not in argv
+if key:
+    cfg = f'header = "x-goog-api-key: {key}"\n'  # via stdin, so the key is not in argv
+else:
+    # A cloud environment can hold the key as an API credential: the agent proxy adds the
+    # header to requests for generativelanguage.googleapis.com and the session never sees it.
+    cfg = ""
+    print("note: no GEMINI_API_KEY here; relying on an API credential added by the environment's proxy")
 
 
 def curl(url, body_file=None):
