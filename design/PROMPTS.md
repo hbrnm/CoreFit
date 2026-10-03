@@ -1,0 +1,58 @@
+# Prompts
+
+## Preamble (round 1)
+
+```
+Design one mobile app screen for "CoreFit", a Romanian-language fitness app for iPhone that logs strength training, food and spine health. Output a single flat, straight-on phone UI screenshot, full-bleed, 2:3 portrait, no device frame, no hands, no background outside the screen.
+
+There are no reference images. Follow this visual system exactly.
+
+VISUAL SYSTEM: clean, calm, native iOS quality, like Apple Health or Apple Fitness. Flat surfaces, no gradients, no glass, no glow. Font: SF Pro. Page background #F2F4F7. Cards #FFFFFF, 16 px corner radius, 1 px #E2E8F0 border, very soft shadow. Text #0F172A, secondary text #475569. Brand blue #2563EB for primary buttons (white text), the selected segment, the selected tab and links. Section accents only for small things (a 4 px left stripe on a card, an icon, a chart line, a small label): workouts orange #C2410C, nutrition green #166534, health teal #0E7490. Success green #15803D for done sets and ticks; warning amber #92400E. Buttons and inputs 12 px radius, 16 px page margins, 12 px gaps between cards. Thin line icons (Lucide style). Numbers in tabular figures; important numbers big and bold.
+MODE: light mode.
+
+RULES: render all text exactly as given, in Romanian, legible and correctly spelled with Romanian diacritics (ă, â, î, ș, ț). Include only the elements listed for this screen, in the order given. Do not add any chrome that is not listed: no extra headers, banners, badges, search bars, avatars, notification bells or dots, ads, promo cards or extra tabs. No emoji, no photos, no people, no illustrations. Status bar at top shows 9:41 with signal, wifi and battery.
+
+SCREEN:
+```
+
+## 01-home
+
+```
+ACASĂ (home) screen, top to bottom:
+1. Header row: "CoreFit" bold at left; at right a small green check icon and "Sincronizat" in secondary text.
+2. Title "Bună, Andrei" large bold, and under it "Sâmbătă, 3 octombrie" in secondary text.
+3. Card with a 4 px orange left stripe: small orange dumbbell icon and orange label "ANTRENAMENTUL DE AZI"; title "Upper A" bold; "4 exerciții · cam 60 min" secondary; a line with a small amber warning icon and "Încă obosite: Piept, Triceps" in amber; a full-width blue button "Începe antrenamentul".
+4. Card with a 4 px green left stripe, title "Azi în nutriție": big "1 840" and "din 2 400 kcal" secondary, a green progress bar at about 77%; under it three small columns, each with a label, a value and a thin bar: "Proteine 128 / 160 g", "Carbohidrați 190 / 260 g", "Grăsimi 62 / 75 g"; then a row "Apă" with "1 250 / 2 500 ml", a blue bar at 50% and a small grey button "+ 250 ml".
+5. Card "Săptămâna aceasta": row "Efort aerob" with "95 / 150 min" and a bar at 63%; row "Zile de forță" with "2 / 3" and a bar at 67%.
+6. Card "Greutate, 30 de zile": "82,4 kg" bold and "−0,6 kg" in green, and a small thin green line chart gently going down.
+7. Bottom tab bar with 5 tabs: Acasă (house icon, selected, blue), Antrenament (dumbbell), Nutriție (apple), Sănătate (heartbeat line), Profil (person).
+```
+
+## 02-workout
+
+```
+ANTRENAMENT ACTIV (active workout) screen, a focused logging screen, top to bottom:
+1. Top row: title "Upper A" bold at left, under it "32 min · 7 din 12 seturi" in secondary text; at right a blue text button "Termină".
+2. A thin orange progress bar across the width at 58%.
+3. Exercise card "Împins cu bara la piept", under it "3 × 6–8 · pauză 2:30" secondary and a small green pill "+2,5 kg data viitoare". A set table with column headers "Set", "kg", "Rep." and a tick column. Three rows, all done (light green row tint, filled green round tick with a white check): "1 · 80 · 8", "2 · 80 · 7", "3 · 80 · 6".
+4. Exercise card "Ramat cu bara", under it "3 × 8–10 · pauză 2:00". Same table. Rows: "1 · 70 · 10" done, "2 · 70 · 9" done, "3" current: a blue outline around the row, input boxes showing "70" and "8", and an empty round tick.
+5. Exercise card "Împins deasupra capului", under it "3 × 6–8 · pauză 2:00". Three empty rows showing "47,5" and "–" with empty ticks.
+6. A full-width outlined button "+ Adaugă exercițiu".
+No bottom tab bar on this screen, no other elements.
+```
+
+## 03-nutrition
+
+```
+NUTRIȚIE, JURNAL (food diary) screen, top to bottom:
+1. Header row: "CoreFit" bold at left; at right a small green check icon and "Sincronizat" in secondary text.
+2. Title "Nutriție" large bold, under it "Faza: Menținere" in secondary text.
+3. A segmented control with five segments: "Jurnal" (selected, blue with white text), "Plan", "Rețete", "Progres", "Unelte".
+4. A date row: a left chevron, "Azi, 3 octombrie" centred bold, a right chevron in light grey.
+5. Summary card with a 4 px green left stripe: big "1 840" and "din 2 400 kcal", a green progress bar at 77%; three columns with label, value and thin green bar: "Proteine 128 / 160 g", "Carbohidrați 190 / 260 g", "Grăsimi 62 / 75 g".
+6. Meal card "Mic dejun" with "420 kcal" at right; one food row: "Iaurt grecesc cu ovăz și afine", under it "250 g" secondary, "420 kcal" at right.
+7. Meal card "Prânz" with "680 kcal" at right; one food row: "Piept de pui cu orez și salată", under it "1 porție", "680 kcal" at right.
+8. Meal card "Gustare" with "240 kcal" at right; one food row: "Măr și migdale", under it "1 măr, 20 g", "240 kcal" at right.
+9. Meal card "Cină" with "0 kcal" at right and a blue text button "+ Adaugă".
+10. Bottom tab bar with 5 tabs: Acasă (house), Antrenament (dumbbell), Nutriție (apple, selected, blue), Sănătate (heartbeat line), Profil (person).
+```
