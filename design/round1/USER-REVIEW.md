@@ -31,3 +31,16 @@
 
 7. **Bara de jos plutitoare**, ca în Apple Health (iOS 26): o capsulă desprinsă de margini și
    de jos, sticlă mată peste conținut, tabul selectat cu o pastilă în spate. 5 taburi.
+
+## Review 4 (cuvânt cu cuvânt)
+
+> Ne inspirăm și health . Îți las libertatea să ajustezi tu cum vrei
+
+8. (ales de Claude, cu mână liberă) Din Apple Health:
+   - paletă neutră iOS: deschis #F2F2F7 / carduri albe; închis negru #000 / carduri #1C1C1E;
+   - cardurile de pe Acasă cu anatomia Health: etichetă mică colorată cu iconiță și „Azi ›”,
+     cifra mare cu unitatea mică, mini-grafic gri cu ziua de azi evidențiată;
+   - culoarea categoriei revine DOAR în etichete, iconițe și valoarea evidențiată din grafice
+     (ca Health); restul rămâne monocrom (decizia 6 nuanțată);
+   - secțiunea „Tendințe”: propoziții simple + bare gri cu linia de medie colorată;
+   - pe Progres, graficul 1RM ca bare gri pe săptămâni, ultima evidențiată.

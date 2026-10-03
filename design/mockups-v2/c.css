@@ -153,3 +153,12 @@ main { padding-left: 16px; padding-right: 16px; }
 [data-theme="dark"] .tabs a.on { background: rgba(255,255,255,.10); }
 .tabs a.on svg { fill: currentColor; fill-opacity: .18; }
 body { padding-bottom: 112px; }
+
+/* Decizia 8: paletă neutră iOS */
+:root { --bg: #F2F2F7; --fg: #111111; --muted: #48484A; --subtle: #6C6C70; --line: #DCDCE1; --fill: #E5E5EA; --done: #111111; --c-workouts: #C2410C; }
+[data-theme='dark'] { --bg: #000000; --fg: #FFFFFF; --muted: #AEAEB2; --subtle: #8E8E93; --line: #2C2C2E; --fill: #2C2C2E; --done: #FFFFFF; --c-workouts: #FF9F0A; }
+[data-theme='dark'] .tabs { background: rgba(44,44,46,.72) !important; }
+.wk { display: flex; gap: 6px; align-items: flex-end; height: 120px; margin-top: 18px; }
+.wk i { flex: 1; border-radius: 3px; background: var(--fill); display: block; }
+.wk i.hi { background: var(--c-workouts); }
+.c { border-color: color-mix(in srgb, var(--subtle) 70%, transparent); }
