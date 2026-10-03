@@ -175,7 +175,7 @@ export function Segmented<T extends string>({
             onClick={() => onChange(o.value)}
             className={cx(
               'btn min-h-[44px] px-2 text-sm',
-              selected ? activeClass : 'border border-steel/30 bg-white text-steel active:bg-steel/10',
+              selected ? activeClass : 'border border-white/10 bg-white/5 text-steel active:bg-white/10',
             )}
           >
             {o.label}

@@ -21,3 +21,13 @@ export function estimate1RM(weightKg: number, reps: number): number | null {
 export function toFieldString(n: number): string {
   return String(Math.round(n * 100) / 100).replace('.', ',');
 }
+
+/**
+ * Număr cu substantivul acordat, ca în română: "1 serie", "5 serii", "20 de serii", "101 serii".
+ * `de` apare când ultimele două cifre fac 0 (peste 0) sau cel puțin 20.
+ */
+export function plural(n: number, one: string, many: string): string {
+  if (n === 1) return `1 ${one}`;
+  const tail = Math.abs(n) % 100;
+  return n !== 0 && (tail === 0 || tail >= 20) ? `${n} de ${many}` : `${n} ${many}`;
+}

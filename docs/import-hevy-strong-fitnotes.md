@@ -1,38 +1,29 @@
 # Import Hevy, Strong, FitNotes
 
-Nu este implementat. Acesta este planul pentru un import CSV, fără API extern.
+Profil → Date → „Import din altă aplicație”. Se alege exportul CSV, se vede ce ar rezulta, apoi se confirmă.
 
-## Principii
+## Cum funcționează
 
-- Fișierul se citește pe dispozitiv. Nu pleacă nicăieri.
-- Se creează sesiuni și serii CoreFit, cu `user_id` al contului curent.
-- Exercițiile necunoscute devin exerciții proprii, nu se inventează un id din catalog.
-- Un import repetat nu dublează: cheia este sursa + id-ul extern al seriei, păstrat într-un câmp `import_key`.
-- Greutatea se convertește în kilograme dacă fișierul este în livre (`lb * 0.45359237`).
-- RPE se păstrează în `rpe` cu `effort_scale: 'rpe'`. RIR, dacă există, cu `effort_scale: 'rir'`.
-- Încălzirea rămâne `set_type: 'warmup'` și nu intră în progresie sau în 1RM.
-- Rutinele importate sunt copii independente, nu înlocuiesc planul săptămânal.
-- Greutatea corporală merge în `daily_nutrition_logs.body_weight_kg` pentru data respectivă, fără să șteargă apa sau notele zilei.
+- Fișierul se citește pe dispozitiv (`src/lib/importCsv.ts`). Nu pleacă nicăieri și nu se apelează niciun API.
+- Sursa se recunoaște după antet. Separatorul (virgulă, punct și virgulă, tab) se ghicește.
+- Sesiunile și seriile primesc id-uri stabile (UUID derivat din sursă + cont + dată + nume + exercițiu + poziție, `stableId`). Un import repetat găsește aceleași id-uri și sare antrenamentele care există deja, inclusiv cele șterse sau modificate între timp. Nu e nevoie de o coloană nouă în Supabase.
+- Numele exercițiilor se potrivesc cu catalogul (`src/lib/exerciseMatch.ts`): cuvintele se normalizează („Pull Up” = „Pull-up”, „Bench Press (Barbell)” = „Barbell Bench Press”), iar potrivirea trebuie să fie clară (scor peste prag și fără egalitate). „Squat” simplu înseamnă genuflexiunea cu bara pe spate, ca în aplicațiile sursă.
+- Exercițiile proprii cu același nume se refolosesc. Cele fără potrivire devin exerciții proprii noi: echipamentul se deduce din nume, tipul din serii (cronometrat, greutatea corpului, cu greutate), grupa din FitNotes (Category) sau, dacă lipsește, o alege utilizatorul înainte de import.
+- Greutatea se convertește în kilograme dacă fișierul e în livre (`lb × 0,45359237`). Hevy și FitNotes spun unitatea; la Strong o alege utilizatorul.
+- Încălzirea (`set_type: warmup` la Hevy, `W` la Strong) rămâne încălzire. RPE 6-10 se păstrează cu `effort_scale: 'rpe'`.
+- Seriile fără repetări și fără durată (cardio pe distanță) se sar și se numără în previzualizare.
+- Antrenamentele fără oră de sfârșit primesc durata din fișier (Strong) sau o estimare de 1,5 minute pe serie, minim 20 de minute.
 
-## Mapare
+## Coloane folosite
 
-| Sursă | CoreFit |
+| Sursă | Coloane |
 | --- | --- |
-| dată + oră antrenament | `workout_sessions.started_at`, `ended_at` dacă există durată |
-| nume antrenament | `workout_sessions.name` |
-| nume exercițiu | potrivire exactă, apoi normalizată, pe catalogul builtin; altfel `custom_exercises` |
-| grupă, dacă există | `muscle` doar dacă e una din cele 10 grupe CoreFit |
-| set, greutate, repetări | `workout_logs` |
-| secunde | `reps` la exercițiile cu durată |
-| RPE / RIR | `rpe` + `effort_scale` |
-| notă | `notes` pe sesiune sau ignorată dacă nu există un câmp pe serie |
-| rutină / folder | `routines`, exercițiile în ordinea din fișier |
-| greutate corporală | `body_weight_kg` pe zi |
+| Hevy | `title`, `start_time`, `end_time`, `description`, `exercise_title`, `set_type`, `weight_kg` / `weight_lbs`, `reps`, `duration_seconds`, `rpe` |
+| Strong | `Date`, `Workout Name`, `Duration`, `Exercise Name`, `Set Order`, `Weight`, `Reps`, `Seconds`, `Workout Notes`, `RPE` |
+| FitNotes | `Date`, `Exercise`, `Category`, `Weight` + `Weight Unit` (sau `Weight (kgs)` / `Weight (lbs)`), `Reps`, `Time` |
 
-## CSV-uri tipice
+## Ce nu face încă
 
-- **Hevy:** `title`, `start_time`, `end_time`, `exercise_title`, `set_index`, `weight_kg`, `reps`, `rpe`, `distance_km`, `duration_seconds`.
-- **Strong:** `Date`, `Workout Name`, `Exercise Name`, `Set Order`, `Weight`, `Reps`, `RPE`, unitate în antet sau în coloană.
-- **FitNotes:** `Date`, `Exercise`, `Category`, `Weight`, `Reps`, `Unit`.
-
-Prima implementare citește un singur CSV, arată câte sesiuni și câte exerciții necunoscute ar rezulta, apoi cere confirmare. Nu se apelează API-ul Hevy.
+- Greutatea corporală (de ex. din Apple Health).
+- Rutinele din aplicațiile sursă: se importă doar antrenamentele făcute.
+- API-ul Hevy Pro.

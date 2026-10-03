@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { builtinExercise } from '../data/exercises';
 import type { LocalWorkoutLog } from './db';
-import { estimate1RM } from './numbers';
+import { estimate1RM, plural } from './numbers';
 import { platesPerSide } from './plates';
 import { detectRecords, groupLinked, setScore, setVolume } from './workoutStats';
 
@@ -112,5 +112,16 @@ describe('exerciții pe o parte', () => {
     expect(builtinExercise('db-row')?.perSide).toBe(true);
     expect(builtinExercise('side-plank')?.perSide).toBe(true);
     expect(builtinExercise('bench-press')?.perSide).toBeUndefined();
+  });
+});
+
+describe('acordul numeralelor', () => {
+  it('pune "de" de la 20 în sus, ca în română', () => {
+    expect(plural(1, 'serie', 'serii')).toBe('1 serie');
+    expect(plural(0, 'serie', 'serii')).toBe('0 serii');
+    expect(plural(19, 'serie', 'serii')).toBe('19 serii');
+    expect(plural(20, 'serie', 'serii')).toBe('20 de serii');
+    expect(plural(101, 'serie', 'serii')).toBe('101 serii');
+    expect(plural(120, 'serie', 'serii')).toBe('120 de serii');
   });
 });
