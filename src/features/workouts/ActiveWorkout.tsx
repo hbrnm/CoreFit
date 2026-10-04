@@ -46,6 +46,7 @@ import {
 import { newId } from '../../lib/db';
 import { Notice } from '../../components/ui';
 import { ExerciseFigure } from '../../components/ExerciseFigure';
+import { AxialWarning } from '../health/AxialWarning';
 import { ExerciseHistory } from './ExerciseHistory';
 import { ExercisePicker } from './ExercisePicker';
 
@@ -375,6 +376,7 @@ export function ActiveWorkout({ session, onFinished }: Props) {
       >
         Efortul în {scale === 'rir' ? 'RIR (repetări în rezervă)' : 'RPE (1–10)'} · <span className="font-semibold text-brand-fg">schimbă</span>
       </button>
+      <AxialWarning compact className="mt-1" exerciseIds={draft.exercises.map((e) => e.exercise_id)} />
 
       {error && (
         <div className="mt-2">

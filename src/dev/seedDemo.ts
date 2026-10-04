@@ -125,4 +125,15 @@ export async function seedDemo(userId: string, mode: 'full' | 'empty' = 'full'):
   // mișcare: pauza de birou, acum 2 zile
   const two = addDays(today, -2);
   await db.healthSessions.put({ id: newId(), user_id: userId, program_id: 'desk-break', started_at: at(two, 11), completed_at: at(two, 11, 3), duration_s: 180, pain_before: null, pain_after: null, stopped_for_pain: false, ...synced() });
+
+  // coloana: durere lombară notată acum o oră (declanșează avertismentul pentru Upper A), checklist pe jumătate
+  const hourAgo = new Date(Date.now() - 3_600_000).toISOString();
+  await db.painLogs.bulkPut([
+    { id: newId(), user_id: userId, region: 'lower_back', score: 6, note: '', logged_at: hourAgo, ...synced() },
+    { id: newId(), user_id: userId, region: 'neck', score: 2, note: '', logged_at: hourAgo, ...synced() },
+  ]);
+  for (let i = 3; i >= 1; i -= 1) {
+    await db.spineChecklists.put({ user_id: userId, log_date: addDays(today, -i), done: ['walk', 'decompress', 'cat-camel', 'chin-tuck'], client_updated_at: nowIso(), sync_status: 'synced' });
+  }
+  await db.spineChecklists.put({ user_id: userId, log_date: today, done: ['walk', 'decompress'], client_updated_at: nowIso(), sync_status: 'synced' });
 }

@@ -75,7 +75,34 @@ export const SCENES = {
     },
   },
   '04-rest': { seed: 'full', go: async (p) => { await startWorkout(p); await tickSets(2)(p); await p.waitForTimeout(1200); } },
-  '07-health': { seed: 'full', go: tab('Sănătate') },
+  '07-health': {
+    seed: 'full',
+    go: async (p) => {
+      await tab('Sănătate')(p);
+      // programul McGill pe tot ecranul, ca în machetă: câteva secunde în primul curl-up
+      await p.getByRole('tab', { name: 'Programe' }).click();
+      await p.getByRole('button', { name: /Big 3 McGill/ }).first().click();
+      await p.getByRole('button', { name: 'Start' }).click();
+      await p.waitForTimeout(3200);
+    },
+  },
+  '07b-spine': { seed: 'full', go: tab('Sănătate') },
+  '07c-library': { seed: 'full', go: sub('Sănătate', 'Programe') },
+  '07d-program': {
+    seed: 'full',
+    go: async (p) => {
+      await tab('Sănătate')(p);
+      await p.getByRole('button', { name: 'Începe pauza' }).click();
+      await p.getByRole('button', { name: 'Începe', exact: true }).click();
+      await p.waitForTimeout(500);
+    },
+  },
+  '05e-warning': {
+    seed: 'full',
+    go: async (p) => {
+      await startWorkout(p);
+    },
+  },
   '08-profile': { seed: 'full', go: tab('Profil') },
 };
 
