@@ -8,6 +8,7 @@ import { kcalByDay, kcalInsight, lastDays, strengthInsight, strengthPerWeek, wei
 import { computeTargets, waterGoalMl, weightTrend } from '../../lib/nutrition';
 import { upsertDay } from '../../lib/nutritionOps';
 import { formatNum } from '../../lib/numbers';
+import { kcalLeftText } from '../../lib/foodEdit';
 import { weekStartOf } from '../../lib/schedule';
 import { requestHealthProgram } from '../../lib/intents';
 import { BigValue, DotsChart, HealthCard, MiniBars, Sparkline, WeekBars } from '../../components/HealthCard';
@@ -159,11 +160,7 @@ export function HomeTab() {
           <div>
             <BigValue value={formatNum(kcal7[6], 0)} unit="kcal" />
             <p className="mt-1.5 text-sm text-muted">
-              {targets
-                ? kcal7[6] <= targets.kcal
-                  ? `din ${formatNum(targets.kcal, 0)} · mai ai ${formatNum(targets.kcal - kcal7[6], 0)}`
-                  : `din ${formatNum(targets.kcal, 0)} · cu ${formatNum(kcal7[6] - targets.kcal, 0)} peste`
-                : 'Ținta apare după ce completezi profilul'}
+              {targets ? kcalLeftText(kcal7[6], targets.kcal) : 'Ținta apare după ce completezi profilul'}
             </p>
           </div>
           {kcal7.some((k) => k > 0) && <MiniBars values={kcal7} category="nutrition" label="Caloriile din ultimele 7 zile" />}

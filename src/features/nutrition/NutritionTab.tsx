@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { useApp } from '../../context';
-import { DOMAIN } from '../../lib/domains';
 import { PHASE_LABELS } from '../../lib/labels';
-import { Segmented } from '../../components/ui';
+import { FlatPanels, UnderlineTabs } from '../../components/ui';
 import { Diary } from './Diary';
 import { ProgressPanel } from './ProgressPanel';
 import { RecipesPanel } from './RecipesPanel';
 import { ToolsPanel } from './ToolsPanel';
 import { WeekPlanPanel } from './WeekPlanPanel';
-
-const D = DOMAIN.nutrition;
 
 type Sub = 'diary' | 'plan' | 'recipes' | 'progress' | 'tools';
 
@@ -27,16 +24,18 @@ export function NutritionTab() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h1 className="font-display text-3xl font-bold leading-tight">Nutriție</h1>
-        {profile && <p className="text-muted">Faza: {PHASE_LABELS[profile.nutrition_phase]}</p>}
+      <div className="pt-2">
+        <h1 className="font-display text-[40px] font-extrabold leading-tight tracking-tight">Nutriție</h1>
+        {profile && <p className="text-[17px] text-muted">{PHASE_LABELS[profile.nutrition_phase]}</p>}
       </div>
-      <Segmented<Sub> label="Secțiuni nutriție" options={SUBS} value={sub} onChange={setSub} activeClass={D.solid} columns={5} />
-      {sub === 'diary' && <Diary />}
-      {sub === 'plan' && <WeekPlanPanel />}
-      {sub === 'recipes' && <RecipesPanel />}
-      {sub === 'progress' && <ProgressPanel />}
-      {sub === 'tools' && <ToolsPanel />}
+      <UnderlineTabs<Sub> label="Secțiuni nutriție" options={SUBS} value={sub} onChange={setSub} />
+      <FlatPanels>
+        {sub === 'diary' && <Diary />}
+        {sub === 'plan' && <WeekPlanPanel />}
+        {sub === 'recipes' && <RecipesPanel />}
+        {sub === 'progress' && <ProgressPanel />}
+        {sub === 'tools' && <ToolsPanel />}
+      </FlatPanels>
     </div>
   );
 }

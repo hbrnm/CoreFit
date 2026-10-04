@@ -187,7 +187,6 @@ export function RecipeImport({ onClose, onImported }: Props) {
               setMode(m);
               setError(null);
             }}
-            activeClass={D.solid}
           />
 
           {mode === 'link' ? (

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { programById } from '../../data/health';
-import { DOMAIN } from '../../lib/domains';
 import { onHealthProgramRequest } from '../../lib/intents';
 import { Segmented } from '../../components/ui';
 import { HealthHome, InfoPanel, ProgramsPanel } from './HealthPanels';
@@ -9,7 +8,6 @@ import { ProgramPlayer } from './ProgramPlayer';
 import { ProgramView } from './ProgramView';
 import { PreventionPanel } from './PreventionPanel';
 
-const D = DOMAIN.health;
 
 type Sub = 'today' | 'programs' | 'pain' | 'info' | 'prevent';
 
@@ -56,7 +54,6 @@ export function HealthTab() {
         options={SUBS}
         value={sub}
         onChange={setSub}
-        activeClass={D.solid}
         columns={2}
       />
       {sub === 'today' && <HealthHome onOpen={openProgram} onStart={setPlayingId} />}

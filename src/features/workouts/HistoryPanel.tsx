@@ -60,7 +60,7 @@ export function HistoryPanel() {
   return (
     <div className="flex flex-col gap-3">
       <BackfillForm sessions={data.sessions} />
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col border-t border-line">
         {data.sessions.map((s) => {
           const sets = (bySession.get(s.id) ?? []).sort((a, b) => a.logged_at.localeCompare(b.logged_at));
           const work = sets.filter((l) => isWorkingSet(l.set_type));
@@ -75,10 +75,10 @@ export function HistoryPanel() {
   
           const isOpen = open === s.id;
           return (
-            <li key={s.id} className="panel">
+            <li key={s.id} className="border-b border-line">
               <button
                 type="button"
-                className="flex w-full items-center justify-between gap-3 p-3 text-left"
+                className="flex min-h-[52px] w-full items-center justify-between gap-3 py-3 text-left"
                 aria-expanded={isOpen}
                 onClick={() => setOpen(isOpen ? null : s.id)}
               >

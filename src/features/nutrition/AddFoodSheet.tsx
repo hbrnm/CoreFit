@@ -141,7 +141,6 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
                 ]}
                 value={recipeMode}
                 onChange={setRecipeMode}
-                activeClass={D.solid}
               />
             )}
             {recipeMode === 'grams' && chosenRecipe.cooked_weight_g ? (
@@ -196,7 +195,6 @@ export function AddFoodSheet({ date, meal, onClose }: Props) {
                 setError(null);
                 setJustAdded(null);
               }}
-              activeClass={D.solid}
               columns={3}
             />
 

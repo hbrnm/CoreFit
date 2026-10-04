@@ -7,7 +7,7 @@ import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
 import { isWorkingSet } from '../../lib/setTypes';
 import { addDays, formatDayMonth, localDateStr } from '../../lib/date';
-import { DOMAIN, tone } from '../../lib/domains';
+import { tone } from '../../lib/domains';
 import { formatNum } from '../../lib/numbers';
 import { bestEstimated1RM, findExercise, setScore, setVolume } from '../../lib/workoutStats';
 import { LineChart } from '../../components/charts';
@@ -137,7 +137,6 @@ export function ProgressPanel() {
               ]}
               value={span}
               onChange={setSpan}
-              activeClass={DOMAIN.workouts.solid}
             />
             <div className="mt-3">
               <LineChart points={perDay} color={tone('workouts')} unit={unit} />

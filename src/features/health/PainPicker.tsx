@@ -1,7 +1,5 @@
 import { cx } from '../../lib/cx';
-import { DOMAIN } from '../../lib/domains';
 
-const D = DOMAIN.health;
 
 interface Props {
   label: string;
@@ -22,7 +20,7 @@ export function PainPicker({ label, value, onChange }: Props) {
           onClick={() => onChange(n)}
           className={cx(
             'btn min-h-[48px] px-0 font-display text-xl',
-            value === n ? D.solid : 'border border-line bg-fg/5 text-fg active:bg-fg/10',
+            value === n ? 'bg-fg text-canvas' : 'border border-line bg-fg/5 text-fg active:bg-fg/10',
           )}
         >
           {n}
