@@ -45,7 +45,7 @@ export function MuscleBalance() {
   const setsOf = new Map(rows.map((r) => [r.muscle, r.sets]));
 
   return (
-    <Panel title="Echilibru muscular" edge={D.edge}>
+    <Panel title="Echilibru muscular">
       <div className="flex flex-col gap-4">
         <p className="text-[15px] text-muted">
           Seturi de lucru. Grupa principală contează 1, o grupă ajutătoare 0,5. Încălzirea nu intră.

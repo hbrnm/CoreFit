@@ -66,7 +66,7 @@ export function ProgressPanel() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel title="Greutatea de azi" edge={D.edge}>
+      <Panel title="Greutatea de azi">
         <div className="flex flex-col gap-3">
           <Stepper
             label="Greutate corporală (kg)"

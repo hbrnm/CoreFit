@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { DOMAIN } from '../../lib/domains';
 import { estimate1RM, formatNum, MAX_1RM_REPS, parseDecimal, weightForReps } from '../../lib/numbers';
 import { Panel } from '../../components/ui';
 
-const D = DOMAIN.workouts;
 
 /** 1RM estimat dintr-o serie oarecare și greutatea potrivită pentru 1-12 repetări. */
 export function OneRmCalculator() {
@@ -16,7 +14,7 @@ export function OneRmCalculator() {
   const tooMany = r !== null && r > MAX_1RM_REPS;
 
   return (
-    <Panel title="Calculator 1RM" edge={D.edge}>
+    <Panel title="Calculator 1RM">
       <div className="flex flex-col gap-3">
         <p className="text-[15px] text-muted">
           Pentru o serie pe care n-ai făcut-o încă: din greutate și repetări, 1RM-ul estimat (formula Epley) și ce greutate

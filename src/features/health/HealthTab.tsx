@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { programById } from '../../data/health';
 import { DOMAIN } from '../../lib/domains';
+import { onHealthProgramRequest } from '../../lib/intents';
 import { Segmented } from '../../components/ui';
 import { HealthHome, InfoPanel, ProgramsPanel } from './HealthPanels';
 import { PainTracker } from './PainTracker';
@@ -24,6 +25,9 @@ export function HealthTab() {
   const [sub, setSub] = useState<Sub>('today');
   const [openId, setOpenId] = useState<string | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
+
+  // „Începe pauza” de pe Acasă pornește programul aici
+  useEffect(() => onHealthProgramRequest((id) => setPlayingId(programById(id) ? id : null)), []);
 
   const playing = playingId ? programById(playingId) : undefined;
   const open = openId ? programById(openId) : undefined;

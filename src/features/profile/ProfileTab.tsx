@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DataPanel } from './DataPanel';
 import { ThemePanel } from './ThemePanel';
+import { SyncLine } from './SyncLine';
 import { useApp } from '../../context';
 import {
   db,
@@ -146,6 +147,9 @@ export function ProfileTab() {
           </button>
         </div>
         </div>
+      </div>
+      <div className="-mt-4">
+        <SyncLine />
       </div>
 
       <ThemePanel />

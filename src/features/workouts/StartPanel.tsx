@@ -25,7 +25,7 @@ export function StartPanel() {
     <div className="flex flex-col gap-4">
       <TodayCard />
 
-      <Panel edge={D.edge}>
+      <Panel>
         <button type="button" className={`btn w-full ${D.solid}`} onClick={() => void freestyle()}>
           <Plus size={18} aria-hidden="true" /> Antrenament liber
         </button>

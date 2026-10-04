@@ -70,16 +70,10 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
   return (
     <AppContext.Provider value={ctx}>
       <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
-        <header className="sticky top-0 z-10 border-b border-line bg-surface/85 pt-[env(safe-area-inset-top)] text-fg backdrop-blur-xl">
-          <div className="flex items-center justify-between px-4 py-2.5">
-            <span className="font-display text-2xl font-bold leading-none">CoreFit</span>
-            <SyncStatus />
-          </div>
-          <div className={cx('h-1', DOMAIN[tab].bar)} aria-hidden="true" />
-        </header>
+        <SyncProblem />
 
         {/* Toate ecranele rămân montate: un antrenament sau un cronometru pornit nu se pierde la schimbarea tabului. */}
-        <main className="flex-1 px-3 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-4">
+        <main className="flex-1 px-4 pb-[calc(7rem+env(safe-area-inset-bottom))] pt-[calc(env(safe-area-inset-top)+0.75rem)]">
           <div className={tab === 'home' ? '' : 'hidden'}>
             <HomeTab />
           </div>
@@ -97,11 +91,12 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
           </div>
         </main>
 
+        {/* Bara de jos plutitoare, ca în Apple Health (iOS 26): capsulă de sticlă mată peste conținut. */}
         <nav
           aria-label="Secțiuni"
-          className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-md border-t border-line bg-surface/85 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
+          className="tabbar fixed bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] left-1/2 z-20 w-[calc(100%-1.75rem)] max-w-[25rem] -translate-x-1/2"
         >
-          <ul className="grid grid-cols-5">
+          <ul className="grid grid-cols-5 p-1.5">
             {TABS.map(({ id, icon: Icon }) => {
               const active = tab === id;
               return (
@@ -111,12 +106,11 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
                     onClick={() => goTo(id)}
                     aria-current={active ? 'page' : undefined}
                     className={cx(
-                      'relative flex min-h-[60px] w-full flex-col items-center justify-center gap-1 text-[13px] font-semibold',
-                      active ? DOMAIN[id].text : 'text-subtle',
+                      'flex h-[54px] w-full flex-col items-center justify-center gap-0.5 rounded-[28px] text-[10.5px] font-semibold',
+                      active ? 'bg-fg/[0.07] text-brand-fg' : 'text-subtle',
                     )}
                   >
-                    {active && <span className={cx('absolute inset-x-4 top-0 h-1', DOMAIN[id].bar)} aria-hidden="true" />}
-                    <Icon size={22} strokeWidth={active ? 2.5 : 2} />
+                    <Icon size={22} strokeWidth={active ? 2.3 : 1.9} aria-hidden="true" />
                     {DOMAIN[id].label}
                   </button>
                 </li>
@@ -129,37 +123,35 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
   );
 }
 
-function SyncStatus() {
+/**
+ * Sincronizarea se arată doar când e o problemă (fără internet, eroare), ca o pastilă sus.
+ * Când totul merge, nu e nimic de văzut; detaliile și „Sincronizează acum” sunt în Profil.
+ */
+function SyncProblem() {
   const { cloud, sync } = useApp();
+  if (!cloud || (sync.isOnline && !sync.lastError)) return null;
 
-  if (!cloud) {
-    return <span className="text-sm text-muted">Datele rămân pe acest dispozitiv</span>;
-  }
-
-  let text: string;
-  if (!sync.isOnline) {
-    text = sync.pending > 0 ? `Fără internet, ${sync.pending} de trimis` : 'Fără internet';
-  } else if (sync.lastError) {
-    text = 'Eroare de sincronizare';
-  } else if (sync.pending > 0) {
-    text = `${sync.pending} de trimis`;
-  } else {
-    text = 'Sincronizat';
-  }
+  const text = !sync.isOnline
+    ? sync.pending > 0
+      ? `Fără internet · ${sync.pending} de trimis când revine`
+      : 'Fără internet · se sincronizează după'
+    : 'Sincronizarea n-a mers';
 
   return (
-    <div className="flex items-center gap-1 text-sm">
-      {!sync.isOnline && <WifiOff size={16} className="text-warning" aria-hidden="true" />}
-      <span className={cx(sync.lastError && sync.isOnline ? 'text-warning' : 'text-muted')}>{text}</span>
-      <button
-        type="button"
-        onClick={() => void sync.syncNow()}
-        disabled={sync.isSyncing || !sync.isOnline}
-        aria-label="Sincronizează acum"
-        className="-mr-2 flex h-11 w-11 items-center justify-center text-muted disabled:opacity-40"
-      >
-        <RefreshCw size={16} className={sync.isSyncing ? 'animate-spin' : ''} />
-      </button>
+    <div className="sticky top-[calc(env(safe-area-inset-top)+0.5rem)] z-30 flex justify-center px-4">
+      <div role="status" className="mt-2 flex items-center gap-1.5 rounded-full bg-raised py-1 pl-3 pr-1 text-[13px] font-semibold text-muted shadow-sm">
+        {!sync.isOnline && <WifiOff size={15} aria-hidden="true" />}
+        <span>{text}</span>
+        <button
+          type="button"
+          onClick={() => void sync.syncNow()}
+          disabled={sync.isSyncing || !sync.isOnline}
+          aria-label="Încearcă din nou"
+          className="flex h-8 w-8 items-center justify-center rounded-full disabled:opacity-40"
+        >
+          <RefreshCw size={15} className={sync.isSyncing ? 'animate-spin' : ''} aria-hidden="true" />
+        </button>
+      </div>
     </div>
   );
 }

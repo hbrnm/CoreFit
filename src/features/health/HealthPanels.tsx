@@ -40,7 +40,7 @@ export function HealthHome({ onOpen, onStart }: HomeProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel edge={D.edge}>
+      <Panel>
         <p className="font-display text-xl font-bold">Pauză de mișcare, 3 minute</p>
         <p className="mt-1 text-[15px] text-fg">Pentru cine stă mult jos. Mers, ridicări de pe scaun și mobilitate.</p>
         <button type="button" className={`btn mt-3 w-full ${D.solid}`} onClick={() => onStart('desk-break')}>
@@ -126,7 +126,7 @@ export function InfoPanel() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel title="Cum să folosești programele" edge={D.edge}>
+      <Panel title="Cum să folosești programele">
         <ul className="flex list-disc flex-col gap-2 pl-5 text-[15px] leading-snug">
           <li>Durerea nu înseamnă automat leziune. Dar dacă durerea crește clar sau apar simptome noi, oprește-te.</li>
           <li>

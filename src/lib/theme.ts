@@ -9,8 +9,8 @@ export type Theme = 'light' | 'dark';
 
 export const THEME_STORAGE_KEY = 'corefit-theme';
 
-/** Culoarea barei de sistem (theme-color): aceeași cu antetul aplicației. */
-export const THEME_COLOR: Record<Theme, string> = { light: '#FFFFFF', dark: '#151E2E' };
+/** Culoarea barei de sistem (theme-color): fundalul paginii, pentru că aplicația nu mai are antet. */
+export const THEME_COLOR: Record<Theme, string> = { light: '#F2F2F7', dark: '#000000' };
 
 export const THEME_LABELS: Record<ThemePref, string> = { system: 'Automat', light: 'Deschis', dark: 'Închis' };
 

@@ -270,7 +270,7 @@ export function McGillBigThree() {
   }
 
   return (
-    <Panel title="Big 3 McGill" edge={D.edge} aside={<span className="text-muted">6-4-2, menținere 10 s</span>}>
+    <Panel title="Big 3 McGill" aside={<span className="text-muted">6-4-2, menținere 10 s</span>}>
       <div className="flex flex-col gap-4">
         <div className={active ? 'opacity-50' : ''} inert={active}>
           <Segmented<Big3Exercise>

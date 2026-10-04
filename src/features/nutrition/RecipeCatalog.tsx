@@ -47,7 +47,7 @@ export function RecipeCatalog({ savedIds }: { savedIds: ReadonlySet<string> }) {
   };
 
   return (
-    <Panel title="Rețete gata" edge={D.edge}>
+    <Panel title="Rețete gata">
       <p className="text-[15px] text-fg">
         Rețete cunoscute. „Meniu” sunt variante de casă din meniul Tastemotions, doar felurile care se pot număra din alimentele aplicației. Nu sunt porțiile de catering și nu includ aluat, trufe, pancetta sau înghețată. Caloriile se adună din ingrediente.
       </p>

@@ -177,7 +177,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
 
   if (phase === 'pain-before') {
     return (
-      <Panel title={program.title} edge={D.edge}>
+      <Panel title={program.title}>
         <div className="flex flex-col gap-4">
           <p className="text-[15px]">Cât te doare acum? 0 înseamnă deloc, 10 cea mai mare durere imaginabilă.</p>
           <PainPicker label="Durere înainte" value={painBefore} onChange={setPainBefore} />
@@ -197,7 +197,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
 
   if (phase === 'pain-after') {
     return (
-      <Panel title={stopped ? 'Sesiune oprită' : 'Sesiune încheiată'} edge={D.edge}>
+      <Panel title={stopped ? 'Sesiune oprită' : 'Sesiune încheiată'}>
         <div className="flex flex-col gap-4">
           {stopped && (
             <Notice tone="warn">
@@ -233,7 +233,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
         </div>
       </div>
 
-      <Panel edge={D.edge}>
+      <Panel>
         <div className="flex flex-col gap-3">
           {isRest ? (
             <>

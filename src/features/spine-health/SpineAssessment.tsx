@@ -93,7 +93,7 @@ export function SpineAssessment() {
   };
 
   return (
-    <Panel title="Evaluare rapidă a coloanei" edge={D.edge}>
+    <Panel title="Evaluare rapidă a coloanei">
       <div className="flex flex-col gap-3">
         <p className="text-[15px] text-fg">Bifează ce îți provoacă disconfort acum.</p>
 

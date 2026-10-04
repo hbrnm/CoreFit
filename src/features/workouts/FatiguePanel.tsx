@@ -5,12 +5,11 @@ import { useCatalog } from '../../hooks/useCatalog';
 import { useLive } from '../../hooks/useLive';
 import { useNow } from '../../hooks/useNow';
 import { db } from '../../lib/db';
-import { DOMAIN, tone, type Tone } from '../../lib/domains';
+import { tone, type Tone } from '../../lib/domains';
 import { FATIGUE_HALF_LIFE_H, FATIGUE_LABELS, muscleFatigue, type FatigueLevel } from '../../lib/fatigue';
 import { BodyMap, shade } from '../../components/BodyMap';
 import { Panel } from '../../components/ui';
 
-const D = DOMAIN.workouts;
 
 const LEVEL_TONE: Record<FatigueLevel, Tone> = {
   fresh: 'success',
@@ -46,7 +45,7 @@ export function FatiguePanel() {
   const busy = rows.filter((r) => r.level !== 'fresh').sort((a, b) => b.value - a.value);
 
   return (
-    <Panel title="Oboseală acum" edge={D.edge}>
+    <Panel title="Oboseală acum">
       <div className="flex flex-col gap-3">
         <BodyMap
           fill={(m: Muscle) => {
