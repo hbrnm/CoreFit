@@ -261,3 +261,33 @@ export function UnderlineTabs<T extends string>({ label, options, value, onChang
     </div>
   );
 }
+
+interface RangePickerProps<T extends string> {
+  label: string;
+  options: ReadonlyArray<{ value: T; label: string }>;
+  value: T;
+  onChange: (value: T) => void;
+}
+
+/** Intervalul unui grafic (7Z / 30Z / 90Z / 1 an): pastile mici, cea aleasă plină, monocrom. */
+export function RangePicker<T extends string>({ label, options, value, onChange }: RangePickerProps<T>) {
+  return (
+    <div role="radiogroup" aria-label={label} className="flex rounded-full bg-fg/[0.06] p-0.5">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="radio"
+          aria-checked={o.value === value}
+          onClick={() => onChange(o.value)}
+          className={cx(
+            'min-h-[44px] flex-1 rounded-full text-[15px] font-semibold',
+            o.value === value ? 'bg-surface text-fg shadow-sm' : 'text-muted',
+          )}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
