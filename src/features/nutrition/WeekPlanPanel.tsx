@@ -124,7 +124,7 @@ export function WeekPlanPanel() {
                   type="button"
                   role="tab"
                   aria-selected={on}
-                  className={`flex min-h-[52px] flex-col items-center justify-center px-0.5 text-sm capitalize ${on ? D.solid : 'border border-line bg-fg/5'}`}
+                  className={`flex min-h-[52px] flex-col items-center justify-center px-0.5 text-sm capitalize ${on ? 'rounded-xl bg-fg text-canvas' : 'border border-line bg-fg/5'}`}
                   onClick={() => {
                     setSelected(item.date);
                     setNote(null);

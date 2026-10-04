@@ -6,7 +6,7 @@ import { db } from '../../lib/db';
 import { DOMAIN } from '../../lib/domains';
 import { formatNum } from '../../lib/numbers';
 import type { SessionSummary } from '../../lib/workoutOps';
-import { Notice, Panel, Sheet, UnderlineTabs } from '../../components/ui';
+import { FlatPanels, Notice, Panel, Sheet, UnderlineTabs } from '../../components/ui';
 import { ActiveWorkout } from './ActiveWorkout';
 import { HistoryPanel } from './HistoryPanel';
 import { ProgressPanel } from './ProgressPanel';
@@ -48,10 +48,12 @@ export function WorkoutsTab() {
         <>
           <h1 className="pt-2 font-display text-[40px] font-extrabold leading-tight tracking-tight">Antrenament</h1>
           <UnderlineTabs<Sub> label="Secțiuni antrenament" options={SUBS} value={sub} onChange={setSub} />
-          {sub === 'start' && <StartPanel />}
-          {sub === 'routines' && <RoutinesPanel />}
-          {sub === 'history' && <HistoryPanel />}
-          {sub === 'progress' && <ProgressPanel />}
+          <FlatPanels>
+            {sub === 'start' && <StartPanel />}
+            {sub === 'routines' && <RoutinesPanel />}
+            {sub === 'history' && <HistoryPanel />}
+            {sub === 'progress' && <ProgressPanel />}
+          </FlatPanels>
         </>
       )}
 

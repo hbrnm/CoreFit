@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { DOMAIN } from '../../lib/domains';
 import { applyThemePref, readThemePref, THEME_LABELS, type ThemePref } from '../../lib/theme';
 import { Panel, Segmented } from '../../components/ui';
 
@@ -16,7 +15,7 @@ export function ThemePanel() {
 
   return (
     <Panel title="Aspect">
-      <Segmented<ThemePref> label="Aspect" options={OPTIONS} value={pref} onChange={choose} activeClass={DOMAIN.profile.solid} columns={3} />
+      <Segmented<ThemePref> label="Aspect" options={OPTIONS} value={pref} onChange={choose} columns={3} />
       <p className="mt-2 text-sm text-muted">
         {pref === 'system' ? 'Urmează setarea telefonului: închis seara, deschis ziua, dacă așa e setat.' : 'Doar pe acest dispozitiv.'}
       </p>

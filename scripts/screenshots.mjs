@@ -16,6 +16,11 @@ const tab = (name) => async (p) => {
   await p.waitForTimeout(500);
 };
 
+const sub = (tabName, name) => async (p) => {
+  await tab(tabName)(p);
+  await p.getByRole('tab', { name }).click();
+  await p.waitForTimeout(500);
+};
 const startWorkout = async (p) => {
   await tab('Acasă')(p);
   await p.getByRole('button', { name: 'Începe antrenamentul' }).first().click();
@@ -35,6 +40,29 @@ export const SCENES = {
   '01-home': { seed: 'full', go: tab('Acasă') },
   '01b-home-empty': { seed: 'empty', go: tab('Acasă') },
   '03-nutrition': { seed: 'full', go: tab('Nutriție') },
+  '03b-entry': {
+    seed: 'full',
+    go: async (p) => {
+      await tab('Nutriție')(p);
+      await p.getByRole('button', { name: /Iaurt grecesc.*Schimbă/ }).first().click();
+      await p.waitForTimeout(400);
+    },
+  },
+  '03c-add': {
+    seed: 'full',
+    go: async (p) => {
+      await tab('Nutriție')(p);
+      await p.getByRole('button', { name: /Adaugă la cină/ }).click();
+      await p.waitForTimeout(500);
+    },
+  },
+  '03d-plan': { seed: 'full', go: sub('Nutriție', 'Plan') },
+  '03e-recipes': { seed: 'full', go: sub('Nutriție', 'Rețete') },
+  '03f-progress': { seed: 'full', go: sub('Nutriție', 'Progres') },
+  '03g-tools': { seed: 'full', go: sub('Nutriție', 'Unelte') },
+  '05b-gallery': { seed: 'full', go: sub('Antrenament', 'Galerie') },
+  '05c-history': { seed: 'full', go: sub('Antrenament', 'Istoric') },
+  '05d-progress': { seed: 'full', go: sub('Antrenament', 'Progres') },
   '05-start': { seed: 'full', go: tab('Antrenament') },
   '02-workout': {
     seed: 'full',

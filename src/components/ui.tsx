@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react';
+import { createContext, useContext, useId, type ReactNode } from 'react';
 import { AlertTriangle, Check, Minus, Plus, RefreshCw, X } from 'lucide-react';
 import { useApp } from '../context';
 import { cx } from '../lib/cx';
@@ -25,12 +25,23 @@ interface PanelProps {
   children: ReactNode;
 }
 
+/**
+ * Stilul C (Antrenament, Nutriție): secțiunile nu sunt carduri, ci blocuri despărțite de o linie.
+ * Ecranele acelea își învelesc conținutul în <FlatPanels>; în rest, Panel rămâne card.
+ */
+const FlatContext = createContext(false);
+
+export function FlatPanels({ children }: { children: ReactNode }) {
+  return <FlatContext.Provider value={true}>{children}</FlatContext.Provider>;
+}
+
 export function Panel({ title, aside, className, children }: PanelProps) {
+  const flat = useContext(FlatContext);
   return (
-    <section className={cx('panel p-4', className)}>
+    <section className={cx(flat ? 'border-t border-line pt-4 first:border-t-0 first:pt-0' : 'panel p-4', className)}>
       {(title || aside) && (
         <div className="mb-3 flex items-baseline justify-between gap-3">
-          {title && <h2 className="font-display text-xl font-bold leading-tight">{title}</h2>}
+          {title && <h2 className={cx('font-display font-bold leading-tight', flat ? 'text-[20px] tracking-tight' : 'text-xl')}>{title}</h2>}
           {aside}
         </div>
       )}
@@ -147,8 +158,6 @@ interface SegmentedProps<T extends string> {
   options: ReadonlyArray<{ value: T; label: string }>;
   value: T | null;
   onChange: (value: T) => void;
-  /** clasele butonului selectat, ex. DOMAIN.workouts.solid */
-  activeClass: string;
   columns?: 2 | 3 | 4 | 5;
 }
 
@@ -157,7 +166,6 @@ export function Segmented<T extends string>({
   options,
   value,
   onChange,
-  activeClass,
   columns = 2,
 }: SegmentedProps<T>) {
   return (
@@ -173,7 +181,7 @@ export function Segmented<T extends string>({
             onClick={() => onChange(o.value)}
             className={cx(
               'btn min-h-[44px] px-2 text-sm',
-              selected ? activeClass : 'border border-line bg-fg/5 text-fg active:bg-fg/10',
+              selected ? 'bg-fg text-canvas' : 'border border-line bg-fg/5 text-fg active:bg-fg/10',
             )}
           >
             {o.label}

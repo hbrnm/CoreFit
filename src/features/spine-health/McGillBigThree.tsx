@@ -278,7 +278,6 @@ export function McGillBigThree() {
             options={EXERCISE_OPTIONS}
             value={exercise}
             onChange={changeExercise}
-            activeClass={D.solid}
             columns={3}
           />
         </div>

@@ -6,14 +6,13 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
 import { isWorkingSet } from '../../lib/setTypes';
-import { DOMAIN, tone } from '../../lib/domains';
+import { tone } from '../../lib/domains';
 import { muscleBalance, type MuscleWindow } from '../../lib/muscles';
 import { BodyMap, shade } from '../../components/BodyMap';
 import { formatNum } from '../../lib/numbers';
 import Dexie from 'dexie';
 import { Panel, Segmented } from '../../components/ui';
 
-const D = DOMAIN.workouts;
 
 const WINDOWS: ReadonlyArray<{ value: MuscleWindow; label: string }> = [
   { value: '7', label: '7 zile' },
@@ -51,7 +50,7 @@ export function MuscleBalance() {
         <p className="text-[15px] text-muted">
           Seturi de lucru. Grupa principală contează 1, o grupă ajutătoare 0,5. Încălzirea nu intră.
         </p>
-        <Segmented<MuscleWindow> label="Perioadă" options={WINDOWS} value={window} onChange={setWindow} activeClass={D.solid} />
+        <Segmented<MuscleWindow> label="Perioadă" options={WINDOWS} value={window} onChange={setWindow} />
         <BodyMap
           fill={(m) => shade('workouts', (setsOf.get(m) ?? 0) / max)}
           describe={(m) => `${formatNum(setsOf.get(m) ?? 0, 1)} seturi`}

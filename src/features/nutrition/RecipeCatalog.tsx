@@ -57,7 +57,6 @@ export function RecipeCatalog({ savedIds }: { savedIds: ReadonlySet<string> }) {
           options={FILTERS}
           value={cuisine}
           onChange={setCuisine}
-          activeClass={D.solid}
           columns={3}
         />
       </div>

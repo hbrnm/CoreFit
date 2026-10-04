@@ -127,7 +127,6 @@ function CsvImport() {
                 ]}
                 value={unit}
                 onChange={changeUnit}
-                activeClass={D.solid}
                 columns={2}
               />
             )}

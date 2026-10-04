@@ -206,7 +206,6 @@ function RoutineEditor({ routine, onClose }: EditorProps) {
                 options={PROGRESSION_OPTIONS}
                 value={defaultProgression}
                 onChange={setDefaultProgression}
-                activeClass={D.solid}
                 columns={4}
               />
             </div>
@@ -327,38 +326,34 @@ export function RoutinesPanel() {
         <ul className="divide-y divide-line">
           {routines?.map((r) => (
             <li key={r.id} className="py-3">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="truncate font-semibold">
-                    {r.name}
-                    {r.is_deload && <span className="ml-2 rounded bg-warning/15 px-1.5 py-0.5 text-xs font-semibold text-muted">deload</span>}
-                  </p>
-                  <p className="text-sm text-muted">
-                    {r.exercises.map((e) => findExercise(catalog, e.exercise_id).name).join(', ')}
-                  </p>
-                  {r.default_progression !== 'none' && (
-                    <p className="text-sm text-workouts">Progresie: {PROGRESSION_LABELS[r.default_progression].toLowerCase()}</p>
-                  )}
-                </div>
-                <div className="flex shrink-0 gap-1">
-                  <button type="button" className="btn-primary min-h-[44px] px-4" onClick={() => void beginRoutine(r)}>
-                    START
-                  </button>
-                  <button type="button" className="btn-quiet min-h-[44px] px-3" onClick={() => void duplicate(r)}>
-                    Copie
-                  </button>
-                  <button type="button" className="btn-quiet min-h-[44px] px-3" onClick={() => setEditing(r)}>
-                    Editează
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={`Șterge ${r.name}`}
-                    className="flex h-11 w-11 items-center justify-center text-subtle active:text-danger"
-                    onClick={() => void remove(r)}
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+              <p className="text-[17px] font-semibold">
+                {r.name}
+                {r.is_deload && <span className="ml-2 rounded bg-warning/15 px-1.5 py-0.5 text-xs font-semibold text-muted">deload</span>}
+              </p>
+              <p className="mt-0.5 text-[15px] text-muted">
+                {r.exercises.map((e) => findExercise(catalog, e.exercise_id).name).join(', ')}
+              </p>
+              {r.default_progression !== 'none' && (
+                <p className="text-sm text-subtle">Progresie: {PROGRESSION_LABELS[r.default_progression].toLowerCase()}</p>
+              )}
+              <div className="mt-2 flex items-center gap-2">
+                <button type="button" className="btn-primary min-h-[44px] px-5" onClick={() => void beginRoutine(r)}>
+                  Începe
+                </button>
+                <button type="button" className="btn min-h-[44px] bg-fg/[0.07] px-4 text-fg" onClick={() => setEditing(r)}>
+                  Editează
+                </button>
+                <button type="button" className="btn min-h-[44px] bg-fg/[0.07] px-4 text-fg" onClick={() => void duplicate(r)}>
+                  Copie
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Șterge ${r.name}`}
+                  className="ml-auto flex h-11 w-11 items-center justify-center text-subtle active:text-danger"
+                  onClick={() => void remove(r)}
+                >
+                  <Trash2 size={18} />
+                </button>
               </div>
             </li>
           ))}

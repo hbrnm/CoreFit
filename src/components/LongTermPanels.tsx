@@ -190,5 +190,5 @@ export function TrainingNote() {
 export function NutritionNote() {
   const picture = useDayPicture();
   if (!picture) return null;
-  return <Notice tone="info">{nutritionNote(picture)}</Notice>;
+  return <p className="px-1 text-[15px] leading-snug text-muted">{nutritionNote(picture)}</p>;
 }

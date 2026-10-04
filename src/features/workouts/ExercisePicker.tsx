@@ -168,7 +168,6 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               options={KIND_OPTIONS}
               value={kind}
               onChange={setKind}
-              activeClass={D.solid}
               columns={3}
             />
             <p className="mt-2 text-sm text-muted">
@@ -215,7 +214,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               aria-pressed={muscle === m}
               className={cx(
                 'btn min-h-[40px] shrink-0 px-3 text-sm',
-                muscle === m ? D.solid : 'border border-line bg-fg/5 text-fg',
+                muscle === m ? 'bg-fg text-canvas' : 'border border-line bg-fg/5 text-fg',
               )}
             >
               {m === 'all' ? 'Toate' : MUSCLE_LABELS[m]}
@@ -231,7 +230,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
               aria-pressed={gear === g}
               className={cx(
                 'btn min-h-[40px] shrink-0 px-3 text-sm',
-                gear === g ? D.solid : 'border border-line bg-fg/5 text-fg',
+                gear === g ? 'bg-fg text-canvas' : 'border border-line bg-fg/5 text-fg',
               )}
             >
               {g === 'all' ? 'Orice echipament' : EQUIPMENT_LABELS[g]}
@@ -241,7 +240,7 @@ export function ExercisePicker({ onPick, onClose }: Props) {
         <button
           type="button"
           aria-pressed={onlyFavorites}
-          className={cx('btn min-h-[44px]', onlyFavorites ? D.solid : 'border border-line bg-fg/5 text-fg')}
+          className={cx('btn min-h-[44px]', onlyFavorites ? 'bg-fg text-canvas' : 'border border-line bg-fg/5 text-fg')}
           onClick={() => setOnlyFavorites((v) => !v)}
         >
           <Star size={16} />

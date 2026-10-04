@@ -1,5 +1,6 @@
 import { db, gramsFromAmountText, newId, nowIso, stamp, type FoodSource, type LocalFoodEntry, type LocalNutritionLog, type Meal } from './db';
 import { addDays } from './date';
+import { rescaleEntry } from './foodEdit';
 import type { Totals } from './nutrition';
 
 export const MEALS: ReadonlyArray<{ id: Meal; label: string }> = [
@@ -45,6 +46,15 @@ export async function addEntry(
 
 export async function deleteEntry(id: string): Promise<void> {
   await db.foodEntries.update(id, { deleted: true, ...stamp() });
+}
+
+/** Alt gramaj pentru un aliment notat; valorile se recalculează proporțional. False dacă nu se poate. */
+export async function changeEntryGrams(id: string, grams: number): Promise<boolean> {
+  const entry = await db.foodEntries.get(id);
+  const next = entry ? rescaleEntry(entry, grams) : null;
+  if (!next) return false;
+  await db.foodEntries.update(id, { ...next, ...stamp() });
+  return true;
 }
 
 export async function moveEntry(id: string, meal: Meal): Promise<void> {

@@ -4,13 +4,11 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db, type LocalNutritionLog } from '../../lib/db';
 import { addDays, formatDayShort } from '../../lib/date';
-import { DOMAIN } from '../../lib/domains';
 import { checkIngredients, TOP_INGREDIENTS, type IngredientVerdict } from '../../lib/ingredients';
 import { upsertDay } from '../../lib/nutritionOps';
 import { cx } from '../../lib/cx';
 import { Notice, Panel, Segmented } from '../../components/ui';
 
-const D = DOMAIN.nutrition;
 
 /** Durata promisiunii fără zahăr și făină. */
 const PROMISE_DAYS = 66;
@@ -103,7 +101,6 @@ export function ToolsPanel() {
             ]}
             value={todayState === 'none' ? null : todayState}
             onChange={(v) => void upsertDay(userId, today, { sugar_free_respected: v === 'clean', flour_free_respected: v === 'clean' })}
-            activeClass={D.solid}
           />
           <p className="mt-2 text-sm text-muted">Ziua nu se numără până nu o marchezi. Seria se resetează la o zi cu abatere.</p>
         </div>

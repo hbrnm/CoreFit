@@ -5,12 +5,10 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db, saveProfilePatch, type LocalRoutine } from '../../lib/db';
 import { addDays, formatWeekdayShort, localDateStr } from '../../lib/date';
-import { DOMAIN } from '../../lib/domains';
 import { clearMove, moveRoutineThisWeek, planForWeek, setWeekSlot, type DayPlan } from '../../lib/schedule';
 import { Sheet } from '../../components/ui';
 import { cx } from '../../lib/cx';
 
-const D = DOMAIN.workouts;
 
 export function WeekPlan() {
   const { userId, profile } = useApp();
@@ -97,7 +95,7 @@ export function WeekPlan() {
               Nicio rutină fixă
             </button>
             {(routines ?? []).map((routine) => (
-              <button key={routine.id} type="button" className={`btn ${open.permanentId === routine.id ? D.solid : 'btn-quiet'}`} onClick={() => void choosePermanent(open, routine.id)}>
+              <button key={routine.id} type="button" className={`btn ${open.permanentId === routine.id ? 'bg-fg text-canvas' : 'btn-quiet'}`} onClick={() => void choosePermanent(open, routine.id)}>
                 {routine.name}
               </button>
             ))}

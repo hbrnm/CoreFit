@@ -14,14 +14,12 @@ import {
   type TrainingSplit,
   type WeekStartsOn,
 } from '../../lib/db';
-import { DOMAIN } from '../../lib/domains';
 import { FOCUS_OPTIONS } from '../../lib/longTerm';
 import { PHASE_LABELS, SPLIT_LABELS } from '../../lib/labels';
 import { parseDecimal } from '../../lib/numbers';
 import { ACTIVITY_LABELS } from '../../lib/nutrition';
 import { Notice, Panel, Segmented } from '../../components/ui';
 
-const D = DOMAIN.profile;
 const SPLIT_OPTIONS = (Object.keys(SPLIT_LABELS) as TrainingSplit[]).map((value) => ({ value, label: SPLIT_LABELS[value] }));
 const PHASE_OPTIONS = (Object.keys(PHASE_LABELS) as NutritionPhase[]).map((value) => ({ value, label: PHASE_LABELS[value] }));
 const ACTIVITY_OPTIONS = Object.keys(ACTIVITY_LABELS) as ActivityLevel[];
@@ -182,7 +180,7 @@ export function ProfileTab() {
                 </div>
                 <div>
                   <label className="label">Sex</label>
-                  <Segmented<Sex> label="Sex" options={[{ value: 'male', label: 'Bărbat' }, { value: 'female', label: 'Femeie' }]} value={sex} onChange={touched(setSex)} activeClass={D.solid} />
+                  <Segmented<Sex> label="Sex" options={[{ value: 'male', label: 'Bărbat' }, { value: 'female', label: 'Femeie' }]} value={sex} onChange={touched(setSex)} />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -201,7 +199,7 @@ export function ProfileTab() {
               <div className="animate-in slide-in-from-right-4 duration-300 flex flex-col gap-4">
                 <div>
                   <label className="label">Faza nutrițională</label>
-                  <Segmented<NutritionPhase> label="Faza nutrițională" options={PHASE_OPTIONS} value={phase} onChange={touched(setPhase)} activeClass={D.solid} />
+                  <Segmented<NutritionPhase> label="Faza nutrițională" options={PHASE_OPTIONS} value={phase} onChange={touched(setPhase)} />
                   <p className="mt-1 text-xs text-subtle">Definirea scade ținta, masa musculară o crește.</p>
                 </div>
                 <div>
@@ -223,15 +221,15 @@ export function ProfileTab() {
               <div className="animate-in slide-in-from-right-4 duration-300 flex flex-col gap-4">
                 <div>
                   <label className="label">Program de antrenament</label>
-                  <Segmented<TrainingSplit> label="Program de antrenament" options={SPLIT_OPTIONS} value={split} onChange={touched(setSplit)} activeClass={D.solid} />
+                  <Segmented<TrainingSplit> label="Program de antrenament" options={SPLIT_OPTIONS} value={split} onChange={touched(setSplit)} />
                 </div>
                 <div>
                   <label className="label">Săptămâna începe lunea?</label>
-                  <Segmented<WeekStartsOn> label="Săptămâna începe lunea?" options={[{ value: 'monday', label: 'Luni' }, { value: 'sunday', label: 'Duminică' }]} value={weekStarts} onChange={touched(setWeekStarts)} activeClass={D.solid} />
+                  <Segmented<WeekStartsOn> label="Săptămâna începe lunea?" options={[{ value: 'monday', label: 'Luni' }, { value: 'sunday', label: 'Duminică' }]} value={weekStarts} onChange={touched(setWeekStarts)} />
                 </div>
                 <div>
                   <label className="label">Scală de Efort (RIR vs RPE)</label>
-                  <Segmented<EffortScale> label="Scală de Efort" options={[{ value: 'rir', label: 'RIR (Repetări în rezervă)' }, { value: 'rpe', label: 'RPE (Percepție 1-10)' }]} value={effortScale} onChange={touched(setEffortScale)} activeClass={D.solid} />
+                  <Segmented<EffortScale> label="Scală de Efort" options={[{ value: 'rir', label: 'RIR (Repetări în rezervă)' }, { value: 'rpe', label: 'RPE (Percepție 1-10)' }]} value={effortScale} onChange={touched(setEffortScale)} />
                 </div>
               </div>
             )}
