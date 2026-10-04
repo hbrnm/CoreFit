@@ -64,7 +64,7 @@ export function MuscleBalance() {
                   <span className="tabular-nums">{formatNum(row.sets, 1)}</span>
                 </span>
                 <span className="block h-2.5 bg-fg/10">
-                  <span className="block h-full" style={{ width: `${(row.sets / max) * 100}%`, backgroundColor: tone('workouts') }} />
+                  <span className="block h-full" style={{ width: `${(row.sets / max) * 100}%`, backgroundColor: tone('fg') }} />
                 </span>
               </button>
               {open === row.muscle && (

@@ -4,8 +4,9 @@ import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
 import { addDays, formatDayMonth } from '../../lib/date';
-import { DOMAIN, tone } from '../../lib/domains';
-import { formatNum, parseDecimal, toFieldString } from '../../lib/numbers';
+import { formatNum, parseDecimal, plural, toFieldString } from '../../lib/numbers';
+import { rangeDays, rangeFrom, RANGES, rateText, type Range } from '../../lib/progress';
+import { sevenDayAverage, weeklyRate } from '../../lib/weight';
 import {
   ACTIVITY_LABELS,
   computeTargets,
@@ -16,17 +17,18 @@ import {
 } from '../../lib/nutrition';
 import { intakeByDate, upsertDay } from '../../lib/nutritionOps';
 import { PHASE_LABELS } from '../../lib/labels';
-import { LineChart } from '../../components/charts';
-import { Notice, Panel, Stepper } from '../../components/ui';
-
-const D = DOMAIN.nutrition;
+import { ProgressChart } from '../../components/ProgressChart';
+import { Notice, Panel, RangePicker, Stepper } from '../../components/ui';
 
 export function ProgressPanel() {
   const { userId, profile, goTo } = useApp();
   const today = useToday();
 
   const { data: logs } = useLive(() => db.nutritionLogs.where('user_id').equals(userId).toArray(), [userId]);
-  const { data: intake } = useLive(() => intakeByDate(userId, addDays(today, -27), today), [userId, today]);
+  const [range, setRange] = useState<Range>('30z');
+  // cel puțin 28 de zile: consumul estimat are nevoie de ele, oricare ar fi intervalul afișat
+  const intakeFrom = rangeDays(range) >= 28 ? rangeFrom(today, range) : addDays(today, -27);
+  const { data: intake } = useLive(() => intakeByDate(userId, intakeFrom, today), [userId, intakeFrom, today]);
 
   const todayRow = (logs ?? []).find((l) => l.log_date === today);
   const [weight, setWeight] = useState('');
@@ -48,9 +50,15 @@ export function ProgressPanel() {
   const targets = computeTargets(profile, latestKg, new Date().getFullYear());
   const estimate = intake ? estimateExpenditure(trend, intake, today) : null;
 
-  const kcalPoints = [...(intake ?? new Map<string, number>()).entries()]
+  const from = rangeFrom(today, range);
+  const shown = trend.filter((p) => p.date >= from && p.date <= today);
+  const lastPoint = shown[shown.length - 1] ?? null;
+  const rate = weeklyRate(trend, today, Math.max(14, rangeDays(range)));
+  const avg7 = sevenDayAverage(trend, today);
+  const kcalSeries = [...(intake ?? new Map<string, number>()).entries()]
+    .filter(([date, kcal]) => date >= from && kcal > 0)
     .sort((a, b) => a[0].localeCompare(b[0]))
-    .map(([date, y]) => ({ label: formatDayMonth(date), y: Math.round(y) }));
+    .map(([date, value]) => ({ date, value: Math.round(value) }));
 
   const saveWeight = async () => {
     const w = parseDecimal(weight);
@@ -66,41 +74,110 @@ export function ProgressPanel() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Panel title="Greutatea de azi">
-        <div className="flex flex-col gap-3">
-          <Stepper
-            label="Greutate corporală (kg)"
-            value={weight}
-            onChange={(v) => {
-              setWeight(v);
-              setSaved(false);
-            }}
-            step={0.1}
-          />
-          {error && <Notice tone="error">{error}</Notice>}
-          {saved && <Notice tone="ok">Greutate salvată.</Notice>}
-          <button type="button" className={`btn ${D.solid}`} onClick={() => void saveWeight()}>
+      <section aria-label="Greutate">
+        <h2 className="text-[13px] font-bold uppercase tracking-[0.08em] text-body">Greutate</h2>
+        <div className="mt-3">
+          <RangePicker<Range> label="Interval" options={RANGES} value={range} onChange={setRange} />
+        </div>
+        {lastPoint ? (
+          <>
+            <p className="num mt-4 text-[64px] leading-none tracking-tight">
+              {formatNum(lastPoint.trend)}
+              <span className="ml-1 text-[22px] font-semibold tracking-normal text-subtle">kg</span>
+            </p>
+            <p className="mt-2 text-[17px] leading-snug text-muted">
+              Trendul{rate !== null ? `: ${rateText(rate)}` : ''}
+              {avg7 !== null ? ` · media pe 7 zile ${formatNum(avg7)} kg` : ''}
+            </p>
+            <div className="mt-4">
+              <ProgressChart
+                from={from}
+                to={today}
+                line={shown.map((p) => ({ date: p.date, value: Math.round(p.trend * 10) / 10 }))}
+                dots={shown.map((p) => ({ date: p.date, value: p.kg }))}
+                category="body"
+                unit="kg"
+                lastLabel={`${lastPoint.date === today ? 'azi' : formatDayMonth(lastPoint.date)} · ${formatNum(lastPoint.trend)} kg`}
+                label={`Greutatea: trend ${formatNum(lastPoint.trend)} kg${rate !== null ? `, ${rateText(rate)}` : ''}`}
+              />
+            </div>
+            <p className="mt-2 text-sm text-subtle">
+              Punctele sunt cântăririle zilnice; linia e trendul (medie mobilă exponențială), care nu se lasă păcălit de apă și mese.
+            </p>
+          </>
+        ) : (
+          <p className="mt-3 text-[17px] text-muted">
+            {trend.length === 0 ? 'Notează greutatea câteva zile ca să apară trendul.' : 'Nicio cântărire în acest interval.'}
+          </p>
+        )}
+      </section>
+
+      <section className="border-t border-line pt-4" aria-label="Greutatea de azi">
+        <div className="flex items-end gap-3">
+          <div className="flex-1">
+            <Stepper
+              label="Greutatea de azi (kg)"
+              value={weight}
+              onChange={(v) => {
+                setWeight(v);
+                setSaved(false);
+              }}
+              step={0.1}
+            />
+          </div>
+          <button type="button" className="btn-primary min-h-[48px] px-5" onClick={() => void saveWeight()}>
             Salvează
           </button>
-          <p className="text-sm text-muted">Cântărește-te dimineața, în condiții asemănătoare. O singură zi spune puțin; contează trendul.</p>
         </div>
-      </Panel>
-
-      <Panel title="Trendul greutății">
-        {trend.length === 0 ? (
-          <p className="text-muted">Notează greutatea câteva zile ca să apară trendul.</p>
-        ) : (
-          <div className="flex flex-col gap-2">
-            <LineChart
-              points={trend.map((p) => ({ label: formatDayMonth(p.date), y: Math.round(p.trend * 10) / 10 }))}
-              secondary={trend.map((p) => ({ label: formatDayMonth(p.date), y: p.kg }))}
-              color={tone('nutrition')}
-              unit="kg"
-            />
-            <p className="text-sm text-muted">Linia groasă e trendul (medie mobilă exponențială); linia subțire e greutatea zilnică.</p>
+        {error && (
+          <div className="mt-2">
+            <Notice tone="error">{error}</Notice>
           </div>
         )}
-      </Panel>
+        {saved && <p className="mt-2 text-[15px] text-muted">Salvată.</p>}
+        <p className="mt-2 text-sm text-subtle">Dimineața, în condiții asemănătoare. O singură zi spune puțin; contează trendul.</p>
+      </section>
+
+      <section className="border-t border-line pt-4" aria-label="Consum estimat">
+        <h2 className="text-[13px] font-bold uppercase tracking-[0.08em] text-subtle">Consum estimat (TDEE dinamic)</h2>
+        {estimate ? (
+          <>
+            <p className="num mt-2 text-[40px] leading-none">
+              {formatNum(estimate.kcal, 0)}
+              <span className="ml-1 text-[17px] font-semibold text-subtle">kcal pe zi</span>
+            </p>
+            <p className="mt-2 text-[15px] text-muted">
+              Din caloriile notate în {plural(estimate.intakeDays, 'zi', 'zile')} și din cât s-a mișcat trendul greutății în ultimele{' '}
+              {plural(estimate.windowDays, 'zi', 'zile')} (aproximativ 7.700 kcal pe kg).
+              {targets ? ` Ținta ta e ${formatNum(targets.kcal, 0)} kcal.` : ''}
+            </p>
+            <p className="mt-1 text-sm text-subtle">
+              Estimarea e mai bună cu cât notezi mai complet ce mănânci; mesele uitate o trag în jos.
+            </p>
+          </>
+        ) : (
+          <p className="mt-2 text-[15px] text-muted">
+            Apare după cel puțin 10 zile cu mâncare notată și greutăți la începutul și la finalul unui interval de minimum 10 zile.
+          </p>
+        )}
+      </section>
+
+      {kcalSeries.length > 1 && (
+        <section className="border-t border-line pt-4" aria-label="Calorii pe zi">
+          <h2 className="text-[13px] font-bold uppercase tracking-[0.08em] text-subtle">Calorii pe zi</h2>
+          <div className="mt-3">
+            <ProgressChart
+              from={from}
+              to={today}
+              line={kcalSeries}
+              category="nutrition"
+              unit="kcal"
+              lastLabel={`${kcalSeries[kcalSeries.length - 1].date === today ? 'azi' : formatDayMonth(kcalSeries[kcalSeries.length - 1].date)} · ${formatNum(kcalSeries[kcalSeries.length - 1].value, 0)} kcal`}
+              label="Caloriile pe zi în intervalul ales"
+            />
+          </div>
+        </section>
+      )}
 
       <Panel title="Țintele tale">
         {targets ? (
@@ -162,34 +239,6 @@ export function ProgressPanel() {
         )}
       </Panel>
 
-      <Panel title="Consumul estimat din datele tale">
-        {estimate ? (
-          <div className="flex flex-col gap-2 text-[15px]">
-            <p>
-              <span className="num text-3xl">{formatNum(estimate.kcal, 0)}</span> kcal pe zi
-            </p>
-            <p className="text-muted">
-              Calculat din caloriile notate în {estimate.intakeDays} de zile și din cât s-a mișcat trendul greutății în
-              ultimele {estimate.windowDays} de zile (aproximativ 7700 kcal pe kg).
-            </p>
-            <p className="text-sm text-muted">
-              Estimarea e mai bună cu cât notezi mai complet ce mănânci. Dacă uiți mese, consumul apare mai mic decât
-              e în realitate.
-            </p>
-          </div>
-        ) : (
-          <p className="text-[15px] text-muted">
-            Apare după cel puțin 10 zile cu mâncare notată și greutăți la începutul și la finalul unui interval de
-            minimum 10 zile.
-          </p>
-        )}
-      </Panel>
-
-      {kcalPoints.length > 1 && (
-        <Panel title="Calorii pe zi, ultimele 4 săptămâni">
-          <LineChart points={kcalPoints} color={tone('nutrition')} unit="kcal" />
-        </Panel>
-      )}
     </div>
   );
 }
