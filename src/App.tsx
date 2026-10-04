@@ -4,7 +4,7 @@ import { AppContext, useApp, type AppContextValue, type Tab } from './context';
 import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
 import { useSync } from './hooks/useSync';
-import { AuthScreen } from './features/auth/AuthScreen';
+import { AuthScreen, NewPasswordScreen } from './features/auth/AuthScreen';
 import { HomeTab } from './features/home/HomeTab';
 import { WorkoutsTab } from './features/workouts/WorkoutsTab';
 import { HealthTab } from './features/health/HealthTab';
@@ -34,7 +34,19 @@ export function App() {
   }
 
   if (state.status === 'signedOut') {
-    return <AuthScreen onSignIn={auth.signIn} onSignUp={auth.signUp} />;
+    return (
+      <AuthScreen
+        onSignIn={auth.signIn}
+        onSignUp={auth.signUp}
+        onReset={auth.resetPassword}
+        onWithoutAccount={auth.continueWithoutAccount}
+        cloudAvailable={auth.cloudAvailable}
+      />
+    );
+  }
+
+  if (state.status === 'recovery') {
+    return <NewPasswordScreen onSave={auth.setNewPassword} />;
   }
 
   return (

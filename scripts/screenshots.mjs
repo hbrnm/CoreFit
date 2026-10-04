@@ -104,6 +104,9 @@ export const SCENES = {
     },
   },
   '08-profile': { seed: 'full', go: tab('Profil') },
+  // ecranul de conectare apare doar cu Supabase configurat: rulează cu SCREENS_URL spre un server
+  // pornit cu VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY (pot fi și valori de test, fără sesiune)
+  '09-login': { seed: 'empty', go: async (p) => p.waitForTimeout(300) },
 };
 
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? '/opt/pw-browsers/chromium' });
