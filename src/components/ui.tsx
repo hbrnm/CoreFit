@@ -282,7 +282,7 @@ export function RangePicker<T extends string>({ label, options, value, onChange 
           onClick={() => onChange(o.value)}
           className={cx(
             'min-h-[44px] flex-1 rounded-full text-[15px] font-semibold',
-            o.value === value ? 'bg-surface text-fg shadow-sm' : 'text-muted',
+            o.value === value ? 'seg-on' : 'text-muted',
           )}
         >
           {o.label}
