@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pause, Play, RotateCcw, ShieldAlert } from 'lucide-react';
+import { Play, RotateCcw } from 'lucide-react';
 import { useApp } from '../../context';
 import { db, newId, nowIso, stamp } from '../../lib/db';
 import { DOMAIN, tone } from '../../lib/domains';
 import { Notice, Panel, Segmented } from '../../components/ui';
 import { PlateTimer } from './PlateTimer';
+import { GuidedScreen } from '../health/GuidedScreen';
 
 const D = DOMAIN.health;
 
@@ -31,9 +32,15 @@ const REST_SECONDS = 20;
 
 const EXERCISE_OPTIONS: ReadonlyArray<{ value: Big3Exercise; label: string }> = [
   { value: 'Modified Curl-up', label: 'Curl-up' },
-  { value: 'Side Bridge', label: 'Side bridge' },
+  { value: 'Side Bridge', label: 'Pod lateral' },
   { value: 'Bird-Dog', label: 'Bird-dog' },
 ];
+
+const NAMES: Record<Big3Exercise, string> = {
+  'Modified Curl-up': 'Curl-up modificat',
+  'Side Bridge': 'Pod lateral',
+  'Bird-Dog': 'Bird-dog',
+};
 
 const INSTRUCTIONS: Record<Big3Exercise, string> = {
   'Modified Curl-up':
@@ -236,51 +243,42 @@ export function McGillBigThree() {
   const totalHolds = countHolds(plan, plan.length);
   const totalMinutes = Math.ceil(plan.reduce((sum, s) => sum + s.seconds, 0) / 60);
 
-  let plateColor: string = tone('health');
-  if (phase === 'done') plateColor = tone('success');
-  else if (phase === 'stopped') plateColor = tone('danger');
-  else if (active) {
-    plateColor = step.kind === 'hold' ? tone('health') : step.kind === 'relax' ? tone('subtle') : tone('warning');
-  }
-
-  const progress =
-    phase === 'done' ? 1 : active ? 1 - remainingMs / (step.seconds * 1000) : 0;
-
+  // panoul arată doar starea de repaus (gata, oprit sau înainte de start); rularea e pe GuidedScreen
+  const plateColor = phase === 'done' ? tone('success') : phase === 'stopped' ? tone('danger') : tone('health');
+  const progress = phase === 'done' ? 1 : 0;
   const nextStep = plan[stepIdx + 1] as Step | undefined;
+  const holeLabel = 'gata de start';
+  const detail = phase === 'idle' ? `${totalHolds} menținute de ${HOLD_SECONDS} s, aproximativ ${totalMinutes} min` : '';
 
-  let holeLabel = 'gata de start';
-  if (phase === 'paused') holeLabel = 'în pauză';
-  else if (phase === 'running') {
-    holeLabel = step.kind === 'hold' ? 'menține' : step.kind === 'relax' ? 'relaxează' : 'pauză';
-  }
-
-  let detail: string;
-  if (phase === 'idle') {
-    detail = `${totalHolds} menținute de ${HOLD_SECONDS} s, aproximativ ${totalMinutes} min`;
-  } else if (active) {
-    if (step.kind === 'rest' && nextStep) {
-      const side = sideText(exercise, nextStep.side);
-      detail = `Urmează setul ${nextStep.set} din ${PYRAMID.length}, ${nextStep.reps} repetări${side ? `, ${side}` : ''}`;
-    } else {
-      const side = sideText(exercise, step.side);
-      detail = `Setul ${step.set} din ${PYRAMID.length}, repetarea ${step.rep} din ${step.reps}${side ? `, ${side}` : ''}`;
-    }
-  } else {
-    detail = '';
+  if (active) {
+    const isHold = step.kind === 'hold';
+    const target = !isHold && nextStep ? nextStep : step;
+    const side = sideText(exercise, target.side);
+    return (
+      <GuidedScreen
+        title="McGill Big 3"
+        startedAt={startedAtRef.current ?? Date.now()}
+        onClose={() => reset(exercise)}
+        paused={phase === 'paused'}
+        onTogglePause={phase === 'running' ? pause : start}
+        position={{ n: Math.max(1, countHolds(plan, stepIdx + 1)), total: totalHolds }}
+        ring={{
+          remainingMs,
+          totalMs: step.seconds * 1000,
+          label: isHold ? 'Ține' : step.kind === 'relax' ? 'Relaxează' : 'Pauză',
+        }}
+        name={NAMES[exercise]}
+        sub={`Setul ${target.set} din ${PYRAMID.length} · repetarea ${isHold ? step.rep : 1} din ${target.reps} · ${HOLD_SECONDS} s fiecare${side ? ` · ${side}` : ''}`}
+        how={INSTRUCTIONS[exercise]}
+        onPain={stopBecauseOfPain}
+      />
+    );
   }
 
   return (
     <Panel title="Big 3 McGill" aside={<span className="text-muted">6-4-2, menținere 10 s</span>}>
       <div className="flex flex-col gap-4">
-        <div className={active ? 'opacity-50' : ''} inert={active}>
-          <Segmented<Big3Exercise>
-            label="Exercițiu"
-            options={EXERCISE_OPTIONS}
-            value={exercise}
-            onChange={changeExercise}
-            columns={3}
-          />
-        </div>
+        <Segmented<Big3Exercise> label="Exercițiu" options={EXERCISE_OPTIONS} value={exercise} onChange={changeExercise} columns={3} />
 
         <p className="text-[15px] leading-snug text-fg">{INSTRUCTIONS[exercise]}</p>
 
@@ -302,11 +300,6 @@ export function McGillBigThree() {
               {detail}
             </p>
           )}
-          {active && (
-            <div className="mt-3 h-1.5 w-full bg-fg/10" aria-hidden="true">
-              <div className="h-full bg-health" style={{ width: `${(stepIdx / plan.length) * 100}%` }} />
-            </div>
-          )}
         </div>
 
         {phase === 'done' && <Notice tone="info">Sesiune încheiată și salvată în jurnal.</Notice>}
@@ -325,25 +318,7 @@ export function McGillBigThree() {
               Start
             </button>
           )}
-          {phase === 'running' && (
-            <button type="button" onClick={pause} className="btn bg-warning-solid text-on-brand active:bg-warning-solid/90">
-              <Pause size={18} />
-              Pauză
-            </button>
-          )}
-          {phase === 'paused' && (
-            <button type="button" onClick={start} className={`btn ${D.solid}`}>
-              <Play size={18} />
-              Continuă
-            </button>
-          )}
-          {active && (
-            <button type="button" onClick={stopBecauseOfPain} className="btn-danger">
-              <ShieldAlert size={18} />
-              Am durere
-            </button>
-          )}
-          {(phase === 'paused' || phase === 'done' || phase === 'stopped') && (
+          {(phase === 'done' || phase === 'stopped') && (
             <button type="button" onClick={() => reset(exercise)} className="btn-quiet col-span-2">
               <RotateCcw size={18} />
               De la capăt

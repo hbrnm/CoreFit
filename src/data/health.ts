@@ -50,6 +50,8 @@ export interface ProgramExercise {
   restS: number;
   /** se face pe rând pe partea stângă și pe cea dreaptă */
   perSide?: boolean;
+  /** zona lucrată, când diferă de zona programului (extensia toracală din programul pentru gât) */
+  zone?: RegionId;
   progress?: string;
 }
 
@@ -243,6 +245,7 @@ export const PROGRAMS: HealthProgram[] = [
       },
       {
         id: 'band-row',
+        zone: 'thoracic',
         name: 'Tracțiuni cu bandă elastică',
         how: 'Trage banda spre piept, apropiind omoplații fără să ridici umerii.',
         kind: 'reps',
@@ -252,6 +255,7 @@ export const PROGRAMS: HealthProgram[] = [
       },
       {
         id: 'thoracic-ext',
+        zone: 'thoracic',
         name: 'Extensie toracală peste spătar',
         how: 'Așezat, mâinile la ceafă, arcuiește ușor partea de sus a spatelui peste spătarul scaunului. Mișcarea vine din zona toracală, nu din gât.',
         kind: 'reps',
@@ -774,6 +778,7 @@ export const PROGRAMS: HealthProgram[] = [
       },
       {
         id: 'break-thoracic',
+        zone: 'thoracic',
         name: 'Extensie toracală',
         how: 'Mâinile la ceafă, arcuiește ușor partea de sus a spatelui peste spătar.',
         kind: 'reps',

@@ -16,6 +16,10 @@ import { DOMAIN, tone } from '../../lib/domains';
 import { Notice, Panel, SyncMark } from '../../components/ui';
 import { WeeklyGoals } from '../../components/WeeklyGoals';
 import { RecoveryNote } from './RecoveryNote';
+import { AxialWarning } from './AxialWarning';
+import { SpineToday } from './SpineToday';
+import { useToday } from '../../hooks/useToday';
+import { todayPlan } from '../../lib/today';
 
 const D = DOMAIN.health;
 
@@ -38,8 +42,23 @@ export function HealthHome({ onOpen, onStart }: HomeProps) {
     [userId],
   );
 
+  const { profile } = useApp();
+  const today = useToday();
+  const { data: routines } = useLive(
+    () =>
+      db.routines
+        .where('user_id')
+        .equals(userId)
+        .filter((r) => !r.deleted)
+        .toArray(),
+    [userId],
+  );
+  const planned = profile && routines ? todayPlan(profile, today, routines).today : null;
+
   return (
     <div className="flex flex-col gap-4">
+      {planned && <AxialWarning exerciseIds={planned.exercises.map((e) => e.exercise_id)} />}
+      <SpineToday />
       <Panel>
         <p className="font-display text-xl font-bold">Pauză de mișcare, 3 minute</p>
         <p className="mt-1 text-[15px] text-fg">Pentru cine stă mult jos. Mers, ridicări de pe scaun și mobilitate.</p>

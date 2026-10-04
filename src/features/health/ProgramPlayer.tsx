@@ -1,49 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ShieldAlert } from 'lucide-react';
 import type { HealthProgram } from '../../data/health';
+import { buildSteps, stepLabel, workPosition } from '../../lib/programSteps';
 import { useApp } from '../../context';
 import { db, newId, nowIso, stamp } from '../../lib/db';
-import { DOMAIN, tone } from '../../lib/domains';
+import { DOMAIN } from '../../lib/domains';
 import { Notice, Panel } from '../../components/ui';
-import { PlateTimer } from '../spine-health/PlateTimer';
+import { GuidedScreen } from './GuidedScreen';
 import { PainPicker } from './PainPicker';
 
 const D = DOMAIN.health;
-
-interface Step {
-  kind: 'work' | 'rest';
-  exIdx: number;
-  setNo: number;
-  sets: number;
-  side: 'left' | 'right' | null;
-  seconds: number | null;
-  reps: number | null;
-}
-
-function buildSteps(program: HealthProgram): Step[] {
-  const steps: Step[] = [];
-  program.exercises.forEach((ex, exIdx) => {
-    const sides: Array<'left' | 'right' | null> = ex.perSide ? ['left', 'right'] : [null];
-    for (let setNo = 1; setNo <= ex.sets; setNo += 1) {
-      for (const side of sides) {
-        steps.push({
-          kind: 'work',
-          exIdx,
-          setNo,
-          sets: ex.sets,
-          side,
-          seconds: ex.kind === 'hold' ? (ex.holdS ?? 30) : null,
-          reps: ex.kind === 'reps' ? (ex.reps ?? 10) : null,
-        });
-      }
-      const last = exIdx === program.exercises.length - 1 && setNo === ex.sets;
-      if (ex.restS > 0 && !last) {
-        steps.push({ kind: 'rest', exIdx, setNo, sets: ex.sets, side: null, seconds: ex.restS, reps: null });
-      }
-    }
-  });
-  return steps;
-}
 
 function buzz(pattern: number | number[]): void {
   try {
@@ -70,6 +35,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
   const [stopped, setStopped] = useState(false);
   const [stepIdx, setStepIdx] = useState(0);
   const [timing, setTiming] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [remainingMs, setRemainingMs] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
@@ -87,6 +53,7 @@ export function ProgramPlayer({ program, onExit }: Props) {
 
   const advance = () => {
     setTiming(false);
+    setPaused(false);
     if (stepIdx + 1 >= steps.length) {
       buzz([200, 100, 200]);
       setPhase('pain-after');
@@ -145,6 +112,18 @@ export function ProgramPlayer({ program, onExit }: Props) {
     setPainBefore(pain);
     startedAtRef.current = Date.now();
     setPhase('running');
+  };
+
+  const togglePause = () => {
+    if (paused) {
+      endsAtRef.current = Date.now() + remainingMs;
+      setPaused(false);
+      setTiming(true);
+    } else if (timing) {
+      setRemainingMs(Math.max(0, endsAtRef.current - Date.now()));
+      setTiming(false);
+      setPaused(true);
+    }
   };
 
   const stopForPain = () => {
@@ -216,90 +195,46 @@ export function ProgramPlayer({ program, onExit }: Props) {
     );
   }
 
-  const sideText = step.side === 'left' ? 'partea stângă' : step.side === 'right' ? 'partea dreaptă' : '';
   const isRest = step.kind === 'rest';
   const upcoming = steps[stepIdx + 1];
-  const nextName = isRest && upcoming ? program.exercises[upcoming.exIdx].name : '';
-  const plateColor = isRest ? tone('warning') : tone('health');
+  const shown = isRest && upcoming ? upcoming : step;
+  const shownExercise = program.exercises[shown.exIdx];
   const totalMs = (step.seconds ?? 0) * 1000;
-  const progress = timing && totalMs > 0 ? 1 - remainingMs / totalMs : 0;
+  const holding = !isRest && step.seconds !== null;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div>
-        <h2 className="font-display text-2xl font-bold leading-tight">{program.title}</h2>
-        <div className="mt-2 h-1.5 w-full bg-fg/10" aria-hidden="true">
-          <div className={`h-full ${D.bar}`} style={{ width: `${(stepIdx / steps.length) * 100}%` }} />
-        </div>
-      </div>
-
-      <Panel>
-        <div className="flex flex-col gap-3">
-          {isRest ? (
-            <>
-              <p className="font-display text-2xl font-bold">Odihnă</p>
-              <p className="text-[15px] text-muted">Urmează: {nextName}</p>
-            </>
-          ) : (
-            <>
-              <p className="font-display text-2xl font-bold">{exercise.name}</p>
-              <p className="text-[15px] text-muted">
-                Seria {step.setNo} din {step.sets}
-                {sideText ? `, ${sideText}` : ''}
-              </p>
-              <p className="text-[15px] leading-snug">{exercise.how}</p>
-              {exercise.progress && <p className="text-sm text-muted">{exercise.progress}</p>}
-            </>
-          )}
-
-          {(isRest || step.seconds !== null) && (
-            <PlateTimer color={plateColor} progress={progress}>
-              <span className="num text-7xl leading-none">{Math.ceil(remainingMs / 1000)}</span>
-              <span className="mt-1 text-sm font-medium text-muted">
-                {isRest ? 'odihnă' : timing ? 'menține' : 'gata de start'}
-              </span>
-            </PlateTimer>
-          )}
-
-          {!isRest && step.reps !== null && (
-            <p className="num text-center text-6xl leading-none">
-              {step.reps}
-              <span className="ml-2 text-xl font-semibold text-muted">repetări</span>
-            </p>
-          )}
-        </div>
-      </Panel>
-
-      <div className="grid grid-cols-2 gap-3">
-        {!isRest && step.seconds !== null && !timing && (
-          <button type="button" className={`btn col-span-2 ${D.solid}`} onClick={() => startTimer(step.seconds ?? 0)}>
-            Start
-          </button>
-        )}
-        {!isRest && step.reps !== null && (
-          <button type="button" className={`btn col-span-2 ${D.solid}`} onClick={advance}>
-            Am terminat seria
-          </button>
-        )}
-        {(isRest || timing) && (
-          <button type="button" className="btn-quiet col-span-2" onClick={advance}>
-            Sari peste
-          </button>
-        )}
-        <button type="button" className="btn-danger" onClick={stopForPain}>
-          <ShieldAlert size={18} />
-          Am durere
-        </button>
-        <button
-          type="button"
-          className="btn-outline"
-          onClick={() => {
-            if (window.confirm('Ieși din sesiune fără să salvezi?')) onExit();
-          }}
-        >
-          Ieși
-        </button>
-      </div>
-    </div>
+    <GuidedScreen
+      title={program.title}
+      startedAt={startedAtRef.current ?? Date.now()}
+      onClose={() => {
+        if (window.confirm('Ieși din sesiune fără să salvezi?')) onExit();
+      }}
+      paused={paused}
+      onTogglePause={timing || paused ? togglePause : undefined}
+      position={workPosition(steps, stepIdx)}
+      ring={
+        isRest || holding
+          ? { remainingMs, totalMs, label: isRest ? 'Pauză' : timing ? 'Ține' : 'Gata de start' }
+          : null
+      }
+      center={
+        <>
+          <span className="num text-[72px] leading-none">{step.reps}</span>
+          <span className="mt-2 text-[17px] font-semibold text-muted">repetări</span>
+        </>
+      }
+      name={isRest ? `Urmează: ${shownExercise.name}` : exercise.name}
+      sub={stepLabel(shown)}
+      how={isRest ? undefined : [exercise.how, exercise.progress].filter(Boolean).join(' ')}
+      primary={
+        holding && !timing && !paused
+          ? { label: 'Start', onClick: () => startTimer(step.seconds ?? 0) }
+          : !isRest && step.reps !== null
+            ? { label: 'Am terminat seria', onClick: advance }
+            : null
+      }
+      secondary={isRest || timing || paused ? { label: isRest ? 'Sari peste pauză' : 'Sari peste', onClick: advance } : null}
+      onPain={stopForPain}
+    />
   );
 }

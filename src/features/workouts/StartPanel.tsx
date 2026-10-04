@@ -14,6 +14,7 @@ import { tiredMusclesFor, todayPlan } from '../../lib/today';
 import { buildDraftExercise, resolveProgression, startSession } from '../../lib/workoutOps';
 import { findExercise } from '../../lib/workoutStats';
 import { WeeklyGoals } from '../../components/WeeklyGoals';
+import { AxialWarning } from '../health/AxialWarning';
 import { PlateCalculator } from './PlateCalculator';
 import { estimateMinutes } from './TodayCard';
 import { WeekPlan } from './WeekPlan';
@@ -86,6 +87,7 @@ export function StartPanel() {
               {routine.is_deload ? ' · săptămână de deload' : ''}
               {tired.length > 0 ? ` · Încă ${tired.length === 1 ? 'obosită' : 'obosite'}: ${tired.join(', ')}` : ''}
             </p>
+            <AxialWarning className="mt-3" exerciseIds={routine.exercises.map((e) => e.exercise_id)} />
             {rows.length > 0 && (
               <ul className="mt-2">
                 {rows.map((r) => (

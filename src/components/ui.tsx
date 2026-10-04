@@ -239,7 +239,7 @@ interface UnderlineTabsProps<T extends string> {
 /** Subsecțiunile unui ecran, în stilul C: text, cea activă subliniată, fără fundal. */
 export function UnderlineTabs<T extends string>({ label, options, value, onChange }: UnderlineTabsProps<T>) {
   return (
-    <div role="tablist" aria-label={label} className="flex gap-6 overflow-x-auto border-b border-line">
+    <div role="tablist" aria-label={label} className="flex gap-5 overflow-x-auto border-b border-line">
       {options.map((o) => {
         const selected = o.value === value;
         return (
