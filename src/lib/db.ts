@@ -1,3 +1,4 @@
+import type { SetType } from './setTypes';
 import Dexie, { type Table } from 'dexie';
 import type { Muscle, Equipment, ExerciseKind } from '../data/exercises';
 import { BUILTIN_EXERCISES } from '../data/exercises';
@@ -36,6 +37,7 @@ export interface WeekMove {
 export type FoodSource = 'builtin' | 'off' | 'custom' | 'recipe' | 'quick';
 export type RegionId =
   | 'lower_back'
+  | 'thoracic'
   | 'neck'
   | 'shoulder'
   | 'hip'
@@ -104,7 +106,8 @@ export interface LocalWorkoutLog extends Owned {
   session_id: string | null;
   exercise_id: string;
   exercise_name: string;
-  set_type: 'work' | 'warmup';
+  /** încălzire, normală, drop set, până la eșec: vezi lib/setTypes.ts */
+  set_type: SetType;
   set_order: number;
   weight_kg: number;
   /** repetări, sau secunde pentru exercițiile cu durată */
@@ -176,6 +179,17 @@ export interface LocalHealthSession extends Owned {
   stopped_for_pain: boolean;
 }
 
+/**
+ * Checklistul zilnic pentru coloană: ce mișcări de igienă a spatelui ai făcut azi.
+ * Un rând pe zi și utilizator, ca jurnalul de nutriție: cheia este (user_id, log_date).
+ */
+export interface LocalSpineChecklist extends Synced {
+  user_id: string;
+  log_date: string;
+  /** id-urile din data/spineChecklist.ts bifate în ziua respectivă */
+  done: string[];
+}
+
 // ------------------------------------------------------------------ nutriție
 
 /** Un rând pe zi și utilizator: cheia primară este (user_id, log_date). */
@@ -193,8 +207,10 @@ export interface LocalFoodEntry extends Owned {
   log_date: string;
   meal: Meal;
   name: string;
-  /** ex. "150 g" sau "1,5 porții" */
+  /** ex. "150 g" sau "1,5 porții": textul afișat */
   amount_text: string;
+  /** cantitatea în grame (sau ml), când se cunoaște; null la porții și adăugare rapidă */
+  grams: number | null;
   kcal: number;
   protein: number;
   carbs: number;
@@ -263,6 +279,7 @@ export class CoreFitDB extends Dexie {
   customFoods!: Table<LocalCustomFood, string>;
   recipes!: Table<LocalRecipe, string>;
   preventionMarks!: Table<LocalPreventionMark, string>;
+  spineChecklists!: Table<LocalSpineChecklist, [string, string]>;
 
   constructor() {
     super('corefit-local');
@@ -288,7 +305,7 @@ export class CoreFitDB extends Dexie {
       })
       .upgrade(async (tx) => {
         const now = new Date().toISOString();
-        const byName = new Map(BUILTIN_EXERCISES.map((e) => [e.name, e.id]));
+        const byName = new Map(BUILTIN_EXERCISES.map((e) => [e.en ?? e.name, e.id]));
 
         await tx
           .table('profiles')
@@ -418,6 +435,20 @@ export class CoreFitDB extends Dexie {
             l.effort_scale ??= null;
           });
       });
+
+    // Modulul 1: checklistul zilnic al coloanei; alimentele primesc gramajul numeric
+    this.version(8)
+      .stores({
+        spineChecklists: '[user_id+log_date], user_id, sync_status',
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table('foodEntries')
+          .toCollection()
+          .modify((e: Record<string, unknown>) => {
+            e.grams ??= gramsFromAmountText(String(e.amount_text ?? ''));
+          });
+      });
   }
 }
 
@@ -426,6 +457,12 @@ export const db = new CoreFitDB();
 // ------------------------------------------------------------------ utilitare
 
 export const newId = (): string => crypto.randomUUID();
+
+/** „150 g” → 150, „1,5 porții” → null: pentru intrările vechi, fără gramaj numeric. */
+export function gramsFromAmountText(text: string): number | null {
+  const m = /^\s*(\d+(?:[.,]\d+)?)\s*(g|ml)\s*$/i.exec(text);
+  return m ? Number(m[1].replace(',', '.')) : null;
+}
 export const nowIso = (): string => new Date().toISOString();
 
 /** Marchează un rând ca modificat local: se va trimite la următoarea sincronizare. */

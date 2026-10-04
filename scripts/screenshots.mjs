@@ -16,11 +16,37 @@ const tab = (name) => async (p) => {
   await p.waitForTimeout(500);
 };
 
+const startWorkout = async (p) => {
+  await tab('Acasă')(p);
+  await p.getByRole('button', { name: 'Începe antrenamentul' }).first().click();
+  await p.waitForTimeout(700);
+};
+const tickSets = (n) => async (p) => {
+  for (let i = 0; i < n; i += 1) {
+    // după fiecare bifare se deschide pauza pe tot ecranul; ultima rămâne deschisă
+    const back = p.getByRole('button', { name: 'Înapoi la serii' });
+    if (await back.count()) await back.click();
+    await p.getByRole('button', { name: 'Bifează seria' }).first().click();
+    await p.waitForTimeout(300);
+  }
+};
+
 export const SCENES = {
   '01-home': { seed: 'full', go: tab('Acasă') },
   '01b-home-empty': { seed: 'empty', go: tab('Acasă') },
   '03-nutrition': { seed: 'full', go: tab('Nutriție') },
   '05-start': { seed: 'full', go: tab('Antrenament') },
+  '02-workout': {
+    seed: 'full',
+    go: async (p) => {
+      await startWorkout(p);
+      await tickSets(2)(p);
+      const back = p.getByRole('button', { name: 'Înapoi la serii' });
+      if (await back.count()) await back.click();
+      await p.waitForTimeout(300);
+    },
+  },
+  '04-rest': { seed: 'full', go: async (p) => { await startWorkout(p); await tickSets(2)(p); await p.waitForTimeout(1200); } },
   '07-health': { seed: 'full', go: tab('Sănătate') },
   '08-profile': { seed: 'full', go: tab('Profil') },
 };

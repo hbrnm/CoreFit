@@ -6,7 +6,7 @@ import { db } from '../../lib/db';
 import { DOMAIN } from '../../lib/domains';
 import { formatNum } from '../../lib/numbers';
 import type { SessionSummary } from '../../lib/workoutOps';
-import { Notice, Panel, Segmented, Sheet } from '../../components/ui';
+import { Notice, Panel, Sheet, UnderlineTabs } from '../../components/ui';
 import { ActiveWorkout } from './ActiveWorkout';
 import { HistoryPanel } from './HistoryPanel';
 import { ProgressPanel } from './ProgressPanel';
@@ -46,15 +46,8 @@ export function WorkoutsTab() {
         <ActiveWorkout key={active.id} session={active} onFinished={setSummary} />
       ) : (
         <>
-          <h1 className="font-display text-3xl font-bold leading-tight">Antrenament</h1>
-          <Segmented<Sub>
-            label="Secțiuni antrenament"
-            options={SUBS}
-            value={sub}
-            onChange={setSub}
-            activeClass={D.solid}
-            columns={4}
-          />
+          <h1 className="pt-2 font-display text-[40px] font-extrabold leading-tight tracking-tight">Antrenament</h1>
+          <UnderlineTabs<Sub> label="Secțiuni antrenament" options={SUBS} value={sub} onChange={setSub} />
           {sub === 'start' && <StartPanel />}
           {sub === 'routines' && <RoutinesPanel />}
           {sub === 'history' && <HistoryPanel />}

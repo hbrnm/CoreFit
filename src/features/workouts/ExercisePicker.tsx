@@ -13,6 +13,7 @@ import { useApp } from '../../context';
 import { useCatalog } from '../../hooks/useCatalog';
 import { db, newId, saveProfilePatch, stamp } from '../../lib/db';
 import { cx } from '../../lib/cx';
+import { normalize } from '../../lib/ingredients';
 import { DOMAIN } from '../../lib/domains';
 import { Notice, Segmented, Sheet } from '../../components/ui';
 import { ExerciseFigure } from '../../components/ExerciseFigure';
@@ -57,9 +58,10 @@ export function ExercisePicker({ onPick, onClose }: Props) {
     return list.filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true)));
   }, [catalog]);
 
-  const q = query.trim().toLowerCase();
+  // fără diacritice și și după numele englezesc: „impins”, „bench press”
+  const q = normalize(query.trim());
   const shown = all
-    .filter((e) => (muscle === 'all' || e.muscle === muscle) && (q === '' || e.name.toLowerCase().includes(q)))
+    .filter((e) => (muscle === 'all' || e.muscle === muscle) && (q === '' || normalize(`${e.name} ${e.en ?? ''}`).includes(q)))
     .filter((e) => gear === 'all' || e.equipment === gear)
     .filter((e) => !onlyFavorites || favorites.has(e.id))
     .sort((a, b) => Number(favorites.has(b.id)) - Number(favorites.has(a.id)) || a.name.localeCompare(b.name, 'ro'));

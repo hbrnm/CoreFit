@@ -21,6 +21,11 @@ export interface AppContextValue {
   profile: LocalProfile | undefined;
   sync: SyncInfo;
   goTo: (tab: Tab) => void;
+  /**
+   * Ecran de lucru pe tot ecranul (antrenamentul în curs, un program ghidat) în tabul dat:
+   * cât e pornit, bara de jos nu apare în acel tab. În celelalte taburi rămâne.
+   */
+  setImmersive: (tab: Tab, on: boolean) => void;
   signOut: () => Promise<void>;
 }
 

@@ -84,3 +84,85 @@ export function backfillLoggedAt(startedAt: string, n: number): string {
 export function heldSeconds(startedAtMs: number, nowMs: number): number {
   return Math.max(1, Math.round((nowMs - startedAtMs) / 1000));
 }
+
+export interface SetPosition {
+  exIndex: number;
+  setIndex: number;
+}
+
+/** Seria care urmează: prima nebifată, în ordinea exercițiilor; null când totul e bifat. */
+export function nextPendingSet(exercises: readonly DraftExercise[]): SetPosition | null {
+  for (let exIndex = 0; exIndex < exercises.length; exIndex += 1) {
+    const setIndex = exercises[exIndex].sets.findIndex((s) => !s.done);
+    if (setIndex >= 0) return { exIndex, setIndex };
+  }
+  return null;
+}
+
+/** Câte serii sunt bifate din câte sunt în schiță (încălzirile incluse, ca în Strong). */
+export function setProgress(exercises: readonly DraftExercise[]): { done: number; total: number } {
+  let done = 0;
+  let total = 0;
+  for (const e of exercises) {
+    total += e.sets.length;
+    done += e.sets.filter((s) => s.done).length;
+  }
+  return { done, total };
+}
+
+/** Numărul afișat al seriei: seriile normale și până la eșec se numără; încălzirea și drop set-ul au literă. */
+export function setNumber(exercise: DraftExercise, setIndex: number): number | null {
+  const kind = exercise.sets[setIndex]?.kind;
+  if (kind === 'warmup' || kind === 'drop') return null;
+  return exercise.sets.slice(0, setIndex + 1).filter((s) => s.kind === 'work' || s.kind === 'failure').length;
+}
+
+/** „3 × 6–8 · pauză 2:30”: ținta exercițiului, din rutină. */
+export function targetLabel(exercise: DraftExercise, restSeconds: number): string {
+  const sets = exercise.sets.filter((s) => s.kind !== 'warmup').length;
+  const r = exercise.repRange;
+  const reps = r ? (r.min === r.max ? `${r.min}` : `${r.min}–${r.max}`) : null;
+  const m = Math.floor(restSeconds / 60);
+  const rest = `${m}:${String(restSeconds % 60).padStart(2, '0')}`;
+  return [reps ? `${sets} × ${reps}` : `${sets} ${sets === 1 ? 'serie' : 'serii'}`, `pauză ${rest}`].join(' · ');
+}
+
+/** „Ultima dată”: seriile identice la rând se adună: „3 serii de 80 × 8, 75 × 10”. */
+export function compactSets(labels: readonly string[]): string {
+  const groups: Array<{ label: string; n: number }> = [];
+  for (const label of labels) {
+    const last = groups[groups.length - 1];
+    if (last && last.label === label) last.n += 1;
+    else groups.push({ label, n: 1 });
+  }
+  return groups.map((g) => (g.n > 1 ? `${g.n} serii de ${g.label}` : g.label)).join(', ');
+}
+
+export interface PreviewRow {
+  /** „Tracțiuni + Flotări la paralele” la superset */
+  title: string;
+  /** „3 × 6–8 · 80 kg”, sau „superset · 3 runde” */
+  detail: string;
+}
+
+/**
+ * Lista de pe Start, înainte de pornire: un rând pe exercițiu, un rând pe superset.
+ * Greutatea e cea cu care se precompletează prima serie (sugestia de progresie inclusă).
+ */
+export function previewRows(exercises: readonly DraftExercise[], nameOf: (id: string) => string): PreviewRow[] {
+  return groupLinked(exercises, (e) => e.linkedToNext).map((group) => {
+    const items = group.map((i) => exercises[i]);
+    if (items.length > 1) {
+      const rounds = Math.max(...items.map((e) => e.sets.filter((s) => s.kind !== 'warmup').length));
+      return { title: items.map((e) => nameOf(e.exercise_id)).join(' + '), detail: `superset · ${rounds} ${rounds === 1 ? 'rundă' : 'runde'}` };
+    }
+    const e = items[0];
+    const work = e.sets.filter((s) => s.kind !== 'warmup');
+    const r = e.repRange;
+    const reps = r ? (r.min === r.max ? `${r.min}` : `${r.min}–${r.max}`) : null;
+    const parts = [reps ? `${work.length} × ${reps}` : `${work.length} ${work.length === 1 ? 'serie' : 'serii'}`];
+    const weight = work[0]?.weight ?? '';
+    if (weight !== '') parts.push(`${weight} kg`);
+    return { title: nameOf(e.exercise_id), detail: parts.join(' · ') };
+  });
+}

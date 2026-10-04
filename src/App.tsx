@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Activity, Apple, Dumbbell, Home, RefreshCw, User, WifiOff } from 'lucide-react';
 import { AppContext, useApp, type AppContextValue, type Tab } from './context';
 import { useAuth } from './hooks/useAuth';
@@ -57,6 +57,7 @@ interface ShellProps {
 
 function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
   const [tab, setTab] = useState<Tab>('home');
+  const [immersiveTabs, setImmersiveTabs] = useState<ReadonlySet<Tab>>(new Set());
   const profile = useProfile(userId);
   const sync = useSync(userId, cloud);
 
@@ -65,7 +66,18 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
     window.scrollTo({ top: 0 });
   };
 
-  const ctx: AppContextValue = { userId, email, cloud, profile, sync, goTo, signOut: onSignOut };
+  const setImmersive = useCallback((which: Tab, on: boolean) => {
+    setImmersiveTabs((cur) => {
+      if (cur.has(which) === on) return cur;
+      const next = new Set(cur);
+      if (on) next.add(which);
+      else next.delete(which);
+      return next;
+    });
+  }, []);
+  const immersive = immersiveTabs.has(tab);
+
+  const ctx: AppContextValue = { userId, email, cloud, profile, sync, goTo, setImmersive, signOut: onSignOut };
 
   return (
     <AppContext.Provider value={ctx}>
@@ -73,7 +85,7 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
         <SyncProblem />
 
         {/* Toate ecranele rămân montate: un antrenament sau un cronometru pornit nu se pierde la schimbarea tabului. */}
-        <main className="flex-1 px-4 pb-[calc(7rem+env(safe-area-inset-bottom))] pt-[calc(env(safe-area-inset-top)+0.75rem)]">
+        <main className={cx('flex-1 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)]', immersive ? 'pb-[calc(6rem+env(safe-area-inset-bottom))]' : 'pb-[calc(7rem+env(safe-area-inset-bottom))]')}>
           <div className={tab === 'home' ? '' : 'hidden'}>
             <HomeTab />
           </div>
@@ -93,6 +105,7 @@ function Shell({ userId, email, cloud, onSignOut }: ShellProps) {
 
         {/* Bara de jos plutitoare, ca în Apple Health (iOS 26): capsulă de sticlă mată peste conținut. */}
         <nav
+          hidden={immersive}
           aria-label="Secțiuni"
           className="tabbar fixed bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] left-1/2 z-20 w-[calc(100%-1.75rem)] max-w-[25rem] -translate-x-1/2"
         >

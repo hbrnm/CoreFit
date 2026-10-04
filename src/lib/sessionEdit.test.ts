@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  compactSets,
+  previewRows,
+  nextPendingSet,
+  setNumber,
+  setProgress,
+  targetLabel,
   backfillLoggedAt,
   backfillWindow,
   heldSeconds,
@@ -112,5 +118,63 @@ describe('cronometrul de lucru', () => {
   it('rotunjește la secunde și nu dă niciodată 0', () => {
     expect(heldSeconds(0, 45_400)).toBe(45);
     expect(heldSeconds(0, 200)).toBe(1);
+  });
+});
+
+describe('seria următoare și progresul', () => {
+  const set = (done: boolean, kind: 'warmup' | 'work' | 'drop' | 'failure' = 'work') => ({ key: Math.random().toString(), kind, weight: '80', reps: '8', effort: '', done, log_id: null });
+  const withSets = (sets: ReturnType<typeof set>[]) => ({ ...ex('a'), sets, repRange: { min: 6, max: 8 } });
+
+  it('prima serie nebifată, în ordinea exercițiilor', () => {
+    const list = [withSets([set(true), set(true)]), withSets([set(true), set(false), set(false)])];
+    expect(nextPendingSet(list)).toEqual({ exIndex: 1, setIndex: 1 });
+    expect(nextPendingSet([withSets([set(true)])])).toBeNull();
+  });
+
+  it('progresul numără toate seriile, bifate din total', () => {
+    expect(setProgress([withSets([set(true), set(false)]), withSets([set(true)])])).toEqual({ done: 2, total: 3 });
+  });
+
+  it('numărul seriei sare peste încălzire și drop set', () => {
+    const e = withSets([set(true, 'warmup'), set(true), set(false, 'failure'), set(false, 'drop')]);
+    expect([0, 1, 2, 3].map((i) => setNumber(e, i))).toEqual([null, 1, 2, null]);
+  });
+
+  it('ținta: „3 × 6–8 · pauză 2:30”, fără încălziri', () => {
+    const e = withSets([set(false, 'warmup'), set(false), set(false), set(false)]);
+    expect(targetLabel(e, 150)).toBe('3 × 6–8 · pauză 2:30');
+    expect(targetLabel({ ...e, repRange: undefined }, 90)).toBe('3 serii · pauză 1:30');
+  });
+});
+
+describe('compactSets', () => {
+  it('adună seriile identice consecutive', () => {
+    expect(compactSets(['80 × 8', '80 × 8', '80 × 8', '75 × 10'])).toBe('3 serii de 80 × 8, 75 × 10');
+  });
+  it('lasă neschimbate seriile diferite și nu adună peste o întrerupere', () => {
+    expect(compactSets(['80 × 8', '75 × 10', '80 × 8'])).toBe('80 × 8, 75 × 10, 80 × 8');
+    expect(compactSets([])).toBe('');
+  });
+});
+
+describe('previewRows', () => {
+  const set = (weight: string, kind: DraftExercise['sets'][number]['kind'] = 'work') => ({ key: weight + kind, kind, weight, reps: '8', effort: '', done: false, log_id: null });
+  const names: Record<string, string> = { bench: 'Împins', row: 'Ramat', pull: 'Tracțiuni', dips: 'Flotări la paralele' };
+  const nameOf = (id: string) => names[id];
+
+  it('un rând pe exercițiu, cu greutatea precompletată', () => {
+    const bench = { ...ex('bench'), sets: [set('60', 'warmup'), set('82,5'), set('82,5'), set('82,5')], repRange: { min: 6, max: 8 } };
+    expect(previewRows([bench], nameOf)).toEqual([{ title: 'Împins', detail: '3 × 6–8 · 82,5 kg' }]);
+  });
+
+  it('fără greutate (greutatea corpului) și cu repetări fixe', () => {
+    const row = { ...ex('row'), sets: [set(''), set('')], repRange: { min: 5, max: 5 } };
+    expect(previewRows([row], nameOf)).toEqual([{ title: 'Ramat', detail: '2 × 5' }]);
+  });
+
+  it('supersetul e un singur rând, cu rundele', () => {
+    const pull = { ...ex('pull', true), sets: [set(''), set(''), set('')] };
+    const dips = { ...ex('dips'), sets: [set(''), set(''), set('')] };
+    expect(previewRows([pull, dips], nameOf)).toEqual([{ title: 'Tracțiuni + Flotări la paralele', detail: 'superset · 3 runde' }]);
   });
 });

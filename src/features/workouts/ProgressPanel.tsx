@@ -5,6 +5,7 @@ import { useCatalog } from '../../hooks/useCatalog';
 import { useLive } from '../../hooks/useLive';
 import { useToday } from '../../hooks/useToday';
 import { db } from '../../lib/db';
+import { isWorkingSet } from '../../lib/setTypes';
 import { addDays, formatDayMonth, localDateStr } from '../../lib/date';
 import { DOMAIN, tone } from '../../lib/domains';
 import { formatNum } from '../../lib/numbers';
@@ -28,7 +29,7 @@ export function ProgressPanel() {
       db.workoutLogs
         .where('[user_id+logged_at]')
         .between([userId, Dexie.minKey], [userId, Dexie.maxKey])
-        .filter((l) => !l.deleted && l.set_type === 'work')
+        .filter((l) => !l.deleted && isWorkingSet(l.set_type))
         .toArray(),
     [userId],
   );
@@ -36,12 +37,12 @@ export function ProgressPanel() {
   const exerciseOptions = useMemo(() => {
     const counts = new Map<string, { name: string; n: number }>();
     for (const l of logs ?? []) {
-      const c = counts.get(l.exercise_id) ?? { name: l.exercise_name, n: 0 };
+      const c = counts.get(l.exercise_id) ?? { name: findExercise(catalog, l.exercise_id, l.exercise_name).name, n: 0 };
       c.n += 1;
       counts.set(l.exercise_id, c);
     }
     return [...counts.entries()].sort((a, b) => b[1].n - a[1].n).map(([id, v]) => ({ id, name: v.name }));
-  }, [logs]);
+  }, [logs, catalog]);
 
   const activeId = selected || exerciseOptions[0]?.id || '';
   const exercise = activeId ? findExercise(catalog, activeId, exerciseOptions.find((o) => o.id === activeId)?.name) : null;

@@ -51,6 +51,14 @@ export function tokens(name: string): Set<string> {
   return set;
 }
 
+const plainName = (name: string): string =>
+  name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
 export const normalizeName = (name: string): string => [...tokens(name)].sort().join(' ');
 
 const EQUIPMENT_WORD: Record<Equipment, string> = {
@@ -78,13 +86,17 @@ export const MATCH_THRESHOLD = 0.6;
  * Echipamentul din catalog contează doar când ajută ("Deadlift (Barbell)" = "Deadlift").
  */
 export function matchExercise(name: string, catalog: readonly Exercise[]): Exercise | null {
+  // numele afișat în română (exportul CoreFit) se potrivește exact, fără diacritice
+  const plain = plainName(name);
+  const exact = catalog.find((ex) => plainName(ex.name) === plain);
+  if (exact) return exact;
   const want = tokens(name);
   if (want.size === 0) return null;
   let best: Exercise | null = null;
   let bestScore = 0;
   let tie = false;
   for (const ex of catalog) {
-    const base = tokens(ex.name);
+    const base = tokens(ex.en ?? ex.name);
     const withEquipment = new Set(base);
     const word = EQUIPMENT_WORD[ex.equipment];
     if (word) withEquipment.add(word);

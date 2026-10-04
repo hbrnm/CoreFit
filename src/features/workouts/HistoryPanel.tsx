@@ -1,3 +1,4 @@
+import { isWorkingSet, SET_TYPE_LABELS } from '../../lib/setTypes';
 import { useMemo, useState } from 'react';
 import Dexie from 'dexie';
 import { Trash2 } from 'lucide-react';
@@ -62,7 +63,7 @@ export function HistoryPanel() {
       <ul className="flex flex-col gap-3">
         {data.sessions.map((s) => {
           const sets = (bySession.get(s.id) ?? []).sort((a, b) => a.logged_at.localeCompare(b.logged_at));
-          const work = sets.filter((l) => l.set_type === 'work');
+          const work = sets.filter((l) => isWorkingSet(l.set_type));
           const volume = work.reduce(
             (sum, l) => sum + setVolume(findExercise(catalog, l.exercise_id, l.exercise_name).kind, l.weight_kg, l.reps),
             0,
@@ -108,7 +109,7 @@ export function HistoryPanel() {
                                   ex.kind === 'duration'
                                     ? `${l.reps} s`
                                     : `${l.weight_kg > 0 ? formatNum(l.weight_kg, 2) : 'corp'} x ${l.reps}`;
-                                return l.set_type === 'warmup' ? `${core} (încălzire)` : core;
+                                return l.set_type === 'work' ? core : `${core} (${SET_TYPE_LABELS[l.set_type].toLowerCase()})`;
                               })
                               .join(', ')}
                           </li>

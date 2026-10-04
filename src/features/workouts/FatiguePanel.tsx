@@ -5,6 +5,7 @@ import { useCatalog } from '../../hooks/useCatalog';
 import { useLive } from '../../hooks/useLive';
 import { useNow } from '../../hooks/useNow';
 import { db } from '../../lib/db';
+import { isWorkingSet } from '../../lib/setTypes';
 import { tone, type Tone } from '../../lib/domains';
 import { FATIGUE_HALF_LIFE_H, FATIGUE_LABELS, muscleFatigue, type FatigueLevel } from '../../lib/fatigue';
 import { BodyMap, shade } from '../../components/BodyMap';
@@ -35,7 +36,7 @@ export function FatiguePanel() {
     return db.workoutLogs
       .where('[user_id+logged_at]')
       .between([userId, since], [userId, Dexie.maxKey])
-      .filter((l) => !l.deleted && l.set_type === 'work')
+      .filter((l) => !l.deleted && isWorkingSet(l.set_type))
       .toArray();
   }, [userId]);
 
